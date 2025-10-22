@@ -13,8 +13,8 @@ public final class ScenarioInfo {
 
     private String answerContent;
 
-    public ScenarioInfo(String scenarioContent) {
-        if (scenarioContent == null || scenarioContent.isEmpty()) {
+    public ScenarioInfo(@NonNull String scenarioContent) {
+        if (scenarioContent.isEmpty()) {
             throw new IllegalArgumentException("scenarioContent cannot be empty");
         }
 
