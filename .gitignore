@@ -5,6 +5,7 @@
 # Custom exclusion
 app/backend/mysql/
 app/backend/redis/data/
+backend/src/main/resources/application-common-secret.yaml
 
 # User-specific stuff
 .idea/

@@ -1,0 +1,64 @@
+#file: noinspection SpellCheckingInspection
+spring:
+  application.name: backend
+  threads.virtual.enabled: true
+  modulith.events.republish-outstanding-events-on-restart: on
+
+  profiles:
+    default: local
+    group:
+      local:
+        - local-database
+        - local-redis
+        - common-secret
+
+  ai:
+    openai:
+      api-key: ${api-key.openai}
+
+  datasource:
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+        globally_quoted_identifiers: true
+
+  data:
+    redis:
+      host: ${cache.redis.host}
+      username: ${cache.redis.username}
+      password: ${cache.redis.password}
+      port: ${cache.redis.port}
+
+springdoc:
+  api-docs.groups.enabled: true
+
+  swagger-ui:
+    enabled: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    display-request-duration: true
+
+base-url:
+  openai: wtf     # TODO : openai base url 넣기
+  oidc:
+    google: wtf   # TODO : google oidc url 넣기
+    github: wtf   # TODO : github oidc url 넣기
+
+mdc-key:
+  request-id: request-id
+
+logging:
+  pattern:
+    dateformat: yyyy-MM-dd'T'HH:mm:ss.SSSz,Asia/Seoul
+    level: '[RID:%10X{${mdc-key.request-id}}] %5p'
+
+  level:
+    sql: debug

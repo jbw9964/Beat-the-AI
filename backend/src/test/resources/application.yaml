@@ -1,0 +1,40 @@
+#file: noinspection SpellCheckingInspection
+spring:
+  application.name: backend
+  threads.virtual.enabled: true
+
+  profiles:
+    default: test
+    group:
+      test:
+        - test-secret
+
+  ai:
+    openai:
+      api-key: ${api-key.openai}
+
+  datasource:
+    url: jdbc:h2:mem:test
+
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        globally_quoted_identifiers: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+mdc-key:
+  request-id: request-id
+
+logging:
+  pattern:
+    dateformat: yyyy-MM-dd'T'HH:mm:ss.SSSz,Asia/Seoul
+
+  level:
+    sql: debug
