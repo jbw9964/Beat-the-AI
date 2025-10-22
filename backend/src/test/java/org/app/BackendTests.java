@@ -1,10 +1,9 @@
 package org.app;
 
+import org.*;
 import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.*;
 
-@SpringBootTest
-class BackendTests {
+class BackendTests extends IntegrationTestSupport {
 
     @Test
     @DisplayName("컨텍스트 로드")

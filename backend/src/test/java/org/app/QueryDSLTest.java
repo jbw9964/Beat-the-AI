@@ -5,15 +5,15 @@ import static org.assertj.core.api.Assertions.*;
 import com.querydsl.jpa.impl.*;
 import jakarta.persistence.*;
 import jakarta.transaction.*;
+import org.*;
 import org.app.entity.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.*;
 
-@SpringBootTest
-public class QueryDSLTest {
+public class QueryDSLTest extends IntegrationTestSupport {
 
     @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     EntityManager em;
 
     @Test

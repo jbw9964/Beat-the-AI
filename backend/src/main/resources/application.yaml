@@ -54,11 +54,12 @@ base-url:
 
 mdc-key:
   request-id: request-id
+  thread-id: thread-id
 
 logging:
   pattern:
     dateformat: yyyy-MM-dd'T'HH:mm:ss.SSSz,Asia/Seoul
-    level: '[RID:%10X{${mdc-key.request-id}}] %5p'
+    level: '[RID:%10X{${mdc-key.request-id}}] [TID:%10X{${mdc-key.thread-id}}] %5p'
 
   level:
     sql: debug
