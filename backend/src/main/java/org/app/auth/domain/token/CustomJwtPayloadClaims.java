@@ -5,6 +5,7 @@ import lombok.*;
 import org.app.entity.*;
 
 @Getter
+@EqualsAndHashCode
 public final class CustomJwtPayloadClaims {
 
     private final String sub;

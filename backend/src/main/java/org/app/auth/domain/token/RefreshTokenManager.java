@@ -1,5 +1,6 @@
 package org.app.auth.domain.token;
 
+import org.app.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -12,8 +13,9 @@ public class RefreshTokenManager extends AbstractTokenManager {
             @Value("${jwt.refresh-token.signature}")
             String signature,
             @Value("${jwt.refresh-token.expiration}")
-            long expiration
+            long expiration,
+            DateTimeProvider dateTimeProvider
     ) {
-        super(RT_ISS, signature, expiration);
+        super(RT_ISS, signature, expiration, dateTimeProvider);
     }
 }

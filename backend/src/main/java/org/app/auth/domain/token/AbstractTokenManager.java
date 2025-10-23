@@ -4,15 +4,19 @@ import io.jsonwebtoken.security.*;
 import javax.crypto.*;
 import lombok.*;
 import org.app.entity.*;
+import org.app.util.*;
 
 public abstract class AbstractTokenManager {
 
     private final JwtProvider provider;
     private final JwtAuthenticator authenticator;
 
-    protected AbstractTokenManager(String tokenIssuer, String signature, long expiration) {
+    protected AbstractTokenManager(
+            String tokenIssuer, String signature, long expiration,
+            DateTimeProvider dtProvider
+    ) {
         SecretKey key = Keys.hmacShaKeyFor(signature.getBytes());
-        this.provider = new JwtProvider(tokenIssuer, key, expiration);
+        this.provider = new JwtProvider(tokenIssuer, key, expiration, dtProvider);
         this.authenticator = new JwtAuthenticator(tokenIssuer, key);
     }
 

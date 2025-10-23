@@ -2,18 +2,20 @@ package org.app.util;
 
 import java.time.*;
 import java.util.*;
+import org.springframework.stereotype.*;
 
+@Component
 public class DateTimeProvider {
 
-    public static LocalDateTime localDateTimeNow() {
+    public LocalDateTime localDateTimeNow() {
         return LocalDateTime.now();
     }
 
-    public static Date dateNow() {
+    public Date dateNow() {
         return Date.from(Instant.now());
     }
 
-    public static Date dateNowAfter(long sec) {
-        return Date.from(Instant.now().plusSeconds(sec));
+    public Date secAfterFromDate(Date from, long sec) {
+        return Date.from(from.toInstant().plusSeconds(sec));
     }
 }

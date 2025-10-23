@@ -1,5 +1,6 @@
 package org.app.auth.domain.token;
 
+import org.app.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -12,8 +13,9 @@ public class AccessTokenManager extends AbstractTokenManager {
             @Value("${jwt.access-token.signature}")
             String signature,
             @Value("${jwt.access-token.expiration}")
-            long expiration
+            long expiration,
+            DateTimeProvider dateTimeProvider
     ) {
-        super(AT_ISS, signature, expiration);
+        super(AT_ISS, signature, expiration, dateTimeProvider);
     }
 }

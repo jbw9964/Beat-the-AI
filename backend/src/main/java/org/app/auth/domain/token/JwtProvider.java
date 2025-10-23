@@ -14,19 +14,24 @@ public class JwtProvider {
 
     @Getter(AccessLevel.PUBLIC)
     private final long expiration;
+    private final DateTimeProvider dtProvider;
 
-    public JwtProvider(String jwtIssuer, SecretKey secretKey, long expiration) {
+    public JwtProvider(
+            String jwtIssuer, SecretKey secretKey, long expiration,
+            DateTimeProvider dtProvider
+    ) {
         this.jwtIssuer = jwtIssuer;
         this.secretKey = secretKey;
         this.expiration = expiration;
+        this.dtProvider = dtProvider;
     }
 
     public final String create(
             @NonNull CustomJwtPayloadClaims customPayloadClaims
     ) {
 
-        Date iat = DateTimeProvider.dateNow();
-        Date exp = DateTimeProvider.dateNowAfter(expiration);
+        Date iat = dtProvider.dateNow();
+        Date exp = dtProvider.secAfterFromDate(iat, expiration);
 
         Claims claims = customPayloadClaims.buildCustomClaims()
                 .issuer(jwtIssuer)
