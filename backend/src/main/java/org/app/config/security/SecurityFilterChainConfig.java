@@ -98,7 +98,7 @@ public class SecurityFilterChainConfig {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/signup", "api/auth/reissue")
+                        .requestMatchers("/api/auth/login", "/api/auth/signup", "/api/auth/reissue")
                         .permitAll()
                         .requestMatchers("/oidc/login", "/oidc/signup")
                         .permitAll()
