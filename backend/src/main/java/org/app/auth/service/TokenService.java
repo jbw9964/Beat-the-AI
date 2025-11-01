@@ -1,5 +1,6 @@
 package org.app.auth.service;
 
+import io.jsonwebtoken.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.auth.domain.token.*;
@@ -37,12 +38,14 @@ public class TokenService implements UserPrincipalProvider {
 
         try {
             userId = atManager.getClaimsFrom(accessToken).getUserId();
-        } catch (Exception e) {
+            return userRepo.findById(userId).orElseThrow(this::invalidTokenEx);
+        } catch (JwtException e) {
             log.warn(e.getMessage(), e);
             throw this.invalidTokenEx();
+        } catch (Exception e) {
+            log.warn("Unexpected error occurred while trying to get user from token", e);
+            throw this.invalidTokenEx();
         }
-
-        return userRepo.findById(userId).orElseThrow(this::invalidTokenEx);
     }
 
     public User getUserFromRt(String refreshToken) {
@@ -50,15 +53,17 @@ public class TokenService implements UserPrincipalProvider {
 
         try {
             userId = rtManager.getClaimsFrom(refreshToken).getUserId();
-        } catch (Exception e) {
+            return rtRecordRepo.findById(userId)
+                    .filter(rtRecord -> rtRecord.getToken().equals(refreshToken))
+                    .flatMap(rtRecord -> userRepo.findById(userId))
+                    .orElseThrow(this::invalidTokenEx);
+        } catch (JwtException e) {
             log.warn(e.getMessage(), e);
             throw this.invalidTokenEx();
+        } catch (Exception e) {
+            log.warn("Unexpected error occurred while trying to get user from token", e);
+            throw this.invalidTokenEx();
         }
-
-        return rtRecordRepo.findById(userId)
-                .filter(rtRecord -> rtRecord.getToken().equals(refreshToken))
-                .flatMap(rtRecord -> userRepo.findById(userId))
-                .orElseThrow(this::invalidTokenEx);
     }
 
     private UnauthorizedException invalidTokenEx() {
