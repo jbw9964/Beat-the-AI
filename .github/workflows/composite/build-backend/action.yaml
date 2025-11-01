@@ -1,0 +1,39 @@
+name: Build backend application
+
+runs:
+  using: composite
+
+  steps:
+    - name: Check whether gradlew exists
+      shell: bash
+      run: |
+        if [ ! -f backend/gradlew ]; then
+          echo "No gradlew exists on working directory backend/gradlew"
+          exit 1
+        fi
+
+    - name: Change gradlew permission
+      shell: bash
+      run: chmod +x backend/gradlew
+
+    - name: Cache gradle dependencies
+      id: cache-gradle
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: ${{ runner.os }}-gradle-
+
+    - name: Setup JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: 21
+        distribution: 'temurin'
+
+    - name: Build with gradle
+      shell: bash
+      run: |
+        backend/gradlew build \
+        --build-cache --parallel -x test

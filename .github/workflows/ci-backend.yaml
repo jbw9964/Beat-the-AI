@@ -1,0 +1,44 @@
+name: CI backend
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+env:
+  redis-version: 'latest'
+  redis-port: '6379'
+
+jobs:
+  report-test-result:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build backend application
+        uses: ./.github/workflows/composite/build-backend
+
+      - name: Setup redis
+        uses: supercharge/redis-github-action@1.8.0
+        with:
+          redis-version: ${{ env.redis-version }}
+          redis-port: ${{ env.redis-port }}
+
+      - name: Run backend test
+        continue-on-error: true
+        id: test
+        shell: bash
+        run: |
+          backend/gradlew test --build-cache --parallel
+
+      - name: Add test result as comment
+        continue-on-error: true
+        uses: EnricoMi/publish-unit-test-result-action@v2.19.0
+        with:
+          files: backend/build/test-results/**/*.xml
+
+      - name: Abort on test fail
+        if: steps.test.outcome != 'success'
+        run: exit 1;
