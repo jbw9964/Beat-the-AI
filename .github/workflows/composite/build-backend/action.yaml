@@ -35,5 +35,4 @@ runs:
     - name: Build with gradle
       shell: bash
       run: |
-        ./backend/gradlew build \
-        --build-cache --parallel -x test
+        ./backend/gradlew -p backend build --build-cache --parallel -x test
