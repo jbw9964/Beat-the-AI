@@ -5,6 +5,13 @@ on:
     branches:
       - dev
 
+permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
+
+
 env:
   redis-version: 'latest'
   redis-port: '6379'
