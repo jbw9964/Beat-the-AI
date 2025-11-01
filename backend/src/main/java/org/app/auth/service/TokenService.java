@@ -28,7 +28,7 @@ public class TokenService {
 
         Long userId = user.getId();
         rtRecordRepo.deleteById(userId);
-        RTRecord newRecord = new RTRecord(userId, rt);
+        RTRecord newRecord = new RTRecord(userId, rt, rtManager.getExpiration());
         rtRecordRepo.save(newRecord);
 
         return new Tokens(at, rt);

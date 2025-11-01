@@ -5,7 +5,7 @@ import org.springframework.data.annotation.*;
 import org.springframework.data.redis.core.*;
 
 @Getter
-@RedisHash(value = "rt-registry", timeToLive = 864000)
+@RedisHash("rt-registry")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RTRecord {
 
@@ -13,8 +13,12 @@ public class RTRecord {
     private Long userId;
     private String token;
 
-    public RTRecord(Long userId, String token) {
+    @TimeToLive
+    private Long expiration;
+
+    public RTRecord(Long userId, String token, long expiration) {
         this.userId = userId;
         this.token = token;
+        this.expiration = expiration;
     }
 }

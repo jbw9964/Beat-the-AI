@@ -28,4 +28,8 @@ public abstract class AbstractTokenManager {
     public CustomJwtPayloadClaims getClaimsFrom(String token) {
         return authenticator.getPayloadClaimsFromToken(token);
     }
+
+    public final long getExpiration() {
+        return provider.getExpiration();
+    }
 }
