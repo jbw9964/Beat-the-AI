@@ -1,0 +1,43 @@
+package org;
+
+import lombok.extern.slf4j.*;
+import org.app.config.security.dto.*;
+import org.app.util.api.*;
+import org.springframework.context.annotation.*;
+import org.springframework.security.access.prepost.*;
+import org.springframework.security.core.annotation.*;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@Profile("test")
+@RestController
+@RequestMapping("/api/auth-testing")
+public class AuthTestController {
+
+    @GetMapping("/public")
+    public ApiResponse<String> onPublic() {
+        return ApiResponse.success("I'm public!");
+    }
+
+    @GetMapping("/anonymous")
+    public ApiResponse<String> onAnonymous() {
+        return ApiResponse.success("I'm anonymous!");
+    }
+
+    @GetMapping("/user")
+    public ApiResponse<Long> onUser(
+            @AuthenticationPrincipal Long authenticatedUserId
+    ) {
+        return ApiResponse.success(authenticatedUserId);
+    }
+
+    @GetMapping("/user/{userId}")
+    @PreAuthorize("{#authentication != null} && {#authentication.userId() == #userId}")
+    public ApiResponse<Long> onPrivate(
+            @PathVariable Long userId,
+            SimpleUserAuthentication authentication
+    ) {
+        log.info("Authentication : {}", authentication);
+        return ApiResponse.success(userId);
+    }
+}

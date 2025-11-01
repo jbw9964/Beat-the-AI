@@ -7,13 +7,13 @@ import org.springframework.modulith.core.*;
 import org.springframework.modulith.docs.*;
 
 @Slf4j
-public class ModulithTest {
+class ModulithTest {
 
-    private static final String
+    static final String
             utilPackage = "org.app.util..",
             entityPackage = "org.app.entity..";
 
-    private final ApplicationModules modules = ApplicationModules.of(
+    final ApplicationModules modules = ApplicationModules.of(
             Backend.class, Predicates.resideInAnyPackage(
                     utilPackage, entityPackage
             )
@@ -21,7 +21,7 @@ public class ModulithTest {
 
     @Test
     @DisplayName("코드가 modulith 하다.")
-    public void verifyModules() {
+    void verifyModules() {
         try {
             modules.verify();
         } finally {
@@ -31,7 +31,7 @@ public class ModulithTest {
 
     @Test
     @DisplayName("문서로 보여준다.")
-    public void writeDocument() {
+    void writeDocument() {
         Documenter documenter = new Documenter(modules);
         documenter.writeDocumentation();
     }
