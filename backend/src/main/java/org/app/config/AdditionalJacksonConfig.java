@@ -7,7 +7,7 @@ import org.springframework.context.annotation.*;
 
 @Configuration
 @RequiredArgsConstructor
-public class AdditionalJacksonConfig {
+class AdditionalJacksonConfig {
 
     private final ObjectMapper objMapper;
 

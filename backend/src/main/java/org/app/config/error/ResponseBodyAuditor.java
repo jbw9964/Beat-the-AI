@@ -35,16 +35,18 @@ public class ResponseBodyAuditor implements ResponseBodyAdvice<Object> {
             ServerHttpRequest request, ServerHttpResponse response
     ) {
 
-        if (body instanceof ApiResponse<?> api) {
-            var statusCode = HttpStatus.valueOf(api.getCode());
-            response.setStatusCode(statusCode);
+        if (body != null) {
+            if (body instanceof ApiResponse<?> api) {
+                var statusCode = HttpStatus.valueOf(api.getCode());
+                response.setStatusCode(statusCode);
 
-            api.setRequestId(mdcIdConfigurer.currentRequestId());
-        } else {
-            log.warn(
-                    "Incompatible body type encountered: {}",
-                    body.getClass().getSimpleName()
-            );
+                api.setRequestId(mdcIdConfigurer.currentRequestId());
+            } else {
+                log.warn(
+                        "Incompatible body type encountered: {}",
+                        body.getClass().getSimpleName()
+                );
+            }
         }
 
         return body;

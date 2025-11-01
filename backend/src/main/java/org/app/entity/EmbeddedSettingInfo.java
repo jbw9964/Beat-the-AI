@@ -32,11 +32,7 @@ public final class EmbeddedSettingInfo {
         this.notiRewardDispose = notiRewardDispose;
     }
 
-    public EmbeddedSettingInfo(EmbeddedSettingInfo copy) {
-        if (copy == null) {
-            throw new IllegalArgumentException("copy cannot be null");
-        }
-
+    public EmbeddedSettingInfo(@NonNull EmbeddedSettingInfo copy) {
         this.notiRating = copy.notiRating;
         this.notiSolved = copy.notiSolved;
         this.notiRewardGain = copy.notiRewardGain;

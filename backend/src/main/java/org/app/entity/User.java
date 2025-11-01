@@ -5,7 +5,16 @@ import lombok.*;
 
 @Getter
 @Entity
-@Table(name = "user")
+@Table(
+        name = "user",
+        indexes = {
+                @Index(
+                        name = "UK__USER_LOGIN_ID",
+                        columnList = "login_id",
+                        unique = true
+                )
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends AuditingCreation {
 
@@ -19,13 +28,26 @@ public class User extends AuditingCreation {
     @Column(length = 50)
     private String email;
 
+    @Column(name = "login_id", length = 50, updatable = false)
+    private String loginId;
+
     @Column(length = 255)
-    private String password;
+    private String encryptedPw;
 
     @Column(length = 255)
     private String thumbnailUrl;
 
     public User(String name) {
         this.name = name;
+    }
+
+    public User(String name, String loginId, String encryptedPw) {
+        this.name = name;
+        this.loginId = loginId;
+        this.encryptedPw = encryptedPw;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
     }
 }

@@ -10,7 +10,7 @@ import org.app.entity.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 
-public class QueryDSLTest extends IntegrationTestSupport {
+class QueryDSLTest extends IntegrationTestSupport {
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -19,7 +19,7 @@ public class QueryDSLTest extends IntegrationTestSupport {
     @Test
     @Transactional
     @DisplayName("QueryDSL 이 정상 작동한다.")
-    public void testQueryDSL() {
+    void testQueryDSL() {
 
         User testUser = new User("name");
         em.persist(testUser);
