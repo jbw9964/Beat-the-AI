@@ -2,7 +2,6 @@ package org.app.config.security;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
-import org.app.auth.service.*;
 import org.app.config.security.dto.*;
 import org.app.entity.*;
 import org.springframework.security.authentication.*;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.*;
 @RequiredArgsConstructor
 class BypassingJwtAuthProvider implements AuthenticationProvider {
 
-    private final TokenService tokenService;
+    private final UserPrincipalProvider userPrincipalProvider;
 
     @Override
     public Authentication authenticate(Authentication authentication)
@@ -25,7 +24,7 @@ class BypassingJwtAuthProvider implements AuthenticationProvider {
         if (authentication instanceof AccessTokenAuthentication(String accessToken)) {
 
             try {
-                User user = tokenService.getUserFromAt(accessToken);
+                User user = userPrincipalProvider.findByAccessToken(accessToken);
                 authResult = new SimpleUserAuthentication(user.getId());
             } catch (Exception e) {
                 log.info("Failed to provide authentication: {}", e.getMessage(), e);

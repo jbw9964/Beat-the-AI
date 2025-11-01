@@ -5,16 +5,15 @@ import lombok.extern.slf4j.*;
 import org.app.auth.domain.token.*;
 import org.app.auth.dto.*;
 import org.app.auth.repository.*;
+import org.app.config.security.*;
 import org.app.entity.*;
 import org.app.util.exception.*;
-import org.springframework.modulith.*;
 import org.springframework.stereotype.*;
 
 @Slf4j
 @Service
-@NamedInterface
 @RequiredArgsConstructor
-public class TokenService {
+public class TokenService implements UserPrincipalProvider {
 
     private final AccessTokenManager atManager;
     private final RefreshTokenManager rtManager;
@@ -64,5 +63,10 @@ public class TokenService {
 
     private UnauthorizedException invalidTokenEx() {
         return new UnauthorizedException("토큰이 유효하지 않습니다.");
+    }
+
+    @Override
+    public User findByAccessToken(String accessToken) {
+        return this.getUserFromAt(accessToken);
     }
 }
