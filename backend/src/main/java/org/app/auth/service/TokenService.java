@@ -8,10 +8,12 @@ import org.app.auth.dto.*;
 import org.app.auth.repository.*;
 import org.app.entity.*;
 import org.app.util.exception.*;
+import org.springframework.modulith.*;
 import org.springframework.stereotype.*;
 
 @Slf4j
 @Service
+@NamedInterface
 @RequiredArgsConstructor
 public class TokenService {
 

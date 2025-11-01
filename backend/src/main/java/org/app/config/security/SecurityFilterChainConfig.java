@@ -35,6 +35,7 @@ public class SecurityFilterChainConfig {
 
     @Bean
     @Order(Ordered.LOWEST_PRECEDENCE)
+    @SuppressWarnings("DefaultAnnotationParam")
     public SecurityFilterChain defaultSecurityChainConfig(HttpSecurity http) throws Exception {
 
         util
@@ -58,8 +59,6 @@ public class SecurityFilterChainConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
-
-                        .requestMatchers("/local-testing").permitAll()
                         .anyRequest().denyAll()
                 );
 
@@ -97,10 +96,22 @@ public class SecurityFilterChainConfig {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/signup").permitAll()
-                        .requestMatchers("/api/auth/temp1").hasAuthority(USER_AUTHORITY)
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/auth/login")
+                        .permitAll()
+                        .requestMatchers("/api/auth/signup")
+                        .permitAll()
+                        .requestMatchers("/api/auth/temp1")
+                        .hasAuthority(USER_AUTHORITY)
+
+                        .requestMatchers("/api/auth-testing/public")
+                        .permitAll()
+                        .requestMatchers("/api/auth-testing/anonymous")
+                        .hasAuthority(ANONYMOUS_AUTHORITY)
+                        .requestMatchers("/api/auth-testing/user")
+                        .hasAuthority(USER_AUTHORITY)
+
+                        .anyRequest()
+                        .authenticated()
                 )
         ;
 
