@@ -1,6 +1,5 @@
 package org.app.auth.service;
 
-import java.util.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.auth.domain.token.*;
@@ -57,18 +56,10 @@ public class TokenService {
             throw this.invalidTokenEx();
         }
 
-        Optional<RTRecord> record = rtRecordRepo.findById(userId);
-        Optional<User> user;
-
-        if (
-                record.isEmpty() ||
-                !record.get().getToken().equals(refreshToken) ||
-                (user = userRepo.findById(userId)).isEmpty()
-        ) {
-            throw this.invalidTokenEx();
-        }
-
-        return user.get();
+        return rtRecordRepo.findById(userId)
+                .filter(rtRecord -> rtRecord.getToken().equals(refreshToken))
+                .flatMap(rtRecord -> userRepo.findById(userId))
+                .orElseThrow(this::invalidTokenEx);
     }
 
     private UnauthorizedException invalidTokenEx() {

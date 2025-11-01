@@ -2,6 +2,7 @@ package org.app.auth.domain.token;
 
 import io.jsonwebtoken.*;
 import lombok.*;
+import org.app.auth.domain.exception.*;
 import org.app.entity.*;
 
 @Getter
@@ -18,13 +19,17 @@ public final class CustomJwtPayloadClaims {
         String sub = payloadClaims.getSubject();
 
         if (sub == null || sub.isEmpty()) {
-            throw new RuntimeException("No subject exists in jwt payload claims");
+            throw new InvalidCustomJwtClaimException(
+                    "No subject exists in jwt payload claims"
+            );
         }
 
         try {
             Long.parseLong(sub);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Subject exists in jwt, but somehow not compatible");
+            throw new InvalidCustomJwtClaimException(
+                    "Subject exists in jwt, but somehow not compatible"
+            );
         }
 
         this.sub = sub;
