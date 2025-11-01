@@ -98,12 +98,10 @@ public class SecurityFilterChainConfig {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login")
+                        .requestMatchers("/api/auth/login", "/api/auth/signup", "api/auth/reissue")
                         .permitAll()
-                        .requestMatchers("/api/auth/signup")
+                        .requestMatchers("/oidc/login", "/oidc/signup")
                         .permitAll()
-                        .requestMatchers("/api/auth/temp1")
-                        .hasAuthority(USER_AUTHORITY)
 
                         .requestMatchers("/api/auth-testing/public")
                         .permitAll()

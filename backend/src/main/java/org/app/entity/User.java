@@ -40,4 +40,14 @@ public class User extends AuditingCreation {
     public User(String name) {
         this.name = name;
     }
+
+    public User(String name, String loginId, String encryptedPw) {
+        this.name = name;
+        this.loginId = loginId;
+        this.encryptedPw = encryptedPw;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
+    }
 }
