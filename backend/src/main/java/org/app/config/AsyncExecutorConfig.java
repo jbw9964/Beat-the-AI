@@ -10,7 +10,7 @@ import org.springframework.scheduling.concurrent.*;
 @EnableAsync
 @Configuration
 @RequiredArgsConstructor
-public class AsyncExecutorConfig {
+class AsyncExecutorConfig {
 
     private static final boolean USE_VIRTUAL_THREAD = true;
     private static final int CORE_POOL_SIZE = 10;

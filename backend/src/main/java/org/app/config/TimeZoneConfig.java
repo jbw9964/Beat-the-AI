@@ -5,7 +5,7 @@ import java.util.*;
 import org.springframework.context.annotation.*;
 
 @Configuration
-public class TimeZoneConfig {
+class TimeZoneConfig {
 
     private static final String TIME_ZONE = "Asia/Seoul";
 

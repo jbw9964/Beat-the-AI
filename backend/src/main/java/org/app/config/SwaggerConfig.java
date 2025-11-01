@@ -7,7 +7,7 @@ import io.swagger.v3.oas.models.servers.*;
 import org.springframework.context.annotation.*;
 
 @Configuration
-public class SwaggerConfig {
+class SwaggerConfig {
 
     @Bean
     public OpenAPI swaggerOpenAPI() {
