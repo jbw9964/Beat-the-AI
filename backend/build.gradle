@@ -45,6 +45,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
     implementation "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.github.napstr:logback-discord-appender:1.0.0'
@@ -59,6 +60,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testCompileOnly 'org.projectlombok:lombok'
