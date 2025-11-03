@@ -17,7 +17,7 @@ import org.springframework.stereotype.*;
 @RequiredArgsConstructor
 public class ApiAccessDeniedHandler implements AccessDeniedHandler {
 
-    private static final int CODE = 403;
+    private static final int CODE = HttpStatus.FORBIDDEN.value();
 
     private final ObjectMapper objMapper;
     private final MdcIdConfigurer mdcIdConfigurer;

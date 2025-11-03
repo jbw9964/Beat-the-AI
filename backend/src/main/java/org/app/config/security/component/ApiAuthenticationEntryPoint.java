@@ -17,7 +17,7 @@ import org.springframework.stereotype.*;
 @RequiredArgsConstructor
 public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final int CODE = 401;
+    private static final int CODE = HttpStatus.UNAUTHORIZED.value();
 
     private final ObjectMapper objMapper;
     private final MdcIdConfigurer mdcIdConfigurer;
