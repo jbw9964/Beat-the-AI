@@ -21,7 +21,6 @@ class AuthController {
     public ApiResponse<Tokens> login(
             @Valid @RequestBody AuthLoginRequest req
     ) {
-
         String loginId = req.loginId();
         String password = req.password();
 
@@ -33,7 +32,6 @@ class AuthController {
     public ApiResponse<AuthSignupResponse> signup(
             @Valid @RequestBody AuthSignupRequest req
     ) {
-
         String username = req.name();
         String loginId = req.loginId();
         String password = req.password();
@@ -41,7 +39,7 @@ class AuthController {
 
         Long userId = simpleAuthService.idPwSignup(username, loginId, password, email);
 
-        return ApiResponse.success(new AuthSignupResponse(userId));
+        return ApiResponse.created(new AuthSignupResponse(userId));
     }
 
     @PostMapping("/reissue")        // 토큰 재발급
