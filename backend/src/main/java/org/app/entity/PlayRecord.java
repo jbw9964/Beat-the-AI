@@ -1,6 +1,7 @@
 package org.app.entity;
 
 import jakarta.persistence.*;
+import java.util.*;
 import lombok.*;
 
 @Getter
@@ -46,6 +47,9 @@ public class PlayRecord extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PlayRecordVisibility visibility;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "record")
+    private final List<ScenarioRecord> scenarioRecords = new ArrayList<>();
 
     public PlayRecord(
             User user, Long problemId, String title, String description,

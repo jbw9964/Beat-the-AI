@@ -50,4 +50,8 @@ public class User extends AuditingCreation {
     public void changeEmail(String email) {
         this.email = email;
     }
+
+    public void changeThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
 }

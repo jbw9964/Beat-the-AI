@@ -9,4 +9,7 @@ public record SimplePageRequest(
         int pageSize
 ) {
 
+    public SimplePageRequest() {
+        this(0, 10);
+    }
 }

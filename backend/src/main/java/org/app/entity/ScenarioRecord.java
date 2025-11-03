@@ -49,5 +49,14 @@ public class ScenarioRecord extends BaseTimeEntity {
         this.hasSubmitted = this.hasPassed = false;
     }
 
-    // TODO : 사용자 응답, ai 평가 결과 update 하는 메서드 만들기
+    public void updateSubmission(
+            String userSubmissionContent, String aiGeneratedContent,
+            boolean hasPassed, LocalDateTime submittedAt
+    ) {
+        this.userSubmissionContent = userSubmissionContent;
+        this.aiGeneratedContent = aiGeneratedContent;
+        this.hasSubmitted = true;
+        this.hasPassed = hasPassed;
+        this.submittedAt = submittedAt;
+    }
 }
