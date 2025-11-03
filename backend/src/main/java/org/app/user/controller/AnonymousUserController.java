@@ -29,6 +29,7 @@ public class AnonymousUserController {
         return ApiResponse.success(response);
     }
 
+    // TODO : 문제 만든사람이 보려하고 CREATOR_ONLY 면 보여줄 수 있어야됨.
     // public 한 사용자 플레이 기록 (목록) 보기
     @GetMapping("/public-record")
     public ApiResponse<GetPublicRecordsResponse> getPublicRecords(
@@ -51,6 +52,7 @@ public class AnonymousUserController {
         return ApiResponse.success(response);
     }
 
+    // TODO : 문제 만든사람이 보려하고 CREATOR_ONLY 면 보여줄 수 있어야됨.
     // public 한 사용자 플레이 기록 (단일) 보기
     @GetMapping("/public-record/{record-id:\\d+}")
     public ApiResponse<GetPublicRecordResponse> getPublicRecord(

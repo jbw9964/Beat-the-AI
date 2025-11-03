@@ -37,13 +37,13 @@ public class Rating extends BaseTimeEntity {
     private String comment;
 
     @Column(nullable = false)
-    private int rating;
+    private int score;
 
-    // TODO : rating 점수 관련해서 app 레벨 제약사항 필요 : [0, 5] 사이의 정수
+    // TODO : score 관련해서 app 레벨 제약사항 필요 : [0, 5] 사이의 정수
 
-    public Rating(Problem problem, Long userId, int rating) {
+    public Rating(Problem problem, Long userId, int score) {
         this.problem = problem;
         this.userId = userId;
-        this.rating = rating;
+        this.score = score;
     }
 }
