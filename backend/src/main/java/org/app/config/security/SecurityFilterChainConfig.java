@@ -2,7 +2,8 @@ package org.app.config.security;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
-import org.app.config.security.dto.*;
+import org.app.config.security.component.*;
+import org.app.config.security.domain.*;
 import org.app.config.security.filter.*;
 import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
@@ -110,9 +111,9 @@ public class SecurityFilterChainConfig {
 
                         // user doamin
                         .requestMatchers(
-                                "/api/user/{user_id:\\d+}",
-                                "/api/user/{user_id:\\d+}/public-record",
-                                "/api/user/{user_id:\\d+}/public-record/{record_id:\\d+}"
+                                "/api/user/{user-id:\\d+}",
+                                "/api/user/{user-id:\\d+}/public-record",
+                                "/api/user/{user-id:\\d+}/public-record/{record-id:\\d+}"
                         ).permitAll()
 
                         // endpoints for auth testing

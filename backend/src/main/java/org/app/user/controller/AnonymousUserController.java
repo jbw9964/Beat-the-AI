@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/user/{user_id:\\d+}")
+@RequestMapping("/api/user/{user-id:\\d+}")
 @RequiredArgsConstructor
 public class AnonymousUserController {
 
@@ -21,7 +21,7 @@ public class AnonymousUserController {
     // 사용자 정보 보기
     @GetMapping
     public ApiResponse<GetUserResponse> getUser(
-            @PathVariable("user_id") Long userId,
+            @PathVariable("user-id") Long userId,
             @AuthenticationPrincipal Long authenticatedUserId
     ) {
         GetUserResponse response = anonymousUserService.getUser(userId, authenticatedUserId);
@@ -29,10 +29,11 @@ public class AnonymousUserController {
         return ApiResponse.success(response);
     }
 
+    // TODO : 문제 만든사람이 보려하고 CREATOR_ONLY 면 보여줄 수 있어야됨.
     // public 한 사용자 플레이 기록 (목록) 보기
     @GetMapping("/public-record")
     public ApiResponse<GetPublicRecordsResponse> getPublicRecords(
-            @PathVariable("user_id") Long userId,
+            @PathVariable("user-id") Long userId,
             @Valid @ParameterObject @ModelAttribute
             SimplePageRequest pageRequest,
             @AuthenticationPrincipal Long authenticatedUserId
@@ -51,11 +52,12 @@ public class AnonymousUserController {
         return ApiResponse.success(response);
     }
 
+    // TODO : 문제 만든사람이 보려하고 CREATOR_ONLY 면 보여줄 수 있어야됨.
     // public 한 사용자 플레이 기록 (단일) 보기
-    @GetMapping("/public-record/{record_id:\\d+}")
+    @GetMapping("/public-record/{record-id:\\d+}")
     public ApiResponse<GetPublicRecordResponse> getPublicRecord(
-            @PathVariable("user_id") Long userId,
-            @PathVariable("record_id") Long recordId,
+            @PathVariable("user-id") Long userId,
+            @PathVariable("record-id") Long recordId,
             @AuthenticationPrincipal Long authenticatedUserId
     ) {
         GetPublicRecordResponse response = anonymousUserService.getPublicRecord(

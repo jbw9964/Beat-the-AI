@@ -1,4 +1,4 @@
-package org.app.config.security;
+package org.app.config.security.component;
 
 import com.fasterxml.jackson.databind.*;
 import jakarta.servlet.http.*;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class ApiAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final int CODE = 401;
+    private static final int CODE = HttpStatus.UNAUTHORIZED.value();
 
     private final ObjectMapper objMapper;
     private final MdcIdConfigurer mdcIdConfigurer;

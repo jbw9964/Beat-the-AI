@@ -1,7 +1,7 @@
 package org;
 
 import lombok.extern.slf4j.*;
-import org.app.config.security.dto.*;
+import org.app.config.security.domain.*;
 import org.app.util.api.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.access.prepost.*;

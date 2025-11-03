@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
-import org.app.config.security.dto.*;
+import org.app.config.security.domain.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.context.*;
