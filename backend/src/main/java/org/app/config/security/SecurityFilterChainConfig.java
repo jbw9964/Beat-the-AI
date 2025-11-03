@@ -61,6 +61,7 @@ public class SecurityFilterChainConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-ui").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().denyAll()
                 );
 
@@ -98,20 +99,34 @@ public class SecurityFilterChainConfig {
         http
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/auth/signup", "/api/auth/reissue")
-                        .permitAll()
-                        .requestMatchers("/oidc/login", "/oidc/signup")
-                        .permitAll()
 
-                        .requestMatchers("/api/auth-testing/public")
-                        .permitAll()
-                        .requestMatchers("/api/auth-testing/anonymous")
-                        .hasAuthority(ANONYMOUS_AUTHORITY)
-                        .requestMatchers("/api/auth-testing/user")
-                        .hasAuthority(USER_AUTHORITY)
+                        // auth domain
+                        .requestMatchers(
+                                "/api/auth/login", "/api/auth/signup", "/api/auth/reissue"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/oidc/login", "/oidc/signup"
+                        ).permitAll()
 
-                        .anyRequest()
-                        .authenticated()
+                        // user doamin
+                        .requestMatchers(
+                                "/api/user/{user_id:\\d+}",
+                                "/api/user/{user_id:\\d+}/public-record",
+                                "/api/user/{user_id:\\d+}/public-record/{record_id:\\d+}"
+                        ).permitAll()
+
+                        // endpoints for auth testing
+                        .requestMatchers(
+                                "/api/auth-testing/public"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/auth-testing/anonymous"
+                        ).hasAuthority(ANONYMOUS_AUTHORITY)
+                        .requestMatchers(
+                                "/api/auth-testing/user"
+                        ).hasAuthority(USER_AUTHORITY)
+
+                        .anyRequest().authenticated()
                 )
         ;
 
@@ -138,9 +153,8 @@ public class SecurityFilterChainConfig {
                 http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
 
-    // Bean 으로 정의하면 spring security 의 FilterChainProxy-SecurityFilterChain 에 속함 뿐만 아니라
-    // Spring MVC 가 자동 구성하는 Servlet filter 에도 속하게 됨. 아마 boot-web 결합한 뭔가때문일 듯.
-    // 그래서 아래 bypassingJwtAuthFilterRegistration 로 해결함.
+    // Bean 으로 정의하면 Spring MVC 가 자동 구성하는 Servlet filter 에도 속하게 됨.
+    // 아마 boot-web 결합한 뭔가때문일 듯. 그래서 아래 bypassingJwtAuthFilterRegistration 로 해결함.
     // 참고 : https://docs.spring.io/spring-boot/how-to/webserver.html#howto.webserver.add-servlet-filter-listener.spring-bean
     @Bean
     public BypassingJwtAuthFilter bypassingJwtAuthFilter(
