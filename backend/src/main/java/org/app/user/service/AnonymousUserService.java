@@ -70,7 +70,7 @@ public class AnonymousUserService {
         DetailedPlayRecordInfo detailedPlayRecordInfo = Util.toDetailedInfo(find);
         List<ScenarioRecordInfo> submittedScenarioInfos
                 = find.getScenarioRecords().stream()
-                .filter(ScenarioRecord::isHasSubmitted)
+                .filter(ScenarioRecord::hasSubmitted)
                 .map(Util::toScenarioInfo)
                 .sorted(Comparator.comparing(ScenarioRecordInfo::scenarioOrder))
                 .toList();
@@ -115,10 +115,10 @@ public class AnonymousUserService {
             int nOfPassedSce = 0;
 
             for (ScenarioRecord sr : scenarioRecords) {
-                if (sr.isHasSubmitted()) {
+                if (sr.hasSubmitted()) {
                     nOfSubmittedSce++;
                 }
-                if (sr.isHasPassed()) {
+                if (sr.hasPassed()) {
                     nOfPassedSce++;
                 }
             }
@@ -138,8 +138,8 @@ public class AnonymousUserService {
             String scenarioContent = entity.getScenarioContent();
             String userSubmissionContent = entity.getUserSubmissionContent();
             String aiGeneratedContent = entity.getAiGeneratedContent();
-            boolean hasSubmitted = entity.isHasSubmitted();
-            boolean hasPassed = entity.isHasPassed();
+            boolean hasSubmitted = entity.hasSubmitted();
+            boolean hasPassed = entity.hasPassed();
             LocalDateTime submittedAt = entity.getSubmittedAt();
 
             return new ScenarioRecordInfo(

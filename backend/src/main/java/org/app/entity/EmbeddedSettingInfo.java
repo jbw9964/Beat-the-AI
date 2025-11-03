@@ -2,9 +2,11 @@ package org.app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.*;
 
 @Getter
 @Embeddable
+@Accessors(fluent = true, chain = false)
 public final class EmbeddedSettingInfo {
 
     private boolean notiRating;

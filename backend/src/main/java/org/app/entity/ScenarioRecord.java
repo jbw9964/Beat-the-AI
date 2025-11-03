@@ -3,6 +3,7 @@ package org.app.entity;
 import jakarta.persistence.*;
 import java.time.*;
 import lombok.*;
+import lombok.experimental.*;
 
 @Getter
 @Entity
@@ -35,9 +36,11 @@ public class ScenarioRecord extends BaseTimeEntity {
     private String aiGeneratedContent;
 
     @Column(nullable = false)
+    @Accessors(fluent = true, chain = false)
     private boolean hasSubmitted;
 
     @Column(nullable = false)
+    @Accessors(fluent = true, chain = false)
     private boolean hasPassed;
 
     private LocalDateTime submittedAt;

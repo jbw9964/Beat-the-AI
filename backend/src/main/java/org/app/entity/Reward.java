@@ -2,6 +2,7 @@ package org.app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.*;
 
 @Getter
 @Entity
@@ -46,6 +47,7 @@ public class Reward extends AuditingCreation {
     private RewardStorageType storageType;
 
     @Column(nullable = false)
+    @Accessors(fluent = true, chain = false)
     private boolean hasTransferred;
 
     public Reward(

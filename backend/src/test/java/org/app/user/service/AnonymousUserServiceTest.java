@@ -183,7 +183,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
         int nOfTotal = submittedScenarios.size() + unsubmittedScenarios.size();
         int nOfSubmitted = submittedScenarios.size();
         int nOfPassed = (int) submittedScenarios.stream()
-                .filter(ScenarioRecord::isHasPassed)
+                .filter(ScenarioRecord::hasPassed)
                 .count();
         int nOfSToGetReward = playRecord.getNumOfScenariosToGetReward();
         int nOfSToFailPlay = playRecord.getNumOfScenariosToFailPlay();
@@ -236,8 +236,8 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
             assertThat(scenarioRecord.getAiGeneratedContent()).isEqualTo(
                     element.aiGeneratedContent()
             );
-            assertThat(scenarioRecord.isHasSubmitted()).isEqualTo(element.hasSubmitted()).isTrue();
-            assertThat(scenarioRecord.isHasPassed()).isEqualTo(element.hasPassed());
+            assertThat(scenarioRecord.hasSubmitted()).isEqualTo(element.hasSubmitted()).isTrue();
+            assertThat(scenarioRecord.hasPassed()).isEqualTo(element.hasPassed());
             assertThat(scenarioRecord.getSubmittedAt()).isCloseTo(
                     element.submittedAt(), within(Duration.ofSeconds(5L))
             );
