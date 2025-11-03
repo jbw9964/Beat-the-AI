@@ -15,7 +15,7 @@ import org.springframework.stereotype.*;
 
 @Service
 @RequiredArgsConstructor
-public class AnonymouseUserService {
+public class AnonymousUserService {
 
     private final UserRepository userRepo;
     private final UserPlayRecordRepository userPlayRecordRepo;

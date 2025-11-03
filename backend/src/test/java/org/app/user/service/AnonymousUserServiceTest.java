@@ -24,14 +24,14 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
 @Slf4j
-@Import(AnonymouseUserServiceTest.DataInitializer.class)
+@Import(AnonymousUserServiceTest.DataInitializer.class)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-class AnonymouseUserServiceTest extends IntegrationTestSupport {
+class AnonymousUserServiceTest extends IntegrationTestSupport {
 
     static final Random RANDOM = new Random();
     static User testUser;
     @Autowired
-    AnonymouseUserService anonymouseUserService;
+    AnonymousUserService anonymousUserService;
 
     @Autowired
     DataInitializer initializer;
@@ -63,7 +63,7 @@ class AnonymouseUserServiceTest extends IntegrationTestSupport {
     @Test
     @DisplayName("임의의 사용자 정보를 조회할 수 있다.")
     void getUser() {
-        GetUserResponse resp = anonymouseUserService.getUser(testUser.getId(), null);
+        GetUserResponse resp = anonymousUserService.getUser(testUser.getId(), null);
 
         assertThat(resp).isNotNull();
         assertThat(resp.userId()).isEqualTo(testUser.getId());
@@ -104,7 +104,7 @@ class AnonymouseUserServiceTest extends IntegrationTestSupport {
         int pageNo = 0;
         int pageSize = publicRecords.size() / 2;
 
-        GetPublicRecordsResponse response = anonymouseUserService.getPublicRecords(
+        GetPublicRecordsResponse response = anonymousUserService.getPublicRecords(
                 userId, pageNo, pageSize, null
         );
 
@@ -171,7 +171,7 @@ class AnonymouseUserServiceTest extends IntegrationTestSupport {
             }
         }
 
-        GetPublicRecordResponse response = anonymouseUserService.getPublicRecord(
+        GetPublicRecordResponse response = anonymousUserService.getPublicRecord(
                 userId, playRecordId, null
         );
 
@@ -243,13 +243,13 @@ class AnonymouseUserServiceTest extends IntegrationTestSupport {
     void testUserNotFound() {
         Long notExistingUserId = Long.MAX_VALUE;
 
-        assertThatThrownBy(() -> anonymouseUserService.getUser(notExistingUserId, null))
+        assertThatThrownBy(() -> anonymousUserService.getUser(notExistingUserId, null))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> anonymouseUserService.getPublicRecords(
+        assertThatThrownBy(() -> anonymousUserService.getPublicRecords(
                 notExistingUserId, 0, 5, null
         ))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> anonymouseUserService.getPublicRecord(
+        assertThatThrownBy(() -> anonymousUserService.getPublicRecord(
                 notExistingUserId, 5L, null
         ))
                 .isInstanceOf(UserNotFoundException.class);
@@ -265,7 +265,7 @@ class AnonymouseUserServiceTest extends IntegrationTestSupport {
         );
         Long playRecordId = nonPublicPR.getId();
 
-        assertThatThrownBy(() -> anonymouseUserService.getPublicRecord(
+        assertThatThrownBy(() -> anonymousUserService.getPublicRecord(
                 userId, playRecordId, null
         ))
                 .isInstanceOf(PublicPlayRecordNotFoundException.class);

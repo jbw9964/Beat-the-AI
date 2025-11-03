@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AnonymousUserController {
 
-    private final AnonymouseUserService anonymouseUserService;
+    private final AnonymousUserService anonymousUserService;
 
     // 사용자 정보 보기
     @GetMapping
@@ -24,7 +24,7 @@ public class AnonymousUserController {
             @PathVariable("user_id") Long userId,
             @AuthenticationPrincipal Long authenticatedUserId
     ) {
-        GetUserResponse response = anonymouseUserService.getUser(userId, authenticatedUserId);
+        GetUserResponse response = anonymousUserService.getUser(userId, authenticatedUserId);
 
         return ApiResponse.success(response);
     }
@@ -44,7 +44,7 @@ public class AnonymousUserController {
         int pageNo = pageRequest.getPageNumOrDefault();
         int pageSize = pageRequest.getPageSizeOrDefault();
 
-        GetPublicRecordsResponse response = anonymouseUserService.getPublicRecords(
+        GetPublicRecordsResponse response = anonymousUserService.getPublicRecords(
                 userId, pageNo, pageSize, authenticatedUserId
         );
 
@@ -58,7 +58,7 @@ public class AnonymousUserController {
             @PathVariable("record_id") Long recordId,
             @AuthenticationPrincipal Long authenticatedUserId
     ) {
-        GetPublicRecordResponse response = anonymouseUserService.getPublicRecord(
+        GetPublicRecordResponse response = anonymousUserService.getPublicRecord(
                 userId, recordId, authenticatedUserId
         );
 
