@@ -110,9 +110,9 @@ public class SecurityFilterChainConfig {
 
                         // user doamin
                         .requestMatchers(
-                                "/api/user/{user_id:\\d+}",
-                                "/api/user/{user_id:\\d+}/public-record",
-                                "/api/user/{user_id:\\d+}/public-record/{record_id:\\d+}"
+                                "/api/user/{user-id:\\d+}",
+                                "/api/user/{user-id:\\d+}/public-record",
+                                "/api/user/{user-id:\\d+}/public-record/{record-id:\\d+}"
                         ).permitAll()
 
                         // endpoints for auth testing
