@@ -1,8 +1,9 @@
-package org.app.config.security;
+package org.app.config.security.component;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
-import org.app.config.security.dto.*;
+import org.app.config.security.*;
+import org.app.config.security.domain.*;
 import org.app.entity.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class BypassingJwtAuthProvider implements AuthenticationProvider {
+public class BypassingJwtAuthProvider implements AuthenticationProvider {
 
     private final UserPrincipalProvider userPrincipalProvider;
 

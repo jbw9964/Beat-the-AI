@@ -1,4 +1,4 @@
-package org.app.config.security.dto;
+package org.app.config.security.domain;
 
 import lombok.*;
 import org.springframework.modulith.*;

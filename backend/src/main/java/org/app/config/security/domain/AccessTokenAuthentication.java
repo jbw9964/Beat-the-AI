@@ -1,19 +1,13 @@
-package org.app.config.security.dto;
+package org.app.config.security.domain;
 
 import java.util.*;
-import lombok.*;
 import org.springframework.security.core.*;
-import org.springframework.security.core.authority.*;
 
-public record SimpleUserAuthentication(Long userId) implements Authentication {
-
-    public SimpleUserAuthentication(@NonNull Long userId) {
-        this.userId = userId;
-    }
+public record AccessTokenAuthentication(String accessToken) implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(Roles.USER.getAuthority()));
+        return List.of();
     }
 
     @Override
@@ -27,13 +21,13 @@ public record SimpleUserAuthentication(Long userId) implements Authentication {
     }
 
     @Override
-    public Long getPrincipal() {
-        return this.userId();
+    public Object getPrincipal() {
+        return this.accessToken();
     }
 
     @Override
     public boolean isAuthenticated() {
-        return true;
+        return false;
     }
 
     @Override
@@ -43,7 +37,6 @@ public record SimpleUserAuthentication(Long userId) implements Authentication {
 
     @Override
     public String getName() {
-        return String.format("USER_ID=%d", this.userId);
+        return String.format("ACCESS_TOKEN=%s", accessToken);
     }
-
 }

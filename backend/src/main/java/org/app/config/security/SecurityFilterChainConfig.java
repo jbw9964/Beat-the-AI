@@ -2,7 +2,8 @@ package org.app.config.security;
 
 import lombok.*;
 import lombok.extern.slf4j.*;
-import org.app.config.security.dto.*;
+import org.app.config.security.component.*;
+import org.app.config.security.domain.*;
 import org.app.config.security.filter.*;
 import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
