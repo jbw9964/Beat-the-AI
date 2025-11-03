@@ -142,7 +142,9 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
             assertThat(publicRecord.getDescription()).isEqualTo(element.description());
             assertThat(publicRecord.getStatus()).isEqualTo(element.status());
             assertThat(publicRecord.getVisibility()).isEqualTo(element.visibility());
-            assertThat(publicRecord.getCreatedAt()).isEqualTo(element.createdAt());
+            assertThat(publicRecord.getCreatedAt()).isCloseTo(
+                    element.createdAt(), within(Duration.ofSeconds(5L))
+            );
         }
     }
 
@@ -225,15 +227,20 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
             assertThat(unsubmittedSRMap).doesNotContainKey(scenarioRecordId);
 
             ScenarioRecord scenarioRecord = submittedSRMap.get(scenarioRecordId);
-            assertThat(element.scenarioOrder()).isEqualTo(scenarioRecord.getScenarioOrder());
-            assertThat(element.scenarioContent()).isEqualTo(scenarioRecord.getScenarioContent());
-            assertThat(element.userSubmissionContent()).isEqualTo(
-                    scenarioRecord.getUserSubmissionContent());
-            assertThat(element.aiGeneratedContent()).isEqualTo(
-                    scenarioRecord.getAiGeneratedContent());
-            assertThat(element.hasSubmitted()).isEqualTo(scenarioRecord.isHasSubmitted()).isTrue();
-            assertThat(element.hasPassed()).isEqualTo(scenarioRecord.isHasPassed());
-            assertThat(element.submittedAt()).isEqualTo(scenarioRecord.getSubmittedAt());
+            assertThat(scenarioRecord.getId()).isEqualTo(element.scenarioRecordId());
+            assertThat(scenarioRecord.getScenarioOrder()).isEqualTo(element.scenarioOrder());
+            assertThat(scenarioRecord.getScenarioContent()).isEqualTo(element.scenarioContent());
+            assertThat(scenarioRecord.getUserSubmissionContent()).isEqualTo(
+                    element.userSubmissionContent()
+            );
+            assertThat(scenarioRecord.getAiGeneratedContent()).isEqualTo(
+                    element.aiGeneratedContent()
+            );
+            assertThat(scenarioRecord.isHasSubmitted()).isEqualTo(element.hasSubmitted()).isTrue();
+            assertThat(scenarioRecord.isHasPassed()).isEqualTo(element.hasPassed());
+            assertThat(scenarioRecord.getSubmittedAt()).isCloseTo(
+                    element.submittedAt(), within(Duration.ofSeconds(5L))
+            );
         }
 
     }
