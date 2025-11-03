@@ -111,12 +111,17 @@ public class AnonymousUserService {
 
             List<ScenarioRecord> scenarioRecords = entity.getScenarioRecords();
             int nOfTotalSce = scenarioRecords.size();
-            int nOfSubmittedSce, nOfPassedSce;
+            int nOfSubmittedSce = 0;
+            int nOfPassedSce = 0;
 
-            nOfSubmittedSce = (int) scenarioRecords.stream()
-                    .filter(ScenarioRecord::isHasSubmitted).count();
-            nOfPassedSce = (int) scenarioRecords.stream()
-                    .filter(ScenarioRecord::isHasPassed).count();
+            for (ScenarioRecord sr : scenarioRecords) {
+                if (sr.isHasSubmitted()) {
+                    nOfSubmittedSce++;
+                }
+                if (sr.isHasPassed()) {
+                    nOfPassedSce++;
+                }
+            }
 
             int nOfSceToGetReward = entity.getNumOfScenariosToGetReward();
             int nOfSceToFailPlay = entity.getNumOfScenariosToFailPlay();
