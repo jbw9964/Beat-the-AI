@@ -71,7 +71,7 @@ class SimpleAuthServiceTest extends IntegrationTestSupport {
         assertThat(user.getEmail()).isEqualTo(email);
 
         assertThat(user.getLoginId()).isEqualTo(loginId);
-        assertThat(pwEncoder.matches(password, user.getEncryptedPw())).isTrue();
+        assertThat(pwEncoder.matches(password, user.getEncryptedPassword())).isTrue();
     }
 
     @Test

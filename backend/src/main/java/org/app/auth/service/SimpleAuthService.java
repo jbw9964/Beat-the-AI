@@ -31,7 +31,7 @@ public class SimpleAuthService {
                 this::loginFailEx, Predicate.not(User::withdrawn)
         );
 
-        if (!pwEncoder.matches(password, find.getEncryptedPw())) {
+        if (!pwEncoder.matches(password, find.getEncryptedPassword())) {
             throw this.loginFailEx();
         }
 

@@ -34,7 +34,7 @@ public class User extends AuditingCreation {
     private String loginId;
 
     @Column(length = 255)
-    private String encryptedPw;
+    private String encryptedPassword;
 
     @Column(length = 255)
     private String thumbnailUrl;
@@ -49,10 +49,14 @@ public class User extends AuditingCreation {
         this.name = name;
     }
 
-    public User(String name, String loginId, String encryptedPw) {
+    public User(String name, String loginId, String encryptedPassword) {
         this.name = name;
         this.loginId = loginId;
-        this.encryptedPw = encryptedPw;
+        this.encryptedPassword = encryptedPassword;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 
     public void changeEmail(String email) {
@@ -61,5 +65,14 @@ public class User extends AuditingCreation {
 
     public void changeThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public void changeEncryptedPassword(String encryptedPw) {
+        this.encryptedPassword = encryptedPw;
+    }
+
+    public void withdrawUser(LocalDate withdrawnAt) {
+        this.withdrawn = true;
+        this.withdrawnAt = withdrawnAt;
     }
 }
