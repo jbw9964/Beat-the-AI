@@ -349,7 +349,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
                 String rewardMessage, int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
                 PlayRecordStatus status, PlayRecordVisibility visibility
         ) {
-            User find = userRepo.findById(userId).orElseThrow();
+            User find = userRepo.findById(userId).orElseThrow(AssertionError::new);
             PlayRecord playRecord = new PlayRecord(
                     find, problemId, title, description,
                     rewardMessage, numOfScenariosToGetReward, numOfScenariosToFailPlay,
@@ -363,7 +363,8 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
         ScenarioRecord createNewUnSubmittedScenarioRecord(
                 Long playRecordId, int scenarioOrder, String scenarioContent
         ) {
-            PlayRecord find = userPlayRecordRepo.findById(playRecordId).orElseThrow();
+            PlayRecord find = userPlayRecordRepo.findById(playRecordId)
+                    .orElseThrow(AssertionError::new);
             ScenarioRecord scenarioRecord
                     = new ScenarioRecord(find, scenarioOrder, scenarioContent);
             return userScenarioRecordRepo.save(scenarioRecord);

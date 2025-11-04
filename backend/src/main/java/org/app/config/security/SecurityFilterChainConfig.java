@@ -127,6 +127,9 @@ public class SecurityFilterChainConfig {
                                 "/api/auth-testing/user"
                         ).hasAuthority(USER_AUTHORITY)
 
+                        // endpoint for page request testing
+                        .requestMatchers("/api/paging-testing/get").permitAll()
+
                         .anyRequest().authenticated()
                 )
         ;
