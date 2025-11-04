@@ -8,6 +8,7 @@ public record UpdateInfoRequest(
         String username,
 
         @Email(message = "이메일 형식이 올바르지 않습니다.")
+        @Size(message = "이메일은 50자 이하여야 합니다.", max = 50)
         String email,
 
         @Size(message = "썸네일 이미지 주소는 255자 이하여야 합니다.", max = 255)

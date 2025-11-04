@@ -24,6 +24,8 @@ public class PagingTestController {
     ) {
         log.info("Given page request: {}", pageRequest);
 
+        log.info(".pageNum(): {}, .pageSize: {}", pageRequest.pageNum(), pageRequest.pageSize());
+
         int pageNum = pageRequest.getPageNumOrDefault();
         int pageSize = pageRequest.getPageSizeOrDefault();
         log.info("pageNum: {}, pageSize: {}", pageNum, pageSize);
