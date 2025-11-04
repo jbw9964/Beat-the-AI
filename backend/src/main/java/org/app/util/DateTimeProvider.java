@@ -11,6 +11,10 @@ public class DateTimeProvider {
         return LocalDateTime.now();
     }
 
+    public LocalDate localDateNow() {
+        return LocalDate.now();
+    }
+
     public Date dateNow() {
         return Date.from(Instant.now());
     }
