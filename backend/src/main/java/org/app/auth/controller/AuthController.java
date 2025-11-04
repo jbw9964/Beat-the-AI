@@ -54,16 +54,19 @@ class AuthController {
 
     @PostMapping("/oidc/login")     // oidc 로그인
     public ApiResponse<?> oidcLogin() {
+        // TODO : OIDC 로그인 구현
         throw new NotImplementedException("OIDC 로그인 미구현");
     }
 
     @PostMapping("/oidc/signup")    // oidc 회원가입
     public ApiResponse<?> oidcSignup() {
+        // TODO : OIDC 회원가입 구현
         throw new NotImplementedException("OIDC 회원가입 미구현");
     }
 
     @PostMapping("/oidc/connect")   // oidc 연동
     public ApiResponse<?> oidcConnect() {
+        // TODO : OIDC 연동 구현
         throw new NotImplementedException("OIDC 연동 미구현");
     }
 }

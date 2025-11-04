@@ -9,6 +9,7 @@ import org.app.user.domain.exception.*;
 import org.app.user.dto.*;
 import org.app.user.dto.response.*;
 import org.app.user.repository.*;
+import org.app.util.*;
 import org.app.util.api.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
@@ -17,13 +18,15 @@ import org.springframework.stereotype.*;
 @RequiredArgsConstructor
 public class AnonymousUserService {
 
+    private final GlobalUtil globalUtil;
     private final UserRepository userRepo;
     private final UserPlayRecordRepository userPlayRecordRepo;
 
     public GetUserResponse getUser(Long userId, Long authenticatedUserId) {
 
-        User find = Util.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new
+        User find = globalUtil.getOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new,
+                Predicate.not(User::withdrawn)
         );
 
         String username = find.getName();
@@ -39,7 +42,10 @@ public class AnonymousUserService {
             Long userId, int pageNo, int pageSize, Long authenticatedUserId
     ) {
 
-        Util.getOrThrow(userId, userRepo::findById, UserNotFoundException::new);
+        globalUtil.getOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new,
+                Predicate.not(User::withdrawn)
+        );
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<PlayRecord> find
@@ -60,9 +66,12 @@ public class AnonymousUserService {
             Long userId, Long recordId, Long authenticatedUserId
     ) {
 
-        Util.getOrThrow(userId, userRepo::findById, UserNotFoundException::new);
+        globalUtil.getOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new,
+                Predicate.not(User::withdrawn)
+        );
 
-        PlayRecord find = Util.getOrThrow(
+        PlayRecord find = globalUtil.getOrThrow(
                 recordId, userPlayRecordRepo::findPublicRecordsByIdFetchingScenarioRecords,
                 PublicPlayRecordNotFoundException::new
         );
@@ -84,12 +93,6 @@ public class AnonymousUserService {
     }
 
     private record Util() {
-
-        static <E, I> E getOrThrow(
-                I identity, Function<I, Optional<E>> func, Supplier<RuntimeException> ex
-        ) {
-            return func.apply(identity).orElseThrow(ex);
-        }
 
         static SimplePlayRecordInfo toSimpleInfo(PlayRecord entity) {
             Long playRecordId = entity.getId();

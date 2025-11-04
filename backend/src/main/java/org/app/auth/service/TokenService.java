@@ -1,6 +1,7 @@
 package org.app.auth.service;
 
 import io.jsonwebtoken.*;
+import java.util.function.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.auth.domain.token.*;
@@ -8,6 +9,7 @@ import org.app.auth.dto.*;
 import org.app.auth.repository.*;
 import org.app.config.security.*;
 import org.app.entity.*;
+import org.app.util.*;
 import org.app.util.exception.*;
 import org.springframework.stereotype.*;
 
@@ -16,6 +18,7 @@ import org.springframework.stereotype.*;
 @RequiredArgsConstructor
 public class TokenService implements UserPrincipalProvider {
 
+    private final GlobalUtil globalUtil;
     private final AccessTokenManager atManager;
     private final RefreshTokenManager rtManager;
     private final AuthUserRepository userRepo;
@@ -38,7 +41,10 @@ public class TokenService implements UserPrincipalProvider {
 
         try {
             userId = atManager.getClaimsFrom(accessToken).getUserId();
-            return userRepo.findById(userId).orElseThrow(this::invalidTokenEx);
+            return globalUtil.getOrThrow(
+                    userId, userRepo::findById, this::invalidTokenEx,
+                    Predicate.not(User::withdrawn)
+            );
         } catch (JwtException e) {
             log.warn(e.getMessage(), e);
             throw this.invalidTokenEx();

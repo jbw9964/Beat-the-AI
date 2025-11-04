@@ -1,11 +1,13 @@
 package org.app.auth.service;
 
+import java.util.function.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.auth.domain.exception.*;
 import org.app.auth.dto.*;
 import org.app.auth.repository.*;
 import org.app.entity.*;
+import org.app.util.*;
 import org.app.util.exception.*;
 import org.springframework.dao.*;
 import org.springframework.security.crypto.password.*;
@@ -17,14 +19,17 @@ import org.springframework.transaction.annotation.*;
 @RequiredArgsConstructor
 public class SimpleAuthService {
 
+    private final GlobalUtil globalUtil;
     private final AuthUserRepository userRepo;
     private final TokenService tokenService;
     private final PasswordEncoder pwEncoder;
 
     public Tokens loginWithIdPw(String loginId, String password) {
 
-        User find = userRepo.findByLoginId(loginId)
-                .orElseThrow(this::loginFailEx);
+        User find = globalUtil.getOrThrow(
+                loginId, userRepo::findByLoginId,
+                this::loginFailEx, Predicate.not(User::withdrawn)
+        );
 
         if (!pwEncoder.matches(password, find.getEncryptedPw())) {
             throw this.loginFailEx();
