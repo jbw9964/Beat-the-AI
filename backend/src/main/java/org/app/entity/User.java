@@ -1,7 +1,9 @@
 package org.app.entity;
 
 import jakarta.persistence.*;
+import java.time.*;
 import lombok.*;
+import lombok.experimental.*;
 
 @Getter
 @Entity
@@ -36,6 +38,12 @@ public class User extends AuditingCreation {
 
     @Column(length = 255)
     private String thumbnailUrl;
+
+    @Column(nullable = false)
+    @Accessors(fluent = true, chain = false)
+    private boolean withdrawn = false;
+
+    private LocalDate withdrawnAt;
 
     public User(String name) {
         this.name = name;
