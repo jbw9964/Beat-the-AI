@@ -2,8 +2,10 @@ package org.app.util;
 
 import java.util.*;
 import java.util.function.*;
+import lombok.extern.slf4j.*;
 import org.springframework.stereotype.*;
 
+@Slf4j
 @Component
 public class GlobalUtil {
 
@@ -18,7 +20,16 @@ public class GlobalUtil {
             I identity, Function<I, Optional<E>> func,
             Supplier<RuntimeException> ex, Predicate<E> filter
     ) {
-        return func.apply(identity).filter(filter).orElseThrow(ex);
+        Optional<E> opt = func.apply(identity);
+
+        if (
+                opt.isPresent() &&
+                (opt = opt.filter(filter)).isEmpty()
+        ) {
+            log.info("Value has been filtered by: {}", filter);
+        }
+
+        return opt.orElseThrow(ex);
     }
 
 }
