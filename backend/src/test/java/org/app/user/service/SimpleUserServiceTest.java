@@ -404,44 +404,110 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자를 찾을 수 없으면 NotFoundException 이 발생한다.")
     void testUserNotFoundException() {
         Long notExistingUserId = Long.MAX_VALUE;
+        String tempStr = "SOMETHING";
 
-        // TODO : 사실 서비스 인자로 받는 userId 는 filter 거쳐서 제공된 값이라
-        //  대부분의 경우 UserNotFoundException 이 발생할 일이 없는데...
-        //  이걸 테스트로 만들어야 할까? 그리고 서비스 내 반드시 검사 로직이 필요할까?
-//        Long problemId = dataInitializer.createNewProblem()
-//
-//        assertThatThrownBy(() -> simpleUserService.getMe(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//        assertThatThrownBy(() -> simpleUserService.withdrawUser(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//
-//        assertThatThrownBy(() -> simpleUserService.updateInfo(
-//                notExistingUserId, null, null, null
-//        ))
-//                .isInstanceOf(UserNotFoundException.class);
-//        assertThatThrownBy(() -> simpleUserService.updateSetting(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//
-//        assertThatThrownBy(() -> simpleUserService.updatePassword(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//
-//        assertThatThrownBy(() -> simpleUserService.getMyProblems(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//        assertThatThrownBy(() -> simpleUserService.getMyProblem(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//
-//        assertThatThrownBy(() -> simpleUserService.getMyRatings(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
-//        assertThatThrownBy(() -> simpleUserService.getMyRating(notExistingUserId))
-//                .isInstanceOf(UserNotFoundException.class);
+        // 정보 조회, 탈퇴, 정보 수정, 설정 수정, 비번 바꾸기
+        assertThatThrownBy(() -> simpleUserService.getMe(notExistingUserId))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.withdrawUser(notExistingUserId))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.updateInfo(
+                notExistingUserId, tempStr, tempStr, tempStr
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.updateSetting(notExistingUserId))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.updatePassword(
+                notExistingUserId, tempStr, tempStr
+        ))
+                .isInstanceOf(UserNotFoundException.class);
 
+        // 내가 만든 문제 목록 보기, 문제 내용 보기
+        assertThatThrownBy(() -> simpleUserService.getMyProblems(
+                notExistingUserId, 0, 10
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.getMyProblem(notExistingUserId, null))
+                .isInstanceOf(UserNotFoundException.class);
+
+        // 내가 평가한 내용 목록 보기, 평가 내용 보기
+        assertThatThrownBy(() -> simpleUserService.getMyRatings(
+                notExistingUserId, 0, 10
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.getMyRating(notExistingUserId, null))
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
-    @DisplayName("탈퇴한 사용자는 자신의 자원을 볼 수 없다.")
+    @DisplayName("탈퇴한 사용자는 식별되지 않는다.")
     void testUserNotFoundExceptionOnWithdrawnUser() {
-        // TODO : 이것도 filter 단에서 처리하는데 테스트가 필요할까?
-        //  또 서비스 단에서도 필요할까?
+        Long withdrawnUserId;
+        Long withdrawnUserProblemId;
+        Long withdrawnUserRatingId;
+        String tempStr = "SOMETHING";
+
+        {
+            LocalDate withdrawnDate = dateTimeProvider.localDateNow();
+
+            User newWithdrawnUser = dataInitializer.createNewWithdrawnUser(
+                    "testWITHDRAWN", "testWITHDRAWNEMAIL",
+                    "testTHUMBNAIL", "testPW", withdrawnDate
+            );
+
+            withdrawnUserId = newWithdrawnUser.getId();
+
+            Problem problem = dataInitializer.createNewProblem(
+                    withdrawnUserId, "TITLE", 2, 3,
+                    ProblemVisibility.PUBLIC,
+                    new ScenarioInfo[]{scenarioInfoSample}
+            );
+
+            withdrawnUserProblemId = problem.getId();
+
+            Rating rating = dataInitializer.createNewRating(
+                    withdrawnUserProblemId, withdrawnUserId,
+                    "comment", 3
+            );
+
+            withdrawnUserRatingId = rating.getId();
+        }
+
+        // 정보 조회, 탈퇴, 정보 수정, 설정 수정, 비번 바꾸기
+        assertThatThrownBy(() -> simpleUserService.getMe(withdrawnUserId))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.withdrawUser(withdrawnUserId))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.updateInfo(
+                withdrawnUserId, tempStr, tempStr, tempStr
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.updateSetting(withdrawnUserId))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.updatePassword(
+                withdrawnUserId, tempStr, tempStr
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+
+        // 내가 만든 문제 목록 보기, 문제 내용 보기
+        assertThatThrownBy(() -> simpleUserService.getMyProblems(
+                withdrawnUserId, 0, 10
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.getMyProblem(
+                withdrawnUserId, withdrawnUserProblemId
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+
+        // 내가 평가한 내용 목록 보기, 평가 내용 보기
+        assertThatThrownBy(() -> simpleUserService.getMyRatings(
+                withdrawnUserId, 0, 10
+        ))
+                .isInstanceOf(UserNotFoundException.class);
+        assertThatThrownBy(() -> simpleUserService.getMyRating(
+                withdrawnUserId, withdrawnUserRatingId
+        ))
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -577,6 +643,20 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
             user.changeEmail(email);
             user.changeThumbnailUrl(thumbnailUrl);
             user.changeEncryptedPassword(pwEncoder.encode(password));
+            return userRepo.save(user);
+        }
+
+        @Transactional
+        User createNewWithdrawnUser(
+                String name, String email,
+                String thumbnailUrl, String password,
+                LocalDate withdrawnAt
+        ) {
+            User user = new User(name);
+            user.changeEmail(email);
+            user.changeThumbnailUrl(thumbnailUrl);
+            user.changeEncryptedPassword(pwEncoder.encode(password));
+            user.withdrawUser(withdrawnAt);
             return userRepo.save(user);
         }
 
