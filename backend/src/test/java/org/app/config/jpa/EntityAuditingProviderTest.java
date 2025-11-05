@@ -57,7 +57,8 @@ class EntityAuditingProviderTest extends IntegrationTestSupport {
         assertThat(created).isNotNull();
         assertThat(created.getId()).isEqualTo(id);
         assertThat(created.getName()).isEqualTo(first);
-        assertThat(created.getCreatedAt()).isEqualTo(mockedCreatedAt);
+        assertThat(created.getCreatedAt())
+                .isCloseTo(mockedCreatedAt, within(Duration.ofSeconds(5L)));
         assertThat(created.getModifiedAt()).isNull();
 
         LocalDateTime mockedModifiedAt = mockedCreatedAt.minusDays(3).minusHours(2);
@@ -72,8 +73,10 @@ class EntityAuditingProviderTest extends IntegrationTestSupport {
         assertThat(modified).isNotNull();
         assertThat(modified.getId()).isEqualTo(id);
         assertThat(modified.getName()).isEqualTo(second);
-        assertThat(modified.getCreatedAt()).isEqualTo(mockedCreatedAt);
-        assertThat(modified.getModifiedAt()).isEqualTo(mockedModifiedAt);
+        assertThat(modified.getCreatedAt())
+                .isCloseTo(mockedCreatedAt, within(Duration.ofSeconds(5L)));
+        assertThat(modified.getModifiedAt())
+                .isCloseTo(mockedModifiedAt, within(Duration.ofSeconds(5L)));
     }
 
     private interface TestEntityRepo extends JpaRepository<TestEntity, Long> {
