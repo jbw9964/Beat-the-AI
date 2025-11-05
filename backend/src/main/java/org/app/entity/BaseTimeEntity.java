@@ -10,10 +10,13 @@ import org.springframework.data.jpa.domain.support.*;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity extends AuditingCreation {
 
+    @MockableLastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @PreUpdate
-    private void updateModifiedAt() {
-        this.modifiedAt = LocalDateTime.now();
+    @PrePersist
+    private void removeModifiedAtOnCreation() {
+        if (modifiedAt != null) {
+            modifiedAt = null;
+        }
     }
 }
