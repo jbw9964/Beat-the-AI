@@ -46,13 +46,14 @@ public class Problem extends BaseTimeEntity {
     public Problem(
             User user, String title,
             int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
-            ProblemVisibility visibility
+            ProblemVisibility visibility, String serializedScenarioInfo
     ) {
         this.user = user;
         this.title = title;
         this.numOfScenariosToGetReward = numOfScenariosToGetReward;
         this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
         this.visibility = visibility;
+        this.serializedScenarioInfo = serializedScenarioInfo;
     }
 
     /*

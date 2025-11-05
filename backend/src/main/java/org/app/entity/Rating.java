@@ -46,4 +46,8 @@ public class Rating extends BaseTimeEntity {
         this.userId = userId;
         this.score = score;
     }
+
+    public void changeComment(String comment) {
+        this.comment = comment;
+    }
 }

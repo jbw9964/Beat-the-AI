@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.request.*;
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 class AuthTest extends IntegrationTestSupport {
 
-    static final String BASE_URL = "/api/auth-testing";
+    static final String BASE_URL = AuthTestController.BASE_URL;
     static User testUser1, testUser2;
 
     @Autowired

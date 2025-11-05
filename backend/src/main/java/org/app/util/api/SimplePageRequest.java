@@ -23,4 +23,16 @@ public record SimplePageRequest(
     public int getPageSizeOrDefault() {
         return pageSize == null ? DEFAULT_PAGE_SIZE : pageSize;
     }
+
+    // 몰랐는데 record 여도 accessor method 를 명시할 수 있다칸다. JLS 명세에 정확한 규칙 나타나 있음.
+    // 참고 : https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.10.3
+    @Override
+    public Integer pageNum() {
+        return getPageNumOrDefault();
+    }
+
+    @Override
+    public Integer pageSize() {
+        return getPageSizeOrDefault();
+    }
 }

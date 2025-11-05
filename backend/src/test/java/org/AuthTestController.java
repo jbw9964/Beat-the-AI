@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Profile("test")
 @RestController
-@RequestMapping("/api/auth-testing")
+@RequestMapping(AuthTestController.BASE_URL)
 public class AuthTestController {
+
+    public static final String BASE_URL = "/api/auth-testing";
 
     @GetMapping("/public")
     public ApiResponse<String> onPublic() {
