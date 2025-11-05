@@ -15,7 +15,7 @@ public interface UserRatingRepository extends JpaRepository<Rating, Long> {
             countQuery = """
                     select count(r) from Rating r
                         where r.userId = :userId
-                        and r.problem.id is not null
+                        and r.problem is not null
                     """)
     Page<Rating> findByUserId(Long userId, Pageable pageable);
 
