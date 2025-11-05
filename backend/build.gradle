@@ -83,7 +83,7 @@ clean {
 tasks.named('test') {
     useJUnitPlatform()
     ignoreFailures = true
-    jvmArgs += '-Xshare:off'
+    jvmArgs += ['-Xshare:off', '-Duser.timezone=Asia/Seoul']
 }
 
 jar {
