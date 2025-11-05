@@ -96,6 +96,16 @@ class ScenarioInfoEmbedderImpl implements ScenarioInfoEmbedder {
             return false;
         }
 
-        return valid(List.of(scenarioInfos));
+        int expected = 0;
+        for (ScenarioInfo scenarioInfo : scenarioInfos) {
+            if (
+                    scenarioInfo == null ||
+                    scenarioInfo.getScenarioOrder() != expected++
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
