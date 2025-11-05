@@ -19,8 +19,9 @@ class ScenarioInfoEmbedderImpl implements ScenarioInfoEmbedder {
     public ScenarioInfo[] deserialize(String serialized) {
 
         if (!valid(serialized)) {
+            RuntimeException cause = new IllegalArgumentException();
             throw new InvalidSerializedScenarioInfoException(
-                    new IllegalArgumentException("Invalid serialized scenario info: " + serialized)
+                    "Invalid serialized scenario info: " + serialized, cause
             );
         }
 
@@ -28,7 +29,9 @@ class ScenarioInfoEmbedderImpl implements ScenarioInfoEmbedder {
         try {
             deserialized = objMapper.readValue(serialized, CLAZZ);
         } catch (JsonProcessingException e) {
-            throw new InvalidSerializedScenarioInfoException("Failed to deserialize ScenarioInfo");
+            throw new InvalidSerializedScenarioInfoException(
+                    "Failed to deserialize ScenarioInfo", e
+            );
         }
 
         if (!valid(deserialized)) {
@@ -93,16 +96,6 @@ class ScenarioInfoEmbedderImpl implements ScenarioInfoEmbedder {
             return false;
         }
 
-        int expected = 0;
-        for (ScenarioInfo scenarioInfo : scenarioInfos) {
-            if (
-                    scenarioInfo == null ||
-                    scenarioInfo.getScenarioOrder() != expected++
-            ) {
-                return false;
-            }
-        }
-
-        return true;
+        return valid(List.of(scenarioInfos));
     }
 }

@@ -10,6 +10,10 @@ public class InvalidSerializedScenarioInfoException extends RuntimeException {
         super(message);
     }
 
+    public InvalidSerializedScenarioInfoException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public InvalidSerializedScenarioInfoException(Throwable cause) {
         super(cause);
     }
