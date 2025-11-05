@@ -74,7 +74,8 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         Long userId = testUser.getId();
 
         LocalDate withdrawnAt = dateTimeProvider.localDateNow();
-        when(dateTimeProvider.localDateNow()).thenReturn(withdrawnAt);
+        doAnswer(invocation -> withdrawnAt)
+                .when(dateTimeProvider).localDateNow();
 
         Long response = simpleUserService.withdrawUser(userId);
 

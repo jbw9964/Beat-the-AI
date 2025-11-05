@@ -62,6 +62,7 @@ public class TokenService implements UserPrincipalProvider {
             return rtRecordRepo.findById(userId)
                     .filter(rtRecord -> rtRecord.getToken().equals(refreshToken))
                     .flatMap(rtRecord -> userRepo.findById(userId))
+                    .filter(Predicate.not(User::withdrawn))
                     .orElseThrow(this::invalidTokenEx);
         } catch (JwtException e) {
             log.warn(e.getMessage(), e);
