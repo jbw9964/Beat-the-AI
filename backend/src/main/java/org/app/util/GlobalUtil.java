@@ -3,6 +3,8 @@ package org.app.util;
 import java.util.*;
 import java.util.function.*;
 import lombok.extern.slf4j.*;
+import org.app.util.api.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 @Slf4j
@@ -32,4 +34,17 @@ public class GlobalUtil {
         return opt.orElseThrow(ex);
     }
 
+    public <E, I> SimplePageResponse<I> toSimplePageResponse(
+            Page<E> find, Function<E, I> mapperFunc
+    ) {
+        Pageable pageable = find.getPageable();
+        int pageNo = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
+        long numOfTotalElements = find.getTotalElements();
+        boolean hasNext = find.hasNext();
+
+        List<I> infos = find.map(mapperFunc).toList();
+
+        return new SimplePageResponse<>(pageNo, pageSize, numOfTotalElements, hasNext, infos);
+    }
 }
