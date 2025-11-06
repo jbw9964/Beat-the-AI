@@ -1,4 +1,4 @@
-package org.app.config.internal;
+package org.app.config.domain;
 
 import com.fasterxml.jackson.core.*;
 import java.util.*;

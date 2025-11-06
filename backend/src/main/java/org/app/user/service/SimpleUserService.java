@@ -4,7 +4,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 import lombok.*;
-import org.app.config.internal.*;
+import org.app.config.domain.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;

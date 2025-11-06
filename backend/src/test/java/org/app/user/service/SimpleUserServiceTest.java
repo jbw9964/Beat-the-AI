@@ -10,7 +10,7 @@ import java.util.function.*;
 import java.util.stream.*;
 import lombok.*;
 import org.*;
-import org.app.config.internal.*;
+import org.app.config.domain.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;

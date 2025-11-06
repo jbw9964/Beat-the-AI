@@ -1,6 +1,7 @@
-package org.app.config.internal;
+package org.app.config.domain;
 
 import com.fasterxml.jackson.databind.*;
+import org.app.config.domain.internal.*;
 import org.springframework.context.annotation.*;
 
 @Configuration

@@ -1,16 +1,17 @@
-package org.app.config.internal;
+package org.app.config.domain.internal;
 
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import java.util.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
+import org.app.config.domain.*;
 import org.app.entity.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings({"ClassCanBeRecord", "BooleanMethodIsAlwaysInverted"})
-class ScenarioInfoEmbedderImpl implements ScenarioInfoEmbedder {
+public class ScenarioInfoEmbedderImpl implements ScenarioInfoEmbedder {
 
     private static final Class<ScenarioInfo[]> CLAZZ = ScenarioInfo[].class;
     private final ObjectMapper objMapper;
