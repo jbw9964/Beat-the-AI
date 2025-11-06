@@ -4,7 +4,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 import lombok.*;
-import org.app.config.internal.*;
+import org.app.config.domain.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;
@@ -31,10 +31,10 @@ public class SimpleUserService {
     private final UserRepository userRepo;
     private final PasswordEncoder pwEncoder;
 
-    private final UserProblemRepository userProblemRepo;
+    private final UserProblemRepository problemRepo;
     private final ScenarioInfoDeserializer scenarioInfoDeserializer;
 
-    private final UserRatingRepository userRatingRepo;
+    private final UserRatingRepository ratingRepo;
 
     // 자기 정보 보기
     public GetUserResponse getMe(Long userId) {
@@ -135,7 +135,7 @@ public class SimpleUserService {
         );
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Problem> find = userProblemRepo.findByUserId(userId, pageable);
+        Page<Problem> find = problemRepo.findByUserId(userId, pageable);
 
         return Util.toSimplePageResponse(find, Util::toSimpleInfo);
     }
@@ -149,7 +149,7 @@ public class SimpleUserService {
         );
 
         Problem find = globalUtil.getOrThrow(
-                problemId, userProblemRepo::findById, ProblemNotFoundException::new
+                problemId, problemRepo::findById, ProblemNotFoundException::new
         );
 
         if (!find.getUser().getId().equals(userId)) {
@@ -173,7 +173,7 @@ public class SimpleUserService {
         );
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<Rating> find = userRatingRepo.findByUserId(userId, pageable);
+        Page<Rating> find = ratingRepo.findByUserId(userId, pageable);
 
         return Util.toSimplePageResponse(find, Util::toInfo);
     }
@@ -187,7 +187,7 @@ public class SimpleUserService {
         );
 
         Rating find = globalUtil.getOrThrow(
-                ratingId, userRatingRepo::findById, RatingNotFoundException::new
+                ratingId, ratingRepo::findById, RatingNotFoundException::new
         );
 
         if (!find.getUserId().equals(userId)) {

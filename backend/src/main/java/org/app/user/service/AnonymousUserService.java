@@ -20,7 +20,7 @@ public class AnonymousUserService {
 
     private final GlobalUtil globalUtil;
     private final UserRepository userRepo;
-    private final UserPlayRecordRepository userPlayRecordRepo;
+    private final UserPlayRecordRepository playRecordRepo;
 
     public GetUserResponse getUser(Long userId, Long authenticatedUserId) {
 
@@ -49,7 +49,7 @@ public class AnonymousUserService {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<PlayRecord> find
-                = userPlayRecordRepo.findPublicRecordsByUserId(userId, pageable);
+                = playRecordRepo.findPublicRecordsByUserId(userId, pageable);
 
         List<SimplePlayRecordInfo> infos = find.map(Util::toSimpleInfo).get().toList();
         long numOfTotalElements = find.getTotalElements();
@@ -72,7 +72,7 @@ public class AnonymousUserService {
         );
 
         PlayRecord find = globalUtil.getOrThrow(
-                recordId, userPlayRecordRepo::findPublicRecordsByIdFetchingScenarioRecords,
+                recordId, playRecordRepo::findPublicRecordsByIdFetchingScenarioRecords,
                 PublicPlayRecordNotFoundException::new
         );
 

@@ -1,4 +1,4 @@
-package org.app.config.internal;
+package org.app.config.domain;
 
 public class InvalidSerializedScenarioInfoException extends RuntimeException {
 

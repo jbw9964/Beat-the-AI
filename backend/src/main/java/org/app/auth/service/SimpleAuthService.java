@@ -4,7 +4,7 @@ import java.util.function.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.auth.domain.exception.*;
-import org.app.auth.dto.*;
+import org.app.auth.dto.response.*;
 import org.app.auth.repository.*;
 import org.app.entity.*;
 import org.app.util.*;

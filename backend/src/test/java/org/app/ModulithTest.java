@@ -1,6 +1,5 @@
 package org.app;
 
-import com.tngtech.archunit.core.domain.JavaClass.*;
 import lombok.extern.slf4j.*;
 import org.junit.jupiter.api.*;
 import org.springframework.modulith.core.*;
@@ -9,15 +8,7 @@ import org.springframework.modulith.docs.*;
 @Slf4j
 class ModulithTest {
 
-    static final String
-            utilPackage = "org.app.util..",
-            entityPackage = "org.app.entity..";
-
-    final ApplicationModules modules = ApplicationModules.of(
-            Backend.class, Predicates.resideInAnyPackage(
-                    utilPackage, entityPackage
-            )
-    );
+    final ApplicationModules modules = ApplicationModules.of(Backend.class);
 
     @Test
     @DisplayName("코드가 modulith 하다.")

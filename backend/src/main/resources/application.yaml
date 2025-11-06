@@ -2,7 +2,9 @@
 spring:
   application.name: backend
   threads.virtual.enabled: true
-  modulith.events.republish-outstanding-events-on-restart: on
+  modulith:
+    detection-strategy: explicitly-annotated
+    events.republish-outstanding-events-on-restart: on
 
   profiles:
     default: local

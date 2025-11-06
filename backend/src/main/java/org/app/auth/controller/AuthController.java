@@ -2,7 +2,6 @@ package org.app.auth.controller;
 
 import jakarta.validation.*;
 import lombok.*;
-import org.app.auth.dto.*;
 import org.app.auth.dto.request.*;
 import org.app.auth.dto.response.*;
 import org.app.auth.service.*;
