@@ -16,6 +16,7 @@ import org.app.user.domain.exception.*;
 import org.app.user.dto.*;
 import org.app.user.event.*;
 import org.app.user.repository.*;
+import org.app.user.service.SimpleUserServiceTest.*;
 import org.app.util.*;
 import org.app.util.api.*;
 import org.app.util.exception.*;
@@ -27,9 +28,10 @@ import org.springframework.stereotype.*;
 import org.springframework.test.context.bean.override.mockito.*;
 import org.springframework.test.context.event.*;
 import org.springframework.transaction.annotation.*;
+import org.support.*;
 
 @RecordApplicationEvents
-@Import(SimpleUserServiceTest.DataInitializer.class)
+@Import(DataInitFacade.class)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 class SimpleUserServiceTest extends IntegrationTestSupport {
 
@@ -44,7 +46,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     ApplicationEvents applicationEvents;
 
     @Autowired
-    DataInitializer dataInitializer;
+    DataInitFacade data;
 
     @Autowired
     UserRepository userRepo;
@@ -58,14 +60,14 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     @BeforeEach
     void setUp() {
         applicationEvents.clear();
-        testUser = dataInitializer.createNewUser(
+        testUser = data.createNewUser(
                 "test", "testEMAIL", "testTHUMBNAIL", testPassword
         );
     }
 
     @AfterEach
     void tearDown() {
-        dataInitializer.initAll();
+        data.initAll();
     }
 
     @Test
@@ -182,7 +184,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 ProblemVisibility visibility =
                         mod == 0 ? ProblemVisibility.PRIVATE : ProblemVisibility.PUBLIC;
 
-                Problem problem = dataInitializer.createNewProblem(
+                Problem problem = data.createNewProblem(
                         userId, title, nOfSToGetReward, nOfSToFailPlay,
                         visibility, scenarioInfo
                 );
@@ -252,7 +254,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 scenarioInfos[i] = new ScenarioInfo(i, sContent, aContent);
             }
 
-            problem = dataInitializer.createNewProblem(
+            problem = data.createNewProblem(
                     userId, "TEST TITLE", 5, 3,
                     ProblemVisibility.PRIVATE, scenarioInfos
             );
@@ -313,7 +315,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
             for (int i = 0; i < numOfRatings; i++) {
                 String pTitle = String.format("problem-%d", i);
                 int n = i + 10;
-                Problem problem = dataInitializer.createNewProblem(
+                Problem problem = data.createNewProblem(
                         userId, pTitle, n, n, ProblemVisibility.PRIVATE, scenarioInfo
                 );
 
@@ -321,7 +323,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 String comment = String.format("comment-%d", i);
                 int score = i % 6;
 
-                ratings.add(dataInitializer.createNewRating(
+                ratings.add(data.createNewRating(
                         problemId, userId, comment, score
                 ));
             }
@@ -374,7 +376,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         Long ratingId;
 
         {
-            Problem problem = dataInitializer.createNewProblem(
+            Problem problem = data.createNewProblem(
                     userId, "testTITLE", 5, 5,
                     ProblemVisibility.PRIVATE,
                     new ScenarioInfo[]{scenarioInfoSample}
@@ -384,7 +386,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
             String comment = "TEST COMMENT";
             int score = 3;
 
-            rating = dataInitializer.createNewRating(problemId, userId, comment, score);
+            rating = data.createNewRating(problemId, userId, comment, score);
             ratingId = rating.getId();
         }
 
@@ -450,14 +452,14 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         {
             LocalDate withdrawnDate = dateTimeProvider.localDateNow();
 
-            User newWithdrawnUser = dataInitializer.createNewWithdrawnUser(
+            User newWithdrawnUser = data.createNewWithdrawnUser(
                     "testWITHDRAWN", "testWITHDRAWNEMAIL",
                     "testTHUMBNAIL", "testPW", withdrawnDate
             );
 
             withdrawnUserId = newWithdrawnUser.getId();
 
-            Problem problem = dataInitializer.createNewProblem(
+            Problem problem = data.createNewProblem(
                     withdrawnUserId, "TITLE", 2, 3,
                     ProblemVisibility.PUBLIC,
                     new ScenarioInfo[]{scenarioInfoSample}
@@ -465,7 +467,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
             withdrawnUserProblemId = problem.getId();
 
-            Rating rating = dataInitializer.createNewRating(
+            Rating rating = data.createNewRating(
                     withdrawnUserProblemId, withdrawnUserId,
                     "comment", 3
             );
@@ -517,7 +519,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         int numOfEachResources = 5;
 
         {
-            User anotherUser = dataInitializer.createNewUser(
+            User anotherUser = data.createNewUser(
                     "another", null, null, "sample"
             );
 
@@ -532,7 +534,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 ProblemVisibility visibility = i % 2 == 0 ?
                         ProblemVisibility.PRIVATE : ProblemVisibility.PUBLIC;
 
-                Problem problem = dataInitializer.createNewProblem(
+                Problem problem = data.createNewProblem(
                         anotherUserId, title, nOfSToGetReward, nOfSToFailPlay,
                         visibility, scenarioInfo
                 );
@@ -541,7 +543,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 String comment = String.format("comment-%d", i);
                 int score = i % 6;
 
-                dataInitializer.createNewRating(problemId, anotherUserId, comment, score);
+                data.createNewRating(problemId, anotherUserId, comment, score);
             }
         }
 
@@ -580,19 +582,19 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         Long ratingId;
 
         {
-            User anotherUser = dataInitializer.createNewUser(
+            User anotherUser = data.createNewUser(
                     "another", null, null, "sample"
             );
 
             Long anotherUserId = anotherUser.getId();
-            Problem problem = dataInitializer.createNewProblem(
+            Problem problem = data.createNewProblem(
                     anotherUserId, "title", 1, 2,
                     ProblemVisibility.PUBLIC, new ScenarioInfo[]{scenarioInfoSample}
             );
 
             problemId = problem.getId();
 
-            Rating rating = dataInitializer.createNewRating(
+            Rating rating = data.createNewRating(
                     problemId, anotherUserId, null, 3
             );
             ratingId = rating.getId();
@@ -617,33 +619,25 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
     @Component
     @SuppressWarnings("SameParameterValue")
-    protected static class DataInitializer {
+    protected static class DataInitFacade {
 
         @Autowired
-        UserRepository userRepo;
+        GeneralDataInitializer initializer;
 
         @Autowired
         PasswordEncoder pwEncoder;
 
         @Autowired
-        UserProblemRepository userProblemRepo;
-
-        @Autowired
         ScenarioInfoSerializer scenarioInfoSerializer;
-
-        @Autowired
-        UserRatingRepository userRatingRepo;
 
         @Transactional
         User createNewUser(
                 String name, String email,
                 String thumbnailUrl, String password
         ) {
-            User user = new User(name);
-            user.changeEmail(email);
-            user.changeThumbnailUrl(thumbnailUrl);
-            user.changeEncryptedPassword(pwEncoder.encode(password));
-            return userRepo.save(user);
+            return initializer.createUser(
+                    name, email, null, pwEncoder.encode(password), thumbnailUrl, false, null
+            );
         }
 
         @Transactional
@@ -652,12 +646,9 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 String thumbnailUrl, String password,
                 LocalDate withdrawnAt
         ) {
-            User user = new User(name);
-            user.changeEmail(email);
-            user.changeThumbnailUrl(thumbnailUrl);
-            user.changeEncryptedPassword(pwEncoder.encode(password));
-            user.withdrawUser(withdrawnAt);
-            return userRepo.save(user);
+            return initializer.createUser(
+                    name, email, null, pwEncoder.encode(password), thumbnailUrl, true, withdrawnAt
+            );
         }
 
         @Transactional
@@ -667,33 +658,24 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
                 ProblemVisibility visibility, ScenarioInfo[] scenarioInfos
         ) {
-            User user = userRepo.findById(userId).orElseThrow(AssertionError::new);
             String serializedSIs = scenarioInfoSerializer.serialize(scenarioInfos);
 
-            Problem problem = new Problem(
-                    user, title, numOfScenariosToGetReward, numOfScenariosToFailPlay,
-                    visibility, serializedSIs
+            return initializer.createProblem(
+                    userId, title, null, null, numOfScenariosToGetReward,
+                    numOfScenariosToFailPlay, visibility, serializedSIs
             );
-
-            return userProblemRepo.save(problem);
         }
 
         @Transactional
         Rating createNewRating(
                 Long problemId, Long userId, String comment, int score
         ) {
-            Problem problem = userProblemRepo.findById(problemId).orElseThrow(AssertionError::new);
-            Rating rating = new Rating(problem, userId, score);
-            rating.changeComment(comment);
-
-            return userRatingRepo.save(rating);
+            return initializer.createRating(problemId, userId, comment, score);
         }
 
         @Transactional
         protected void initAll() {
-            userRatingRepo.deleteAll();
-            userProblemRepo.deleteAll();
-            userRepo.deleteAll();
+            initializer.initAll();
         }
     }
 

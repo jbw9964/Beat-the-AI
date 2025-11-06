@@ -56,6 +56,14 @@ public class Problem extends BaseTimeEntity {
         this.serializedScenarioInfo = serializedScenarioInfo;
     }
 
+    public void changeDescription(String newDescription) {
+        this.description = newDescription;
+    }
+
+    public void changeRewardMessage(String rewardMessage) {
+        this.rewardMessage = rewardMessage;
+    }
+
     /*
         TODO : 직렬화된 시나리오 info 관련해서 작업 필요함.
         1. 엔티티 serializedScenarioInfo 를 List<ScenarioInfo> 로 제공하는 메서드

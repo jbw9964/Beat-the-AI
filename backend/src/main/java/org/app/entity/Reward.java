@@ -60,4 +60,17 @@ public class Reward extends AuditingCreation {
         this.storageType = storageType;
         this.hasTransferred = false;
     }
+
+    public Reward(
+            Problem problem, String description,
+            String originLocation, String overviewLocation,
+            RewardStorageType storageType, boolean hasTransferred
+    ) {
+        this.problem = problem;
+        this.description = description;
+        this.originLocation = originLocation;
+        this.overviewLocation = overviewLocation;
+        this.storageType = storageType;
+        this.hasTransferred = hasTransferred;
+    }
 }
