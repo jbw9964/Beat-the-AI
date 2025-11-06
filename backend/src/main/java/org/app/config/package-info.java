@@ -1,5 +1,8 @@
 @NonNullApi
-@ApplicationModule
+@ApplicationModule(
+        id = "config",
+        displayName = "config"
+)
 package org.app.config;
 
 import org.springframework.lang.*;
