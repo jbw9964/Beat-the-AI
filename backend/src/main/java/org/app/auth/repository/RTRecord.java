@@ -1,4 +1,4 @@
-package org.app.auth.domain.token;
+package org.app.auth.repository;
 
 import lombok.*;
 import org.springframework.data.annotation.*;
