@@ -1,5 +1,6 @@
 package org.app.user.dto;
 
+import java.time.*;
 import lombok.*;
 import org.app.entity.*;
 
@@ -14,7 +15,8 @@ public record DetailedPlayRecordInfo(
         int numOfSubmittedScenarios,
         int numOfPassedScenarios,
         int numOfScenariosToGetReward,
-        int numOfScenariosToFailPlay
+        int numOfScenariosToFailPlay,
+        LocalDateTime createdAt
 ) {
 
     public DetailedPlayRecordInfo(
@@ -29,7 +31,7 @@ public record DetailedPlayRecordInfo(
                 simpleInfo.status(), simpleInfo.visibility(),
                 numOfTotalScenarios, numOfSubmittedScenarios,
                 numOfPassedScenarios, numOfScenariosToGetReward,
-                numOfScenariosToFailPlay
+                numOfScenariosToFailPlay, simpleInfo.createdAt()
         );
     }
 }

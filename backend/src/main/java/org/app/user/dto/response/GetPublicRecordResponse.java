@@ -1,11 +1,11 @@
 package org.app.user.dto.response;
 
+import java.util.*;
 import org.app.user.dto.*;
-import org.app.util.api.*;
 
 public record GetPublicRecordResponse(
         DetailedPlayRecordInfo detailedPlayRecordInfo,
-        SimplePageResponse<ScenarioRecordInfo> scenarioPageResponse,
+        List<ScenarioRecordInfo> scenarioInfos,
         boolean isMine
 ) {
 

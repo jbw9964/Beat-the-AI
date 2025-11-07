@@ -187,6 +187,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
                 .count();
         int nOfSToGetReward = playRecord.getNumOfScenariosToGetReward();
         int nOfSToFailPlay = playRecord.getNumOfScenariosToFailPlay();
+        LocalDateTime createdAt = playRecord.getCreatedAt();
 
         DetailedPlayRecordInfo detailedPRInfo = response.detailedPlayRecordInfo();
         assertThat(detailedPRInfo).isNotNull();
@@ -202,15 +203,11 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
         assertThat(detailedPRInfo.numOfPassedScenarios()).isEqualTo(nOfPassed);
         assertThat(detailedPRInfo.numOfScenariosToGetReward()).isEqualTo(nOfSToGetReward);
         assertThat(detailedPRInfo.numOfScenariosToFailPlay()).isEqualTo(nOfSToFailPlay);
+        assertThat(detailedPRInfo.createdAt())
+                .isCloseTo(createdAt, within(Duration.ofSeconds(5L)));
 
-        int nOfPagedElements = submittedScenarios.size();
-
-        SimplePageResponse<ScenarioRecordInfo> pagedSRInfo = response.scenarioPageResponse();
-        assertThat(pagedSRInfo).isNotNull();
-        assertThat(pagedSRInfo.numOfPagedElements()).isEqualTo(nOfPagedElements);
-
-        List<ScenarioRecordInfo> pagedElements = pagedSRInfo.pagedElements();
-        assertThat(pagedElements).isNotNull().hasSize(nOfPagedElements)
+        List<ScenarioRecordInfo> scenarioRecordInfos = response.scenarioInfos();
+        assertThat(scenarioRecordInfos).isNotNull().hasSize(nOfSubmitted)
                 .isSortedAccordingTo(Comparator.comparing(ScenarioRecordInfo::scenarioOrder));
 
         Map<Long, ScenarioRecord> submittedSRMap = submittedScenarios.stream()
@@ -218,28 +215,28 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
         Map<Long, ScenarioRecord> unsubmittedSRMap = unsubmittedScenarios.stream()
                 .collect(Collectors.toMap(ScenarioRecord::getId, Function.identity()));
 
-        for (ScenarioRecordInfo element : pagedElements) {
+        for (ScenarioRecordInfo info : scenarioRecordInfos) {
 
-            assertThat(element).isNotNull();
+            assertThat(info).isNotNull();
 
-            Long scenarioRecordId = element.scenarioRecordId();
+            Long scenarioRecordId = info.scenarioRecordId();
             assertThat(submittedSRMap).containsKey(scenarioRecordId);
             assertThat(unsubmittedSRMap).doesNotContainKey(scenarioRecordId);
 
             ScenarioRecord scenarioRecord = submittedSRMap.get(scenarioRecordId);
-            assertThat(scenarioRecord.getId()).isEqualTo(element.scenarioRecordId());
-            assertThat(scenarioRecord.getScenarioOrder()).isEqualTo(element.scenarioOrder());
-            assertThat(scenarioRecord.getScenarioContent()).isEqualTo(element.scenarioContent());
+            assertThat(scenarioRecord.getId()).isEqualTo(info.scenarioRecordId());
+            assertThat(scenarioRecord.getScenarioOrder()).isEqualTo(info.scenarioOrder());
+            assertThat(scenarioRecord.getScenarioContent()).isEqualTo(info.scenarioContent());
             assertThat(scenarioRecord.getUserSubmissionContent()).isEqualTo(
-                    element.userSubmissionContent()
+                    info.userSubmissionContent()
             );
             assertThat(scenarioRecord.getAiGeneratedContent()).isEqualTo(
-                    element.aiGeneratedContent()
+                    info.aiGeneratedContent()
             );
-            assertThat(scenarioRecord.hasSubmitted()).isEqualTo(element.hasSubmitted()).isTrue();
-            assertThat(scenarioRecord.hasPassed()).isEqualTo(element.hasPassed());
+            assertThat(scenarioRecord.hasSubmitted()).isEqualTo(info.hasSubmitted()).isTrue();
+            assertThat(scenarioRecord.hasPassed()).isEqualTo(info.hasPassed());
             assertThat(scenarioRecord.getSubmittedAt()).isCloseTo(
-                    element.submittedAt(), within(Duration.ofSeconds(5L))
+                    info.submittedAt(), within(Duration.ofSeconds(5L))
             );
         }
 
