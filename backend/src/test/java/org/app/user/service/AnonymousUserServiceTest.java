@@ -323,20 +323,19 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
     }
 
     @Component
+    @Transactional
     @SuppressWarnings("SameParameterValue")
     protected static class DataInitFacade {
 
         @Autowired
         GeneralDataInitializer initializer;
 
-        @Transactional
         User createNewUser(String name, String email, String thumbnailUrl) {
             return initializer.createUser(
                     name, email, null, null, thumbnailUrl, false, null
             );
         }
 
-        @Transactional
         PlayRecord createNewPlayRecord(
                 Long userId, Long problemId, String title, String description,
                 String rewardMessage, int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
@@ -349,7 +348,6 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
             );
         }
 
-        @Transactional
         ScenarioRecord createNewUnSubmittedScenarioRecord(
                 Long playRecordId, int scenarioOrder, String scenarioContent
         ) {
@@ -359,7 +357,6 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
             );
         }
 
-        @Transactional
         ScenarioRecord createNewSubmittedScenarioRecord(
                 Long playRecordId, int scenarioOrder, String scenarioContent,
                 String userSubmissionContent, String aiGeneratedContent,
@@ -371,7 +368,6 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
             );
         }
 
-        @Transactional
         void initAll() {
             initializer.initAll();
         }

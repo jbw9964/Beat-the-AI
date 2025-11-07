@@ -101,7 +101,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
         await()
                 .atMost(Duration.ofSeconds(timeToAwaitEventPub))
-                .pollDelay(Duration.ofMillis(500L))
+                .pollDelay(Duration.ofMillis(50L))
                 .untilAsserted(() -> {
 
                     List<UserWithdrawEvent> withdrawEvents
@@ -618,6 +618,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     }
 
     @Component
+    @Transactional
     @SuppressWarnings("SameParameterValue")
     protected static class DataInitFacade {
 
@@ -630,7 +631,6 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         @Autowired
         ScenarioInfoSerializer scenarioInfoSerializer;
 
-        @Transactional
         User createNewUser(
                 String name, String email,
                 String thumbnailUrl, String password
@@ -640,7 +640,6 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
             );
         }
 
-        @Transactional
         User createNewWithdrawnUser(
                 String name, String email,
                 String thumbnailUrl, String password,
@@ -651,7 +650,6 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
             );
         }
 
-        @Transactional
         @SneakyThrows
         Problem createNewProblem(
                 Long userId, String title,
@@ -666,14 +664,12 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
             );
         }
 
-        @Transactional
         Rating createNewRating(
                 Long problemId, Long userId, String comment, int score
         ) {
             return initializer.createRating(problemId, userId, comment, score);
         }
 
-        @Transactional
         protected void initAll() {
             initializer.initAll();
         }
