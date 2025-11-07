@@ -52,5 +52,20 @@ public class TemporalProblem extends BaseTimeEntity {
         this.title = title;
     }
 
+    public TemporalProblem(
+            User user, String title, String description, String rewardMessage,
+            int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
+            ProblemVisibility visibility, String serializedScenarioInfo
+    ) {
+        this.user = user;
+        this.title = title;
+        this.description = description;
+        this.rewardMessage = rewardMessage;
+        this.numOfScenariosToGetReward = numOfScenariosToGetReward;
+        this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
+        this.visibility = visibility;
+        this.serializedScenarioInfo = serializedScenarioInfo;
+    }
+
     // TODO : 임시저장 바꿨을 때 각 속성 잘 바꿔주는 기능 구성해야 함.
 }

@@ -77,8 +77,8 @@ public class SimpleUserController {
             @Valid @ParameterObject @ModelAttribute
             SimplePageRequest pageRequest
     ) {
-        int pageNo = pageRequest.getPageNumOrDefault();
-        int pageSize = pageRequest.getPageSizeOrDefault();
+        int pageNo = pageRequest.pageNum();
+        int pageSize = pageRequest.pageSize();
 
         SimplePageResponse<SimpleProblemInfo> response
                 = simpleUserService.getMyProblems(authedUserId, pageNo, pageSize);
@@ -103,8 +103,8 @@ public class SimpleUserController {
             @Valid @ParameterObject @ModelAttribute
             SimplePageRequest pageRequest
     ) {
-        int pageNo = pageRequest.getPageNumOrDefault();
-        int pageSize = pageRequest.getPageSizeOrDefault();
+        int pageNo = pageRequest.pageNum();
+        int pageSize = pageRequest.pageSize();
 
         SimplePageResponse<RatingInfo> response
                 = simpleUserService.getMyRatings(authedUserId, pageNo, pageSize);

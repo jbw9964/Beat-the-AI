@@ -41,6 +41,13 @@ public class Rating extends BaseTimeEntity {
 
     // TODO : score 관련해서 app 레벨 제약사항 필요 : [0, 5] 사이의 정수
 
+    public Rating(Problem problem, Long userId, String comment, int score) {
+        this.problem = problem;
+        this.userId = userId;
+        this.comment = comment;
+        this.score = score;
+    }
+
     public Rating(Problem problem, Long userId, int score) {
         this.problem = problem;
         this.userId = userId;

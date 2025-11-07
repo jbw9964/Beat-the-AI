@@ -137,7 +137,7 @@ public class SimpleUserService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Problem> find = problemRepo.findByUserId(userId, pageable);
 
-        return Util.toSimplePageResponse(find, Util::toSimpleInfo);
+        return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
     }
 
     // 내가 만든 문제 내용 보기
@@ -175,7 +175,7 @@ public class SimpleUserService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Rating> find = ratingRepo.findByUserId(userId, pageable);
 
-        return Util.toSimplePageResponse(find, Util::toInfo);
+        return globalUtil.toSimplePageResponse(find, Util::toInfo);
     }
 
     // 내가 평가한 내용 보기
@@ -198,20 +198,6 @@ public class SimpleUserService {
     }
 
     private record Util() {
-
-        static <E, I> SimplePageResponse<I> toSimplePageResponse(
-                Page<E> find, Function<E, I> mapperFunc
-        ) {
-            Pageable pageable = find.getPageable();
-            int pageNo = pageable.getPageNumber();
-            int pageSize = pageable.getPageSize();
-            long numOfTotalElements = find.getTotalElements();
-            boolean hasNext = find.hasNext();
-
-            List<I> infos = find.map(mapperFunc).toList();
-
-            return new SimplePageResponse<>(pageNo, pageSize, numOfTotalElements, hasNext, infos);
-        }
 
         static SimpleProblemInfo toSimpleInfo(Problem entity) {
             Long problemId = entity.getId();

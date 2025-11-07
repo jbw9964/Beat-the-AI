@@ -42,8 +42,8 @@ public class AnonymousUserController {
         // @ModelAttribute 로 SimplePageRequest 속성 이름 받도록 구성
         // @ParameterObject 로 swagger 에서 query param 으로 인식하도록 구성
 
-        int pageNo = pageRequest.getPageNumOrDefault();
-        int pageSize = pageRequest.getPageSizeOrDefault();
+        int pageNo = pageRequest.pageNum();
+        int pageSize = pageRequest.pageSize();
 
         GetPublicRecordsResponse response = anonymousUserService.getPublicRecords(
                 userId, pageNo, pageSize, authenticatedUserId

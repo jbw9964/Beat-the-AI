@@ -12,7 +12,6 @@ import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;
 import org.app.user.dto.response.*;
-import org.app.user.repository.*;
 import org.app.util.*;
 import org.app.util.api.*;
 import org.junit.jupiter.api.*;
@@ -22,9 +21,10 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
+import org.support.*;
 
 @Slf4j
-@Import(AnonymousUserServiceTest.DataInitializer.class)
+@Import(AnonymousUserServiceTest.DataInitFacade.class)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 class AnonymousUserServiceTest extends IntegrationTestSupport {
 
@@ -34,7 +34,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
     AnonymousUserService anonymousUserService;
 
     @Autowired
-    DataInitializer initializer;
+    DataInitFacade data;
 
     @Autowired
     DateTimeProvider dateTimeProvider;
@@ -50,14 +50,14 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setUp() {
-        testUser = initializer.createNewUser(
+        testUser = data.createNewUser(
                 "test", "testEMAIL", "testTHUMBNAIL"
         );
     }
 
     @AfterEach
     void tearDown() {
-        initializer.initAll();
+        data.initAll();
     }
 
     @Test
@@ -152,7 +152,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
     @DisplayName("Public 한 사용자 플레이 내용을 볼 수 있다.")
     void getPublicRecord() {
         Long userId = testUser.getId();
-        PlayRecord playRecord = initializer.createNewPlayRecord(
+        PlayRecord playRecord = data.createNewPlayRecord(
                 userId, 55L,
                 "testTITLE", "testDESCRIPTION", "testREWARD",
                 5, 5,
@@ -284,7 +284,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
     ) {
         String tempStr = String.valueOf(problemId);
         int tempInt = RANDOM.nextInt(1, 15);
-        return initializer.createNewPlayRecord(
+        return data.createNewPlayRecord(
                 userId, problemId, tempStr, tempStr, tempStr,
                 tempInt, tempInt, status, visibility
         );
@@ -296,7 +296,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
         String scenarioContent = String.format(
                 "Scenario %s-%s", playRecordId, scenarioOrder
         );
-        return initializer.createNewUnSubmittedScenarioRecord(
+        return data.createNewUnSubmittedScenarioRecord(
                 playRecordId, scenarioOrder, scenarioContent
         );
     }
@@ -315,7 +315,7 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
         );
         LocalDateTime submittedAt = dateTimeProvider.localDateTimeNow();
 
-        return initializer.createNewSubmittedScenarioRecord(
+        return data.createNewSubmittedScenarioRecord(
                 playRecordId, scenarioOrder,
                 scenarioContent, userSubmissionContent, aiGeneratedContent,
                 hasPassed, submittedAt
@@ -323,75 +323,53 @@ class AnonymousUserServiceTest extends IntegrationTestSupport {
     }
 
     @Component
+    @Transactional
     @SuppressWarnings("SameParameterValue")
-    protected static class DataInitializer {
+    protected static class DataInitFacade {
 
         @Autowired
-        UserRepository userRepo;
+        GeneralDataInitializer initializer;
 
-        @Autowired
-        UserPlayRecordRepository userPlayRecordRepo;
-
-        @Autowired
-        UserScenarioRecordRepository userScenarioRecordRepo;
-
-        @Transactional
         User createNewUser(String name, String email, String thumbnailUrl) {
-            User user = new User(name);
-            user.changeEmail(email);
-            user.changeThumbnailUrl(thumbnailUrl);
-            return userRepo.save(user);
+            return initializer.createUser(
+                    name, email, null, null, thumbnailUrl, false, null
+            );
         }
 
-        @Transactional
         PlayRecord createNewPlayRecord(
                 Long userId, Long problemId, String title, String description,
                 String rewardMessage, int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
                 PlayRecordStatus status, PlayRecordVisibility visibility
         ) {
-            User find = userRepo.findById(userId).orElseThrow(AssertionError::new);
-            PlayRecord playRecord = new PlayRecord(
-                    find, problemId, title, description,
+            return initializer.createPlayRecord(
+                    userId, problemId, title, description,
                     rewardMessage, numOfScenariosToGetReward, numOfScenariosToFailPlay,
                     status, visibility
             );
-
-            return userPlayRecordRepo.save(playRecord);
         }
 
-        @Transactional
         ScenarioRecord createNewUnSubmittedScenarioRecord(
                 Long playRecordId, int scenarioOrder, String scenarioContent
         ) {
-            PlayRecord find = userPlayRecordRepo.findById(playRecordId)
-                    .orElseThrow(AssertionError::new);
-            ScenarioRecord scenarioRecord
-                    = new ScenarioRecord(find, scenarioOrder, scenarioContent);
-            return userScenarioRecordRepo.save(scenarioRecord);
+            return initializer.createScenarioRecord(
+                    playRecordId, scenarioOrder, scenarioContent,
+                    false, null, null, false, null
+            );
         }
 
-        @Transactional
         ScenarioRecord createNewSubmittedScenarioRecord(
                 Long playRecordId, int scenarioOrder, String scenarioContent,
                 String userSubmissionContent, String aiGeneratedContent,
                 boolean hasPassed, LocalDateTime submittedAt
         ) {
-            ScenarioRecord scenarioRecord = this.createNewUnSubmittedScenarioRecord(
-                    playRecordId, scenarioOrder, scenarioContent
+            return initializer.createScenarioRecord(
+                    playRecordId, scenarioOrder, scenarioContent,
+                    true, userSubmissionContent, aiGeneratedContent, hasPassed, submittedAt
             );
-
-            scenarioRecord.updateSubmission(
-                    userSubmissionContent, aiGeneratedContent, hasPassed, submittedAt
-            );
-
-            return scenarioRecord;
         }
 
-        @Transactional
         void initAll() {
-            userScenarioRecordRepo.deleteAll();
-            userPlayRecordRepo.deleteAll();
-            userRepo.deleteAll();
+            initializer.initAll();
         }
     }
 }

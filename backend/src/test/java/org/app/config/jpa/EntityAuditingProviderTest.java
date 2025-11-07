@@ -9,21 +9,15 @@ import java.time.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.*;
-import org.app.*;
 import org.app.entity.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.*;
-import org.springframework.data.jpa.repository.config.*;
 import org.springframework.stereotype.*;
 import org.springframework.test.context.bean.override.mockito.*;
 
 @Slf4j
-@EnableJpaRepositories(
-        basePackageClasses = Backend.class,
-        considerNestedRepositories = true
-)
 @Import(EntityAuditingProviderTest.DataInitializer.class)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 class EntityAuditingProviderTest extends IntegrationTestSupport {

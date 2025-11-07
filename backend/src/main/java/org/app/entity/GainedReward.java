@@ -51,5 +51,16 @@ public class GainedReward extends AuditingCreation {
         this.storageType = storageType;
     }
 
-    // TODO : rewardId, description 설정하는 생성자 또는 메서드 만들기
+    public GainedReward(
+            User user, PlayRecord record, Long rewardId,
+            String description, String location,
+            RewardStorageType storageType
+    ) {
+        this.user = user;
+        this.record = record;
+        this.rewardId = rewardId;
+        this.description = description;
+        this.location = location;
+        this.storageType = storageType;
+    }
 }

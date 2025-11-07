@@ -51,12 +51,8 @@ public class AnonymousUserService {
         Page<PlayRecord> find
                 = playRecordRepo.findPublicRecordsByUserId(userId, pageable);
 
-        List<SimplePlayRecordInfo> infos = find.map(Util::toSimpleInfo).get().toList();
-        long numOfTotalElements = find.getTotalElements();
-        boolean hasNext = find.hasNext();
-
         SimplePageResponse<SimplePlayRecordInfo> pageResponse
-                = new SimplePageResponse<>(pageNo, pageSize, numOfTotalElements, hasNext, infos);
+                = globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
         boolean isMine = userId.equals(authenticatedUserId);
 
         return new GetPublicRecordsResponse(pageResponse, isMine);
