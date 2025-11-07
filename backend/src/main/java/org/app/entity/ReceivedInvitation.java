@@ -5,7 +5,15 @@ import lombok.*;
 
 @Getter
 @Entity
-@Table(name = "received_invitation")
+@Table(
+        name = "received_invitation",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "UK__RECEIVED_INVITATION_USER_WITH_CODE",
+                        columnNames = {"user_id", "code"}
+                )
+        }
+)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReceivedInvitation extends AuditingCreation {
 
