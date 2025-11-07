@@ -18,7 +18,7 @@ public class UserInvitationController {
     private final UserInvitationService userInvitationService;
 
     @GetMapping     // 내가 수령한 초대 코드 목록 보기
-    public ApiResponse<SimplePageResponse<ReceivedInvitationInfo>> getReceivedInvitations(
+    public ApiResponse<SimplePageResponse<ReceivedInvitationInfo>> getMyReceivedInvitations(
             @AuthenticationPrincipal Long authedUserId,
             @Valid @ParameterObject @ModelAttribute
             SimplePageRequest pageRequest
@@ -27,7 +27,7 @@ public class UserInvitationController {
         int pageSize = pageRequest.pageSize();
 
         SimplePageResponse<ReceivedInvitationInfo> response
-                = userInvitationService.getReceivedInvitations(authedUserId, pageNo, pageSize);
+                = userInvitationService.getMyReceivedInvitations(authedUserId, pageNo, pageSize);
 
         return ApiResponse.success(response);
     }
@@ -46,11 +46,11 @@ public class UserInvitationController {
 
     // 내가 수령한 초대 코드 내용 보기
     @GetMapping("/{received-invitation-id:\\d+}")
-    public ApiResponse<ReceivedInvitationInfo> getReceivedInvitation(
+    public ApiResponse<ReceivedInvitationInfo> getMyReceivedInvitation(
             @AuthenticationPrincipal Long authedUserId,
             @PathVariable("received-invitation-id") Long receivedInvitationId
     ) {
-        ReceivedInvitationInfo response = userInvitationService.getReceivedInvitation(
+        ReceivedInvitationInfo response = userInvitationService.getMyReceivedInvitation(
                 authedUserId, receivedInvitationId
         );
 
@@ -59,11 +59,12 @@ public class UserInvitationController {
 
     // 받은 수령 코드 삭제하기
     @DeleteMapping("/{received-invitation-id:\\d+}")
-    public ApiResponse<Long> deleteInvitation(
+    public ApiResponse<Long> deleteMyInvitation(
             @AuthenticationPrincipal Long authedUserId,
             @PathVariable("received-invitation-id") Long receivedInvitationId
     ) {
-        Long response = userInvitationService.deleteInvitation(authedUserId, receivedInvitationId);
+        Long response = userInvitationService.deleteMyInvitation(authedUserId,
+                receivedInvitationId);
 
         return ApiResponse.success(response);
     }

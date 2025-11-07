@@ -72,14 +72,14 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자는 탈퇴할 수 있다.")
-    void withdrawUser() {
+    void withdrawMe() {
         Long userId = testUser.getId();
 
         LocalDate withdrawnAt = dateTimeProvider.localDateNow();
         doAnswer(invocation -> withdrawnAt)
                 .when(dateTimeProvider).localDateNow();
 
-        Long response = simpleUserService.withdrawUser(userId);
+        Long response = simpleUserService.withdrawMe(userId);
 
         assertThat(response).isNotNull().isEqualTo(userId);
 
@@ -97,7 +97,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         Long userId = testUser.getId();
         long timeToAwaitEventPub = 5L;
 
-        simpleUserService.withdrawUser(userId);
+        simpleUserService.withdrawMe(userId);
 
         await()
                 .atMost(Duration.ofSeconds(timeToAwaitEventPub))
@@ -117,13 +117,13 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자 정보를 수정할 수 있다.")
-    void updateInfo() {
+    void updateMyInfo() {
         Long userId = testUser.getId();
         String newName = "NEW NAME";
         String newEmail = "NEW EMAIL";
         String newThumbnail = "NEW THUMBNAIL";
 
-        Long response = simpleUserService.updateInfo(userId, newName, newEmail, newThumbnail);
+        Long response = simpleUserService.updateMyInfo(userId, newName, newEmail, newThumbnail);
 
         assertThat(response).isNotNull().isEqualTo(userId);
 
@@ -138,22 +138,22 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("아직 사용자 설정은 변경할 수 없다.")
-    void updateSetting() {
+    void updateMySetting() {
         // TODO : 사용자 설정 변경 구현 후 테스트 구성하기
 
         Long userId = testUser.getId();
 
-        assertThatThrownBy(() -> simpleUserService.updateSetting(userId))
+        assertThatThrownBy(() -> simpleUserService.updateMySetting(userId))
                 .isInstanceOf(NotImplementedException.class);
     }
 
     @Test
     @DisplayName("사용자 비밀번호를 변경할 수 있다.")
-    void updatePassword() {
+    void updateMyPassword() {
         Long userId = testUser.getId();
         String newPassword = "NEW PASSWORD";
 
-        Long response = simpleUserService.updatePassword(userId, testPassword, newPassword);
+        Long response = simpleUserService.updateMyPassword(userId, testPassword, newPassword);
 
         assertThat(response).isNotNull().isEqualTo(userId);
 
@@ -411,15 +411,15 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         // 정보 조회, 탈퇴, 정보 수정, 설정 수정, 비번 바꾸기
         assertThatThrownBy(() -> simpleUserService.getMe(notExistingUserId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.withdrawUser(notExistingUserId))
+        assertThatThrownBy(() -> simpleUserService.withdrawMe(notExistingUserId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.updateInfo(
+        assertThatThrownBy(() -> simpleUserService.updateMyInfo(
                 notExistingUserId, tempStr, tempStr, tempStr
         ))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.updateSetting(notExistingUserId))
+        assertThatThrownBy(() -> simpleUserService.updateMySetting(notExistingUserId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.updatePassword(
+        assertThatThrownBy(() -> simpleUserService.updateMyPassword(
                 notExistingUserId, tempStr, tempStr
         ))
                 .isInstanceOf(UserNotFoundException.class);
@@ -478,15 +478,15 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         // 정보 조회, 탈퇴, 정보 수정, 설정 수정, 비번 바꾸기
         assertThatThrownBy(() -> simpleUserService.getMe(withdrawnUserId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.withdrawUser(withdrawnUserId))
+        assertThatThrownBy(() -> simpleUserService.withdrawMe(withdrawnUserId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.updateInfo(
+        assertThatThrownBy(() -> simpleUserService.updateMyInfo(
                 withdrawnUserId, tempStr, tempStr, tempStr
         ))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.updateSetting(withdrawnUserId))
+        assertThatThrownBy(() -> simpleUserService.updateMySetting(withdrawnUserId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> simpleUserService.updatePassword(
+        assertThatThrownBy(() -> simpleUserService.updateMyPassword(
                 withdrawnUserId, tempStr, tempStr
         ))
                 .isInstanceOf(UserNotFoundException.class);
@@ -611,7 +611,7 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     void testPasswordMismatchException() {
         Long userId = testUser.getId();
 
-        assertThatThrownBy(() -> simpleUserService.updatePassword(
+        assertThatThrownBy(() -> simpleUserService.updateMyPassword(
                 userId, "invalid pw", "new pw"
         ))
                 .isInstanceOf(PasswordMismatchException.class);

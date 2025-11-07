@@ -46,7 +46,7 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자는 자신이 수령한 초대코드 목록을 조회할 수 있다.")
-    void getReceivedInvitations() {
+    void getMyReceivedInvitations() {
         Long userId = testUser.getId();
         int numOfReceivedInvitation = 10;
 
@@ -65,7 +65,8 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
         int pageNo = 0;
         int pageSize = numOfReceivedInvitation / 2;
 
-        SimplePageResponse<ReceivedInvitationInfo> response = userInvitationService.getReceivedInvitations(
+        SimplePageResponse<ReceivedInvitationInfo> response
+                = userInvitationService.getMyReceivedInvitations(
                 userId, pageNo, pageSize
         );
 
@@ -104,14 +105,14 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자는 자신이 수령한 초대코드를 조회할 수 있다.")
-    void getReceivedInvitation() {
+    void getMyReceivedInvitation() {
         Long userId = testUser.getId();
         ReceivedInvitation entity = data.createNewReceivedInvitation(
                 userId, 100L, "this is test"
         );
 
         Long receivedInvitationId = entity.getId();
-        ReceivedInvitationInfo response = userInvitationService.getReceivedInvitation(
+        ReceivedInvitationInfo response = userInvitationService.getMyReceivedInvitation(
                 userId, receivedInvitationId
         );
 
@@ -157,12 +158,12 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("사용자는 수령했던 초대코드를 삭제할 수 있다.")
-    void deleteInvitation() {
+    void deleteMyInvitation() {
         Long userId = testUser.getId();
         Long receivedInvitationId = data.createNewReceivedInvitation(userId, 100L, "this is test")
                 .getId();
 
-        Long response = userInvitationService.deleteInvitation(userId, receivedInvitationId);
+        Long response = userInvitationService.deleteMyInvitation(userId, receivedInvitationId);
 
         assertThat(response).isNotNull();
 
@@ -215,7 +216,7 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
 
         int pageNo = 0;
 
-        List<ReceivedInvitationInfo> infos = userInvitationService.getReceivedInvitations(
+        List<ReceivedInvitationInfo> infos = userInvitationService.getMyReceivedInvitations(
                 userId, pageNo, numOfTotal
         ).pagedElements();
 
@@ -244,9 +245,10 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
         Long activeId = activeRIs.getFirst().getId();
         Long inactiveId = inactiveRIs.getLast().getId();
 
-        ReceivedInvitationInfo activeResponse = userInvitationService.getReceivedInvitation(userId,
+        ReceivedInvitationInfo activeResponse = userInvitationService.getMyReceivedInvitation(
+                userId,
                 activeId);
-        ReceivedInvitationInfo inactiveResponse = userInvitationService.getReceivedInvitation(
+        ReceivedInvitationInfo inactiveResponse = userInvitationService.getMyReceivedInvitation(
                 userId, inactiveId);
 
         assertThat(activeResponse).isNotNull();
@@ -267,18 +269,20 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
         String notExistingCode = "notExistingCode";
 
         // 초대 목록, 내용 보기
-        assertThatThrownBy(() -> userInvitationService.getReceivedInvitations(notExistingId, 0, 10))
+        assertThatThrownBy(
+                () -> userInvitationService.getMyReceivedInvitations(notExistingId, 0, 10))
                 .isInstanceOf(UserNotFoundException.class);
         assertThatThrownBy(
-                () -> userInvitationService.getReceivedInvitations(withdrawnUserId, 0, 10))
+                () -> userInvitationService.getMyReceivedInvitations(withdrawnUserId, 0, 10))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> userInvitationService.getReceivedInvitation(notExistingId,
+        assertThatThrownBy(() -> userInvitationService.getMyReceivedInvitation(notExistingId,
                 existingReceivedInvitationId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> userInvitationService.getReceivedInvitation(withdrawnUserId,
+        assertThatThrownBy(() -> userInvitationService.getMyReceivedInvitation(withdrawnUserId,
                 existingReceivedInvitationId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> userInvitationService.getReceivedInvitation(userId, notExistingId))
+        assertThatThrownBy(
+                () -> userInvitationService.getMyReceivedInvitation(userId, notExistingId))
                 .isInstanceOf(ReceivedInvitationNotFoundException.class);
 
         // 코드 수령하기
@@ -290,13 +294,13 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
                 .isInstanceOf(UserNotFoundException.class);
 
         // 코드 삭제하기
-        assertThatThrownBy(() -> userInvitationService.deleteInvitation(notExistingId,
+        assertThatThrownBy(() -> userInvitationService.deleteMyInvitation(notExistingId,
                 existingReceivedInvitationId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> userInvitationService.deleteInvitation(withdrawnUserId,
+        assertThatThrownBy(() -> userInvitationService.deleteMyInvitation(withdrawnUserId,
                 existingReceivedInvitationId))
                 .isInstanceOf(UserNotFoundException.class);
-        assertThatThrownBy(() -> userInvitationService.deleteInvitation(userId, notExistingId))
+        assertThatThrownBy(() -> userInvitationService.deleteMyInvitation(userId, notExistingId))
                 .isInstanceOf(ReceivedInvitationNotFoundException.class);
     }
 
@@ -313,10 +317,10 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
                     .getId();
         }
 
-        assertThatThrownBy(() -> userInvitationService.getReceivedInvitation(userId,
+        assertThatThrownBy(() -> userInvitationService.getMyReceivedInvitation(userId,
                 anotherUserOwnedReceivedInvitationId))
                 .isInstanceOf(ForbiddenException.class);
-        assertThatThrownBy(() -> userInvitationService.deleteInvitation(userId,
+        assertThatThrownBy(() -> userInvitationService.deleteMyInvitation(userId,
                 anotherUserOwnedReceivedInvitationId))
                 .isInstanceOf(ForbiddenException.class);
     }

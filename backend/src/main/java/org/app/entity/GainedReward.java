@@ -25,7 +25,7 @@ public class GainedReward extends AuditingCreation {
             name = "record_id", nullable = false, updatable = false,
             foreignKey = @ForeignKey(name = "FK__GAINED_REWARD_TO_PLAY_RECORD")
     )
-    private PlayRecord record;
+    private PlayRecord playRecord;
 
     // 혹시 몰라 넣은 reward 느슨한 결합
     @Column(updatable = false)
@@ -42,22 +42,22 @@ public class GainedReward extends AuditingCreation {
     private RewardStorageType storageType;
 
     public GainedReward(
-            User user, PlayRecord record,
+            User user, PlayRecord playRecord,
             String location, RewardStorageType storageType
     ) {
         this.user = user;
-        this.record = record;
+        this.playRecord = playRecord;
         this.location = location;
         this.storageType = storageType;
     }
 
     public GainedReward(
-            User user, PlayRecord record, Long rewardId,
+            User user, PlayRecord playRecord, Long rewardId,
             String description, String location,
             RewardStorageType storageType
     ) {
         this.user = user;
-        this.record = record;
+        this.playRecord = playRecord;
         this.rewardId = rewardId;
         this.description = description;
         this.location = location;

@@ -93,7 +93,7 @@ class PagingTest extends IntegrationTestSupport {
         int pageNum = pageRequest.getPageNumOrDefault();
         int pageSize = pageRequest.getPageSizeOrDefault();
 
-        return mvc.perform(get(url, pageRequest))
+        return mvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(
                         jsonPath("$.data.pageNum").value(pageNum)
