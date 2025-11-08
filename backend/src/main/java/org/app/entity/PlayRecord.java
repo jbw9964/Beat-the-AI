@@ -67,5 +67,14 @@ public class PlayRecord extends BaseTimeEntity {
         this.visibility = visibility;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean hasCleared() {
+        return this.getStatus().equals(PlayRecordStatus.CLEARED);
+    }
+
+    public void changeVisibility(PlayRecordVisibility visibility) {
+        this.visibility = visibility;
+    }
+
     // TODO : Problem 포함하는 생성자 넣기
 }

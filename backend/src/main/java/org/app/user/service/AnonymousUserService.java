@@ -86,6 +86,7 @@ public class AnonymousUserService {
         );
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private record Util() {
 
         static SimplePlayRecordInfo toSimpleInfo(PlayRecord entity) {

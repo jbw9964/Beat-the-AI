@@ -22,7 +22,7 @@ public class GainedReward extends AuditingCreation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "record_id", nullable = false, updatable = false,
+            name = "play_record_id", nullable = false, updatable = false,
             foreignKey = @ForeignKey(name = "FK__GAINED_REWARD_TO_PLAY_RECORD")
     )
     private PlayRecord playRecord;
