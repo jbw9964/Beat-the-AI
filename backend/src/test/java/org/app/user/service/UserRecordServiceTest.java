@@ -555,10 +555,16 @@ class UserRecordServiceTest extends IntegrationTestSupport {
     @DisplayName("사용자는 오직 자신의 자원만 조회할 수 있다.")
     void testForbiddenException1() {
         Long userId = testUser.getId();
+        Long userOwnedPlayRecordId;
         Long anotherUserOwnedPlayRecordId;
         Long anotherUserOwnedGainedRewardId;
 
         {
+            userOwnedPlayRecordId = data.createPlayRecord(
+                    userId, 33L,
+                    PlayRecordStatus.CLEARED, PlayRecordVisibility.PRIVATE
+            ).getId();
+
             Long anotherUserId = data.createUser().getId();
             anotherUserOwnedPlayRecordId = data.createPlayRecord(
                     anotherUserId, 58L,
@@ -576,6 +582,10 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                 .isInstanceOf(ForbiddenException.class);
         assertThatThrownBy(() -> userRecordService.getMyRewards(
                 userId, anotherUserOwnedPlayRecordId, 0, 10
+        ))
+                .isInstanceOf(ForbiddenException.class);
+        assertThatThrownBy(() -> userRecordService.getMyReward(
+                userId, userOwnedPlayRecordId, anotherUserOwnedGainedRewardId
         ))
                 .isInstanceOf(ForbiddenException.class);
         assertThatThrownBy(() -> userRecordService.getMyReward(

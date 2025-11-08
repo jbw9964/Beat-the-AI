@@ -144,6 +144,10 @@ public class UserRecordService {
                 GainedRewardNotFoundException::new
         );
 
+        if (!find.getPlayRecord().getId().equals(playRecordId)) {
+            throw new ForbiddenException("해당 보상은 다른 플레이 기록과 연관된 보상입니다.");
+        }
+
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("보상 내용은 자기 자신만 조회할 수 있습니다.");
         }
