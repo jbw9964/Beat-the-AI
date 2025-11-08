@@ -9,13 +9,13 @@ public interface UserInvitationRepository extends JpaRepository<Invitation, Long
     @Query("""
             select i from Invitation i
             inner join fetch i.problem
-            where i.code = :code
+                where i.code = :code
             """)
     Optional<Invitation> findByCodeFetchingProblem(String code);
 
     @Query("""
             select i from Invitation i
-            where i.code in :codes
+                where i.code in :codes
             """)
     List<Invitation> findAllByCodes(List<String> codes);
 
