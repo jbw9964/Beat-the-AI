@@ -23,6 +23,7 @@ public class GeneralDataInitializer {
 
     private final TestUserRepository userRepo;
 
+    @Builder(builderMethodName = "gainedRewardBuilder")
     public GainedReward createGainedReward(
             Long userId, Long playRecordId, Long rewardId,
             String description, String location,
@@ -45,6 +46,7 @@ public class GeneralDataInitializer {
         return notificationRepo.save(notification);
     }
 
+    @Builder(builderMethodName = "userBuilder")
     public User createUser(
             String name, String email, String loginId,
             String encryptedPassword, String thumbnail,
@@ -68,6 +70,7 @@ public class GeneralDataInitializer {
         return receivedInvitationRepo.save(receivedInvitation);
     }
 
+    @Builder(builderMethodName = "playRecordBuilder")
     public PlayRecord createPlayRecord(
             Long userId, Long problemId, String title, String description,
             String rewardMessage, int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
@@ -94,6 +97,7 @@ public class GeneralDataInitializer {
         return rewardRepo.save(reward);
     }
 
+    @Builder(builderMethodName = "scenarioRecordBuilder")
     public ScenarioRecord createScenarioRecord(
             Long playRecordId, int scenarioOrder, String scenarioContent,
             boolean hasSubmitted, String userSubmissionContent, String aiGeneratedContent,
@@ -111,6 +115,7 @@ public class GeneralDataInitializer {
         return scenarioRecordRepo.save(scenarioRecord);
     }
 
+    @Builder(builderMethodName = "problemBuilder")
     public Problem createProblem(
             Long userId, String title, String description, String rewardMessage,
             int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
