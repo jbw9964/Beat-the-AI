@@ -6,6 +6,7 @@ import org.app.entity.*;
 import org.springframework.modulith.*;
 
 @NamedInterface
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public interface ScenarioInfoSerializer {
 
     String serialize(List<ScenarioInfo> scenarioInfos)
