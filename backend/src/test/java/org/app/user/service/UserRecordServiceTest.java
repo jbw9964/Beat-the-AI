@@ -38,49 +38,6 @@ class UserRecordServiceTest extends IntegrationTestSupport {
     @Autowired
     TestGainedRewardRepository gainedRewardRepo;
 
-    @SuppressWarnings("SameParameterValue")
-    private static <E> List<E> assertPagingResponseEqualityAndGetElements(
-            SimplePageResponse<E> response, int pageNo, int pageSize,
-            int numOfPagedElements, int numOfTotal, boolean hasNext
-    ) {
-
-        assertThat(response).isNotNull();
-        assertThat(response.pageNoRequest()).isEqualTo(pageNo);
-        assertThat(response.pageSizeRequest()).isEqualTo(pageSize);
-        assertThat(response.numOfPagedElements()).isEqualTo(numOfPagedElements);
-        assertThat(response.numOfTotalElements()).isEqualTo(numOfTotal);
-        assertThat(response.hasNext()).isEqualTo(hasNext);
-
-        List<E> elements = response.pagedElements();
-        assertThat(elements).isNotNull().hasSize(numOfPagedElements);
-
-        return elements;
-    }
-
-    private static <I> void assertThrow(
-            I identity,
-            Function<I, ?> func,
-            Class<? extends RuntimeException> ex
-    ) {
-        assertThatThrownBy(() -> func.apply(identity)).isInstanceOf(ex);
-    }
-
-    private static <I1, I2> void assertThrow(
-            I1 identity1, I2 identity2, BiFunction<I1, I2, ?> func,
-            Class<? extends RuntimeException> ex
-    ) {
-        assertThatThrownBy(() -> func.apply(identity1, identity2)).isInstanceOf(ex);
-    }
-
-    private static <I1, I2, I3> void assertThrow(
-            I1 identity1, I2 identity2, I3 identity3,
-            TripleFunction<I1, I2, I3, ?> func,
-            Class<? extends RuntimeException> ex
-    ) {
-        assertThatThrownBy(() -> func.apply(identity1, identity2, identity3))
-                .isInstanceOf(ex);
-    }
-
     @BeforeEach
     void setUp() {
         testUser = data.createUser();
@@ -125,9 +82,11 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                 userId, pageNo, pageSize
         );
 
-        List<SimplePlayRecordInfo> elements = assertPagingResponseEqualityAndGetElements(
+        TestUtils.assertSimplePageResponseEquality(
                 response, pageNo, pageSize, pageSize, numOfTotal, true
         );
+
+        List<SimplePlayRecordInfo> elements = response.pagedElements();
 
         Map<Long, PlayRecord> playRecordMap = playRecords.stream()
                 .collect(Collectors.toMap(PlayRecord::getId, Function.identity()));
@@ -324,9 +283,11 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                 userId, playRecordId, pageNo, pageSize
         );
 
-        List<GainedRewardInfo> elements = assertPagingResponseEqualityAndGetElements(
+        TestUtils.assertSimplePageResponseEquality(
                 response, pageNo, pageSize, pageSize, numOfTotal, true
         );
+
+        List<GainedRewardInfo> elements = response.pagedElements();
 
         Map<Long, GainedReward> gainedRewardMap = gainedRewards.stream()
                 .collect(Collectors.toMap(GainedReward::getId, Function.identity()));
@@ -445,24 +406,24 @@ class UserRecordServiceTest extends IntegrationTestSupport {
             BiFunction<Long, Long, ?> getMyRecordFunc
                     = (uid, pid) -> userRecordService.getMyRecord(uid, pid);
 
-            assertThrow(    // 사용자 없을 때
+            TestUtils.assertThrow(    // 사용자 없을 때
                     notExistingId, getMyRecordsFunc,
                     UserNotFoundException.class
             );
-            assertThrow(    // 사용자 탈퇴했을 때
+            TestUtils.assertThrow(    // 사용자 탈퇴했을 때
                     withdrawnUserId, getMyRecordsFunc,
                     UserNotFoundException.class
             );
 
-            assertThrow(    // 사용자 없을 때
+            TestUtils.assertThrow(    // 사용자 없을 때
                     notExistingId, existingPlayRecordId,
                     getMyRecordFunc, UserNotFoundException.class
             );
-            assertThrow(    // 사용자 탈퇴했을 때
+            TestUtils.assertThrow(    // 사용자 탈퇴했을 때
                     withdrawnUserId, existingPlayRecordId,
                     getMyRecordFunc, UserNotFoundException.class
             );
-            assertThrow(    // 관련 기록 없을 때
+            TestUtils.assertThrow(    // 관련 기록 없을 때
                     existingUserId, notExistingId,
                     getMyRecordFunc, PlayRecordNotFoundException.class
             );
@@ -475,15 +436,15 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                     uid, pid, PlayRecordVisibility.PRIVATE
             );
 
-            assertThrow(    // 사용자 없을 때
+            TestUtils.assertThrow(    // 사용자 없을 때
                     notExistingId, existingPlayRecordId,
                     changeMyRecordVisibilityFunc, UserNotFoundException.class
             );
-            assertThrow(    // 사용자 탈퇴했을 때
+            TestUtils.assertThrow(    // 사용자 탈퇴했을 때
                     withdrawnUserId, existingPlayRecordId,
                     changeMyRecordVisibilityFunc, UserNotFoundException.class
             );
-            assertThrow(    // 관련 기록 없을 때
+            TestUtils.assertThrow(    // 관련 기록 없을 때
                     existingUserId, notExistingId,
                     changeMyRecordVisibilityFunc, PlayRecordNotFoundException.class
             );
@@ -495,37 +456,37 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                     = (uid, pid) -> userRecordService.getMyRewards(
                     uid, pid, 0, 10
             );
-            TripleFunction<Long, Long, Long, ?> getMyRewardFunc
+            TestUtils.Triplet<Long, Long, Long, ?> getMyRewardFunc
                     = (uid, pid, gid) -> userRecordService.getMyReward(
                     uid, pid, gid
             );
 
-            assertThrow(    // 사용자 없을 때
+            TestUtils.assertThrow(    // 사용자 없을 때
                     notExistingId, existingPlayRecordId,
                     getMyRewardsFunc, UserNotFoundException.class
             );
-            assertThrow(    // 탈퇴했을 때
+            TestUtils.assertThrow(    // 탈퇴했을 때
                     withdrawnUserId, existingPlayRecordId,
                     getMyRewardsFunc, UserNotFoundException.class
             );
-            assertThrow(    // 기록 없을 때
+            TestUtils.assertThrow(    // 기록 없을 때
                     existingUserId, notExistingId,
                     getMyRewardsFunc, PlayRecordNotFoundException.class
             );
 
-            assertThrow(    // 사용자 없을때
+            TestUtils.assertThrow(    // 사용자 없을때
                     notExistingId, existingPlayRecordId, existingGainedRewardId,
                     getMyRewardFunc, UserNotFoundException.class
             );
-            assertThrow(    // 탈퇴했을 때
+            TestUtils.assertThrow(    // 탈퇴했을 때
                     withdrawnUserId, existingPlayRecordId, existingGainedRewardId,
                     getMyRewardFunc, UserNotFoundException.class
             );
-            assertThrow(    // 기록 없을 때
+            TestUtils.assertThrow(    // 기록 없을 때
                     existingUserId, notExistingId, existingGainedRewardId,
                     getMyRewardFunc, PlayRecordNotFoundException.class
             );
-            assertThrow(    // 보상 없을 때
+            TestUtils.assertThrow(    // 보상 없을 때
                     existingUserId, existingPlayRecordId, notExistingId,
                     getMyRewardFunc, GainedRewardNotFoundException.class
             );
@@ -536,15 +497,15 @@ class UserRecordServiceTest extends IntegrationTestSupport {
             BiFunction<Long, Long, ?> deleteMyRewardsFunc
                     = (uid, pid) -> userRecordService.deleteMyRewards(uid, pid);
 
-            assertThrow(    // 사용자 없을 때
+            TestUtils.assertThrow(    // 사용자 없을 때
                     notExistingId, existingPlayRecordId,
                     deleteMyRewardsFunc, UserNotFoundException.class
             );
-            assertThrow(    // 탈퇴
+            TestUtils.assertThrow(    // 탈퇴
                     withdrawnUserId, existingPlayRecordId,
                     deleteMyRewardsFunc, UserNotFoundException.class
             );
-            assertThrow(    // 기록 없을 때
+            TestUtils.assertThrow(    // 기록 없을 때
                     existingUserId, notExistingId,
                     deleteMyRewardsFunc, PlayRecordNotFoundException.class
             );
@@ -639,12 +600,6 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                 userId, playRecordId, 4321L
         ))
                 .isInstanceOf(NonClearedPlayRecordException.class);
-    }
-
-    @FunctionalInterface
-    interface TripleFunction<T1, T2, T3, R> {
-
-        R apply(T1 t1, T2 t2, T3 t3);
     }
 
     @Component

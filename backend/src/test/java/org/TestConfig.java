@@ -8,7 +8,6 @@ import org.support.*;
 @Configuration
 @RequiredArgsConstructor
 @EnableJpaRepositories(basePackageClasses = TestConfig.class, considerNestedRepositories = true)
-@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 public class TestConfig {
 
     private final TestGainedRewardRepository gainedRewardRepo;

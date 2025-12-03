@@ -3,10 +3,12 @@ package org.support;
 import java.time.*;
 import lombok.*;
 import org.app.entity.*;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.transaction.annotation.*;
 
 @Transactional
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class GeneralDataInitializer {
 
     private static final NotificationSetting setting = null;
@@ -169,22 +171,28 @@ public class GeneralDataInitializer {
     }
 
     private void initProblemDomain() {
-        invitationRepo.deleteAll();
-        rewardRepo.deleteAll();
-        ratingRepo.deleteAll();
-        problemRepo.deleteAll();
+        this.deleteAll(invitationRepo);
+        this.deleteAll(rewardRepo);
+        this.deleteAll(ratingRepo);
+        this.deleteAll(problemRepo);
     }
 
     private void initPlayDomain() {
-        gainedRewardRepo.deleteAll();
-        scenarioRecordRepo.deleteAll();
-        playRecordRepo.deleteAll();
+        this.deleteAll(gainedRewardRepo);
+        this.deleteAll(scenarioRecordRepo);
+        this.deleteAll(playRecordRepo);
     }
 
     private void initUserDomain() {
-        notificationRepo.deleteAll();
-        temporalProblemRepo.deleteAll();
-        receivedInvitationRepo.deleteAll();
-        userRepo.deleteAll();
+        this.deleteAll(notificationRepo);
+        this.deleteAll(temporalProblemRepo);
+        this.deleteAll(receivedInvitationRepo);
+        this.deleteAll(userRepo);
+    }
+
+    private <E, I> void deleteAll(
+            JpaRepository<E, I> jpaRepo
+    ) {
+        jpaRepo.deleteAllInBatch(jpaRepo.findAll());
     }
 }
