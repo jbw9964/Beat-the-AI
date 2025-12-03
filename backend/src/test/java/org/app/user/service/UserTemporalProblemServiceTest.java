@@ -12,7 +12,6 @@ import org.app.config.domain.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;
-import org.app.user.dto.request.*;
 import org.app.util.api.*;
 import org.app.util.exception.*;
 import org.junit.jupiter.api.*;
@@ -367,7 +366,6 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
             //noinspection DataFlowIssue
             Function<Long, ?> createProblemFunc
                     = uid -> service.createTemporalProblem(uid, null);
-            //noinspection DataFlowIssue
             BiFunction<Long, Long, ?> updateProblemFunc
                     = (uid, tid) -> service.updateTemporalProblem(uid, tid, null);
             BiFunction<Long, Long, ?> deleteProblemFunc
@@ -426,6 +424,11 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
 
         assertThatThrownBy(() -> service.getMyTemporalProblem(
                 userId, anotherUserOwnedTemporalProblemId
+        ))
+                .isInstanceOf(ForbiddenException.class);
+
+        assertThatThrownBy(() -> service.updateTemporalProblem(
+                userId, anotherUserOwnedTemporalProblemId, null
         ))
                 .isInstanceOf(ForbiddenException.class);
 

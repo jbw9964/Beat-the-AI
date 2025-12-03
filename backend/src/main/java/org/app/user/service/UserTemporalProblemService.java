@@ -7,7 +7,6 @@ import org.app.config.domain.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;
-import org.app.user.dto.request.*;
 import org.app.user.repository.*;
 import org.app.util.*;
 import org.app.util.api.*;
@@ -104,6 +103,10 @@ public class UserTemporalProblemService {
                 temporalId, temporalProblemRepo::findById,
                 TemporalProblemNotFoundException::new
         );
+
+        if (!find.getUser().getId().equals(userId)) {
+            throw new ForbiddenException("임시저장 내용은 자기 자신만 수정할 수 있습니다.");
+        }
 
         find
                 .changeTitle(info.title())
