@@ -8,7 +8,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.config.*;
 
 @Configuration
-@EnableJpaAuditing
+@EnableJpaAuditing(modifyOnCreate = false)
 @RequiredArgsConstructor
 class JpaAuditingConfig {
 

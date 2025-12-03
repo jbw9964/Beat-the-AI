@@ -79,15 +79,14 @@ public class AnonymousUserService {
                 .map(Util::toScenarioInfo)
                 .sorted(Comparator.comparing(ScenarioRecordInfo::scenarioOrder))
                 .toList();
-        SimplePageResponse<ScenarioRecordInfo> scenarioPageResponse =
-                new SimplePageResponse<>(submittedScenarioInfos);
         boolean isMine = userId.equals(authenticatedUserId);
 
         return new GetPublicRecordResponse(
-                detailedPlayRecordInfo, scenarioPageResponse, isMine
+                detailedPlayRecordInfo, submittedScenarioInfos, isMine
         );
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private record Util() {
 
         static SimplePlayRecordInfo toSimpleInfo(PlayRecord entity) {

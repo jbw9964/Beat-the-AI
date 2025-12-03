@@ -9,6 +9,13 @@ public interface UserPlayRecordRepository extends JpaRepository<PlayRecord, Long
 
     @Query("""
             select pr from PlayRecord pr
+            left join fetch pr.scenarioRecords
+                where pr.id = :id
+            """)
+    Optional<PlayRecord> findByIdFetchingScenarioRecords(Long id);
+
+    @Query("""
+            select pr from PlayRecord pr
                 where pr.user.id = :userId
                 and pr.visibility = org.app.entity.PlayRecordVisibility.PUBLIC
             """)
@@ -21,4 +28,7 @@ public interface UserPlayRecordRepository extends JpaRepository<PlayRecord, Long
                 and pr.visibility = org.app.entity.PlayRecordVisibility.PUBLIC
             """)
     Optional<PlayRecord> findPublicRecordsByIdFetchingScenarioRecords(Long playRecordId);
+
+    Page<PlayRecord> findByUserId(Long userId, Pageable pageable);
+
 }

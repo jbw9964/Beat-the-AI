@@ -13,10 +13,4 @@ public abstract class BaseTimeEntity extends AuditingCreation {
     @MockableLastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @PrePersist
-    private void removeModifiedAtOnCreation() {
-        if (modifiedAt != null) {
-            modifiedAt = null;
-        }
-    }
 }

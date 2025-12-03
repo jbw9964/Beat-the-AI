@@ -26,14 +26,14 @@ public class SimpleUserController {
     }
 
     @DeleteMapping  // 회원 탈퇴하기
-    public ApiResponse<Long> withdrawUser(@AuthenticationPrincipal Long authedUserId) {
-        Long response = simpleUserService.withdrawUser(authedUserId);
+    public ApiResponse<Long> withdrawMe(@AuthenticationPrincipal Long authedUserId) {
+        Long response = simpleUserService.withdrawMe(authedUserId);
 
         return ApiResponse.accepted(response);
     }
 
     @PutMapping("/info")        // 자기 정보 수정하기
-    public ApiResponse<Long> updateInfo(
+    public ApiResponse<Long> updateMyInfo(
             @AuthenticationPrincipal Long authedUserId,
             @Valid @RequestBody UpdateInfoRequest request
     ) {
@@ -41,7 +41,7 @@ public class SimpleUserController {
         String newEmail = request.email();
         String newThumbnail = request.thumbnailUrl();
 
-        Long response = simpleUserService.updateInfo(
+        Long response = simpleUserService.updateMyInfo(
                 authedUserId, newName, newEmail, newThumbnail
         );
 
@@ -49,24 +49,24 @@ public class SimpleUserController {
     }
 
     @PutMapping("/setting")     // 자기 설정 수정하기
-    public ApiResponse<Long> updateSetting(
+    public ApiResponse<Long> updateMySetting(
             @AuthenticationPrincipal Long authedUserId,
             @Valid @RequestBody UpdateSettingRequest request
     ) {
-        Long response = simpleUserService.updateSetting(authedUserId);
+        Long response = simpleUserService.updateMySetting(authedUserId);
 
         return ApiResponse.success(response);
     }
 
     @PostMapping("/password")       // 비밀번호 바꾸기
-    public ApiResponse<Long> updatePassword(
+    public ApiResponse<Long> updateMyPassword(
             @AuthenticationPrincipal Long authedUserId,
             @Valid @RequestBody ChangePasswordRequest request
     ) {
         String oldPw = request.oldPassword();
         String newPw = request.newPassword();
 
-        Long response = simpleUserService.updatePassword(authedUserId, oldPw, newPw);
+        Long response = simpleUserService.updateMyPassword(authedUserId, oldPw, newPw);
 
         return ApiResponse.success(response);
     }

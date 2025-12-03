@@ -31,7 +31,7 @@ public class UserInvitationService {
 
 
     // 초대받은 목록 보기. 이전에 수령한 초대가 유효하지 않으면 응답 속성으로 보여줌.
-    public SimplePageResponse<ReceivedInvitationInfo> getReceivedInvitations(
+    public SimplePageResponse<ReceivedInvitationInfo> getMyReceivedInvitations(
             Long userId, int pageNo, int pageSize
     ) {
 
@@ -80,7 +80,7 @@ public class UserInvitationService {
     }
 
     // 내가 수령한 초대 코드 내용 보기
-    public ReceivedInvitationInfo getReceivedInvitation(Long userId, Long receivedInvitationId) {
+    public ReceivedInvitationInfo getMyReceivedInvitation(Long userId, Long receivedInvitationId) {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
@@ -101,7 +101,7 @@ public class UserInvitationService {
 
     // 수령했던 코드 삭제하기
     @Transactional
-    public Long deleteInvitation(Long userId, Long receivedInvitationId) {
+    public Long deleteMyInvitation(Long userId, Long receivedInvitationId) {
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         ReceivedInvitation find = globalUtil.getOrThrow(

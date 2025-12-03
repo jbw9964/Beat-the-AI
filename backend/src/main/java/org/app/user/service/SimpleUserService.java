@@ -53,7 +53,7 @@ public class SimpleUserService {
 
     // 회원탈퇴하기
     @Transactional
-    public Long withdrawUser(Long userId) {
+    public Long withdrawMe(Long userId) {
         // TODO : 이벤트 기반 유저 자원 삭제 필요.
         //  일단 withdraw 속성으로 조회 안되게 만들었고,
         //  이후 다른부분 개발하면서 다른 삭제시키는거 만들어야됨.
@@ -74,7 +74,7 @@ public class SimpleUserService {
 
     // 내 정보 수정하기 : 이름, 이메일, 썸네일 등
     @Transactional
-    public Long updateInfo(
+    public Long updateMyInfo(
             Long userId, String newUsername, String newEmail, String newThumbnail
     ) {
 
@@ -92,7 +92,7 @@ public class SimpleUserService {
 
     // 내 설정 수정하기 : 알림 설정, 플레이시 default visibility 등 (상세하게 생각 아직 안함)
     @Transactional
-    public Long updateSetting(Long userId) {
+    public Long updateMySetting(Long userId) {
         // TODO : 설정 수정 구현
         User find = globalUtil.getOrThrow(
                 userId, userRepo::findById, UserNotFoundException::new,
@@ -104,7 +104,7 @@ public class SimpleUserService {
 
     // 비번 바꾸기
     @Transactional
-    public Long updatePassword(
+    public Long updateMyPassword(
             Long userId, String oldPassword, String newPassword
     ) {
 
