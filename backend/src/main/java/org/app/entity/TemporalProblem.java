@@ -7,6 +7,7 @@ import lombok.*;
 @Entity
 @Table(name = "temporal_problem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuppressWarnings("UnusedReturnValue")
 public class TemporalProblem extends BaseTimeEntity {
 
     @Id
@@ -29,9 +30,9 @@ public class TemporalProblem extends BaseTimeEntity {
     @Column(length = 50)
     private String rewardMessage;
 
-    private int numOfScenariosToGetReward;
+    private Integer numOfScenariosToGetReward;
 
-    private int numOfScenariosToFailPlay;
+    private Integer numOfScenariosToFailPlay;
 
     @Enumerated(EnumType.STRING)
     private ProblemVisibility visibility;
@@ -40,21 +41,9 @@ public class TemporalProblem extends BaseTimeEntity {
     @Basic(fetch = FetchType.LAZY)
     private String serializedScenarioInfo;
 
-    /*
-        TODO : 직렬화된 시나리오 info 관련해서 작업 필요함.
-        1. 엔티티 serializedScenarioInfo 를 List<ScenarioInfo> 로 제공하는 메서드
-        2. List<ScenarioInfo> 를 직렬화해 serializedScenarioInfo 로 저장하는 메서드
-        위 과정에서 ScenarioInfo 의 scenarioOrder 잘 생각해서 작업해야 함.
-     */
-
-    public TemporalProblem(User user, String title) {
-        this.user = user;
-        this.title = title;
-    }
-
     public TemporalProblem(
             User user, String title, String description, String rewardMessage,
-            int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
+            Integer numOfScenariosToGetReward, Integer numOfScenariosToFailPlay,
             ProblemVisibility visibility, String serializedScenarioInfo
     ) {
         this.user = user;
@@ -67,5 +56,38 @@ public class TemporalProblem extends BaseTimeEntity {
         this.serializedScenarioInfo = serializedScenarioInfo;
     }
 
-    // TODO : 임시저장 바꿨을 때 각 속성 잘 바꿔주는 기능 구성해야 함.
+    public TemporalProblem changeTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public TemporalProblem changeDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public TemporalProblem changeRewardMessage(String rewardMessage) {
+        this.rewardMessage = rewardMessage;
+        return this;
+    }
+
+    public TemporalProblem changeNumOfScenariosToGetReward(Integer numOfScenariosToGetReward) {
+        this.numOfScenariosToGetReward = numOfScenariosToGetReward;
+        return this;
+    }
+
+    public TemporalProblem changeNumOfScenariosToFailPlay(Integer numOfScenariosToFailPlay) {
+        this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
+        return this;
+    }
+
+    public TemporalProblem changeVisibility(ProblemVisibility visibility) {
+        this.visibility = visibility;
+        return this;
+    }
+
+    public TemporalProblem changeSerializedScenarioInfo(String serializedScenarioInfo) {
+        this.serializedScenarioInfo = serializedScenarioInfo;
+        return this;
+    }
 }
