@@ -194,6 +194,6 @@ public class GeneralDataInitializer {
     private <E, I> void deleteAll(
             JpaRepository<E, I> jpaRepo
     ) {
-        jpaRepo.deleteAllInBatch(jpaRepo.findAll());
+        jpaRepo.deleteAllInBatch();
     }
 }

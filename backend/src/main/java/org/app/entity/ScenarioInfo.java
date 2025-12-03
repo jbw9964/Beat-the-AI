@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class ScenarioInfo {
+public final class ScenarioInfo implements Comparable<ScenarioInfo> {
 
     @Min(value = 0, message = "시나리오 순서는 0 보다 크거나 같은 정수여야 합니다.")
     private int scenarioOrder;
@@ -37,4 +37,8 @@ public final class ScenarioInfo {
         this.answerContent = answerContent;
     }
 
+    @Override
+    public int compareTo(ScenarioInfo o) {
+        return Integer.compare(this.scenarioOrder, o.scenarioOrder);
+    }
 }

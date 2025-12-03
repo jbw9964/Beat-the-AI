@@ -2,8 +2,6 @@ package org.app.user.controller;
 
 import jakarta.validation.*;
 import lombok.*;
-import org.app.config.domain.*;
-import org.app.entity.*;
 import org.app.user.dto.*;
 import org.app.user.dto.request.*;
 import org.app.user.service.*;
@@ -19,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserTemporalController {
 
     private final UserTemporalProblemService temporalProblemService;
-    private final ScenarioInfoValidator scenarioInfoValidator;
+    private final TemporalProblemInfoAdaptor infoAdaptor;
 
     // 임시저장 목록보기
     @GetMapping
@@ -59,9 +57,15 @@ public class UserTemporalController {
             @AuthenticationPrincipal Long authedUserId,
             @Valid @RequestBody CreateTemporalProblemRequest req
     ) {
-        this.validateScenarioInfoSerializable(req);
+        if (!infoAdaptor.areScenarioInfosSerializable(req.scenarioInfos())) {
+            throw new BadRequestException(
+                    "제공한 시나리오 정보는 직렬화 할 수 없습니다. 정보간 순서, null 체크 여부를 확인해 주세요."
+            );
+        }
 
-        Long response = temporalProblemService.createTemporalProblem(authedUserId, req);
+        SerializedTemporalProblemInfo info = infoAdaptor.getSerializedInfo(req);
+
+        Long response = temporalProblemService.createTemporalProblem(authedUserId, info);
 
         return ApiResponse.created(response);
     }
@@ -73,10 +77,16 @@ public class UserTemporalController {
             @PathVariable("temporal-id") Long temporalId,
             @Valid @RequestBody CreateTemporalProblemRequest req
     ) {
-        this.validateScenarioInfoSerializable(req);
+        if (!infoAdaptor.areScenarioInfosSerializable(req.scenarioInfos())) {
+            throw new BadRequestException(
+                    "제공한 시나리오 정보는 직렬화 할 수 없습니다. 정보간 순서, null 체크 여부를 확인해 주세요."
+            );
+        }
+
+        SerializedTemporalProblemInfo info = infoAdaptor.getSerializedInfo(req);
 
         Long response = temporalProblemService.updateTemporalProblem(
-                authedUserId, temporalId, req
+                authedUserId, temporalId, info
         );
 
         return ApiResponse.success(response);
@@ -95,13 +105,4 @@ public class UserTemporalController {
         return ApiResponse.success(response);
     }
 
-    private void validateScenarioInfoSerializable(CreateTemporalProblemRequest request) {
-        ScenarioInfo[] scenarioInfos = request.scenarioInfos();
-
-        if (!scenarioInfoValidator.serializable(scenarioInfos)) {
-            throw new BadRequestException(
-                    "제공한 시나리오 정보는 직렬화 할 수 없습니다. 정보간 순서, null 체크 여부를 확인해 주세요."
-            );
-        }
-    }
 }

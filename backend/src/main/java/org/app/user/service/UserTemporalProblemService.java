@@ -25,7 +25,6 @@ public class UserTemporalProblemService {
     private final UserRepository userRepo;
     private final UserTemporalProblemRepository temporalProblemRepo;
 
-    private final ScenarioInfoSerializer serializer;
     private final ScenarioInfoDeserializer deserializer;
 
 
@@ -73,17 +72,17 @@ public class UserTemporalProblemService {
 
     // 임시저장 생성하기
     @Transactional
-    public Long createTemporalProblem(Long userId, CreateTemporalProblemRequest request) {
+    public Long createTemporalProblem(Long userId, SerializedTemporalProblemInfo info) {
 
         User user = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        String title = request.title();
-        String description = request.description();
-        String rewardMsg = request.rewardMessage();
-        Integer nOfSToGetReward = request.numOfScenariosToGetReward();
-        Integer nOfSToFailPlay = request.numOfScenariosToFailPlay();
-        ProblemVisibility visibility = request.visibility();
-        String serializedInfo = this.getSerializedScenarioInfo(request.scenarioInfos());
+        String title = info.title();
+        String description = info.description();
+        String rewardMsg = info.rewardMessage();
+        Integer nOfSToGetReward = info.numOfScenariosToGetReward();
+        Integer nOfSToFailPlay = info.numOfScenariosToFailPlay();
+        ProblemVisibility visibility = info.visibility();
+        String serializedInfo = info.serializedScenarioInfos();
 
         TemporalProblem newEntity = new TemporalProblem(
                 user, title, description, rewardMsg,
@@ -96,7 +95,7 @@ public class UserTemporalProblemService {
     // 임시저장 수정하기
     @Transactional
     public Long updateTemporalProblem(
-            Long userId, Long temporalId, CreateTemporalProblemRequest request
+            Long userId, Long temporalId, SerializedTemporalProblemInfo info
     ) {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
@@ -107,15 +106,13 @@ public class UserTemporalProblemService {
         );
 
         find
-                .changeTitle(request.title())
-                .changeDescription(request.description())
-                .changeRewardMessage(request.rewardMessage())
-                .changeNumOfScenariosToGetReward(request.numOfScenariosToGetReward())
-                .changeNumOfScenariosToFailPlay(request.numOfScenariosToFailPlay())
-                .changeVisibility(request.visibility())
-                .changeSerializedScenarioInfo(
-                        this.getSerializedScenarioInfo(request.scenarioInfos())
-                );
+                .changeTitle(info.title())
+                .changeDescription(info.description())
+                .changeRewardMessage(info.rewardMessage())
+                .changeNumOfScenariosToGetReward(info.numOfScenariosToGetReward())
+                .changeNumOfScenariosToFailPlay(info.numOfScenariosToFailPlay())
+                .changeVisibility(info.visibility())
+                .changeSerializedScenarioInfo(info.serializedScenarioInfos());
 
         return find.getId();
     }
@@ -145,17 +142,6 @@ public class UserTemporalProblemService {
                 userId, userRepo::findById, UserNotFoundException::new,
                 Predicate.not(User::withdrawn)
         );
-    }
-
-    private String getSerializedScenarioInfo(ScenarioInfo[] scenarioInfos) {
-        if (scenarioInfos == null || scenarioInfos.length == 0) {
-            return null;
-        }
-        try {
-            return serializer.serialize(scenarioInfos);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to serialize info due to: " + e.getCause(), e);
-        }
     }
 
     private static class Util {

@@ -173,7 +173,7 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("새로운 임시저장 내용을 생성할 수 있다.")
-    void createTemporalProblem() {
+    void createTemporalProblem() throws JsonProcessingException {
         Long userId = testUser.getId();
 
         String title = "TEST-TITLE";
@@ -189,12 +189,12 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
         };
 
         //noinspection ConstantValue
-        CreateTemporalProblemRequest request = new CreateTemporalProblemRequest(
-                title, description, rewardMessage,
-                nOfSToGetReward, nOfSToFailPlay, visibility, scenarioInfos
+        SerializedTemporalProblemInfo savingInfo = new SerializedTemporalProblemInfo(
+                title, description, rewardMessage, nOfSToGetReward, nOfSToFailPlay, visibility,
+                serializer.serialize(scenarioInfos)
         );
 
-        Long response = service.createTemporalProblem(userId, request);
+        Long response = service.createTemporalProblem(userId, savingInfo);
         assertThat(response).isNotNull();
 
         Optional<TemporalProblem> opt = temporalProblemRepo.findById(response);
@@ -232,7 +232,7 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("임시저장 내용을 수정할 수 있다.")
-    void updateTemporalProblem() {
+    void updateTemporalProblem() throws JsonProcessingException {
         Long userId = testUser.getId();
         Long entityId;
 
@@ -255,12 +255,12 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
                 new ScenarioInfo(2, "wtf?", null)
         };
 
-        CreateTemporalProblemRequest request = new CreateTemporalProblemRequest(
-                title, description, rewardMessage,
-                nOfSToGetReward, nOfSToFailPlay, visibility, scenarioInfos
+        SerializedTemporalProblemInfo savingInfo = new SerializedTemporalProblemInfo(
+                title, description, rewardMessage, nOfSToGetReward, nOfSToFailPlay, visibility,
+                serializer.serialize(scenarioInfos)
         );
 
-        Long response = service.updateTemporalProblem(userId, entityId, request);
+        Long response = service.updateTemporalProblem(userId, entityId, savingInfo);
         assertThat(response).isNotNull().isEqualTo(entityId);
 
         Optional<TemporalProblem> opt = temporalProblemRepo.findById(response);
