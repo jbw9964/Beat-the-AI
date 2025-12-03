@@ -136,9 +136,10 @@ public class GeneralDataInitializer {
         return problemRepo.save(problem);
     }
 
+    @Builder(builderMethodName = "temporalProblemBuilder")
     public TemporalProblem createTemporalProblem(
             Long userId, String title, String description, String rewardMessage,
-            int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
+            Integer numOfScenariosToGetReward, Integer numOfScenariosToFailPlay,
             ProblemVisibility visibility, String serializedScenarioInfo
     ) {
         User find = userRepo.findById(userId).orElseThrow(AssertionError::new);
