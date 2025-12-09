@@ -76,15 +76,20 @@ public class ExceptionHandlerConfig {
                 data = jsonParseEx.getOriginalMessage();
             }
             case InvalidFormatException invalidFormatEx -> {
-                message = "올바르지 않은 형식입니다.";
+                message = String.format(
+                        "주어진 값 %s 은 올바르지 않은 형식입니다.",
+                        invalidFormatEx.getValue()
+                );
 
                 List<String> description = (List<String>) (data = new ArrayList<>());
 
                 for (Reference path : invalidFormatEx.getPath()) {
                     String fieldName = path.getFieldName();
-                    description.add(String.format(
-                            "파라미터 '%s' 의 형식이 올바르지 않습니다.", fieldName
-                    ));
+                    if (fieldName != null) {
+                        description.add(String.format(
+                                "파라미터 '%s' 의 형식이 올바르지 않습니다.", fieldName
+                        ));
+                    }
                 }
             }
             case JsonMappingException mappingEx -> {

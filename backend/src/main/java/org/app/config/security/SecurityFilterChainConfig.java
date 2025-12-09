@@ -106,7 +106,7 @@ public class SecurityFilterChainConfig {
                                 "/api/auth/login", "/api/auth/signup", "/api/auth/reissue"
                         ).permitAll()
                         .requestMatchers(
-                                "/oidc/login", "/oidc/signup"
+                                "/api/oidc/login", "/api/oidc/signup"
                         ).permitAll()
 
                         // user doamin
