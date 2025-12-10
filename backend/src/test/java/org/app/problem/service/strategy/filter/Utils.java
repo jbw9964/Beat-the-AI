@@ -1,11 +1,11 @@
-package org.app.problem.service.strategy;
+package org.app.problem.service.strategy.filter;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
-import org.app.problem.domain.search.*;
+import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 import org.junit.jupiter.params.provider.*;
 

@@ -1,4 +1,4 @@
-package org.app.problem.domain.search;
+package org.app.problem.domain.search.filter;
 
 import org.app.problem.domain.exception.*;
 import org.app.problem.dto.request.*;

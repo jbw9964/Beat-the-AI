@@ -1,4 +1,4 @@
-package org.app.problem.domain.search;
+package org.app.problem.domain.search.filter;
 
 public interface ProblemFilter<T> {
 

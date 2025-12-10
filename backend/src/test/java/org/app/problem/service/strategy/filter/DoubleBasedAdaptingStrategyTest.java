@@ -1,10 +1,10 @@
-package org.app.problem.service.strategy;
+package org.app.problem.service.strategy.filter;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.*;
 import org.app.problem.domain.exception.*;
-import org.app.problem.domain.search.*;
+import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -49,7 +49,7 @@ class DoubleBasedAdaptingStrategyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.Utils#integerBaseToFilterArguments")
+    @MethodSource("org.app.problem.service.strategy.filter.Utils#integerBaseToFilterArguments")
     @DisplayName("Double 기반 전략의 toFilter 가 정상 작동한다.")
     void testToFilter(
             ProblemFilterType filterType, Number from, Number to, Number equalTo,
@@ -91,7 +91,7 @@ class DoubleBasedAdaptingStrategyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("전략과 요청의 filter type 이 일치하지 않으면 FilterTypeMissMatchException 이 발생한다.")
     void testFilterTypeMismatch(ProblemFilterType given) {
         ProblemFilterType anyOtherFilterType = Utils.getAnyOtherFilterType(given);
@@ -108,7 +108,7 @@ class DoubleBasedAdaptingStrategyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("Double 로 parsing 할 수 없는 요청은 MalformedFilteringRequestException 을 일으킨다.")
     void testMalformedRequest(ProblemFilterType filterType) {
         DoubleBasedAdaptingStrategy strategy = genStrategy(
@@ -125,7 +125,7 @@ class DoubleBasedAdaptingStrategyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("허용 범위 밖 값들이 제공되면 IllegalFilterValueException 이 발생한다.")
     void testIllegalFilterValue1(ProblemFilterType filterType) {
 
@@ -157,7 +157,7 @@ class DoubleBasedAdaptingStrategyTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("From, To 가 활성화되고 from 이 to 보다 크면 IllegalFilterValueException 가 발생한다.")
     void testIllegalFilterValue2(ProblemFilterType filterType) {
         DoubleBasedAdaptingStrategy strategy = genStrategy(

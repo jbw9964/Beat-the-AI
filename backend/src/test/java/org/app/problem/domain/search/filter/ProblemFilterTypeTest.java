@@ -1,4 +1,4 @@
-package org.app.problem.domain.search;
+package org.app.problem.domain.search.filter;
 
 import static org.assertj.core.api.Assertions.*;
 

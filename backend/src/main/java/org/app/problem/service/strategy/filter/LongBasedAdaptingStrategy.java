@@ -1,7 +1,7 @@
-package org.app.problem.service.strategy;
+package org.app.problem.service.strategy.filter;
 
 import org.app.problem.domain.exception.*;
-import org.app.problem.domain.search.*;
+import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 
 public abstract non-sealed class LongBasedAdaptingStrategy

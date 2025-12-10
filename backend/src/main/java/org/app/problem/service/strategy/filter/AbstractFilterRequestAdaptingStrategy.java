@@ -1,11 +1,11 @@
-package org.app.problem.service.strategy;
+package org.app.problem.service.strategy.filter;
 
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
 import lombok.*;
 import org.app.problem.domain.exception.*;
-import org.app.problem.domain.search.*;
+import org.app.problem.domain.search.filter.*;
 
 @Getter
 @SuppressWarnings({"SameParameterValue", "DuplicatedCode"})
