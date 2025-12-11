@@ -7,6 +7,7 @@ import lombok.*;
 @Entity
 @Table(name = "problem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuppressWarnings("DefaultAnnotationParam")
 public class Problem extends BaseTimeEntity {
 
     @Id
@@ -42,6 +43,14 @@ public class Problem extends BaseTimeEntity {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private String serializedScenarioInfo;
+
+    // TODO : Public 속성인 문제에 대해서만 집계 정보 존재해야 함.
+    @OneToOne(
+            fetch = FetchType.EAGER, mappedBy = "problem"
+            // TODO : cascade 한번 사용해볼까? 일단 주석처리해둠.
+            //, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
+    private ProblemAggregation problemAggregation;
 
     public Problem(
             User user, String title,
