@@ -2,10 +2,10 @@ package org.app.problem.domain.exception;
 
 import org.app.util.exception.*;
 
-public class FilterTypeMissMatchException
+public class FilterTypeMismatchException
         extends InternalServerErrorException {
 
-    public FilterTypeMissMatchException(String message) {
+    public FilterTypeMismatchException(String message) {
         super(message);
     }
 }

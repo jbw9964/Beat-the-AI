@@ -21,7 +21,9 @@ public abstract non-sealed class LongBasedAdaptingStrategy
 
     @Override
     public final ProblemFilter<Long> toFilter(FilteringRequest request)
-            throws MalformedFilteringRequestException, IllegalFilterValueException {
+            throws FilterTypeMismatchException,
+            MalformedFilteringRequestException,
+            IllegalFilterValueException {
 
         super.throwExOnFilterTypeMismatch(request.filterType());
 

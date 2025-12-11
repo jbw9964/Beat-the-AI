@@ -6,7 +6,9 @@ import org.app.problem.dto.request.*;
 public interface FilterRequestAdaptingStrategy<T> {
 
     ProblemFilter<T> toFilter(FilteringRequest request)
-            throws MalformedFilteringRequestException, IllegalFilterValueException;
+            throws FilterTypeMismatchException,
+            MalformedFilteringRequestException,
+            IllegalFilterValueException;
 
     ProblemFilterType handleableFilterType();
 

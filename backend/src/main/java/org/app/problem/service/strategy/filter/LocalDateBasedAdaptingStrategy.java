@@ -23,7 +23,9 @@ public abstract non-sealed class LocalDateBasedAdaptingStrategy
 
     @Override
     public final ProblemFilter<LocalDate> toFilter(FilteringRequest request)
-            throws MalformedFilteringRequestException, IllegalFilterValueException {
+            throws FilterTypeMismatchException,
+            MalformedFilteringRequestException,
+            IllegalFilterValueException {
 
         super.throwExOnFilterTypeMismatch(request.filterType());
 

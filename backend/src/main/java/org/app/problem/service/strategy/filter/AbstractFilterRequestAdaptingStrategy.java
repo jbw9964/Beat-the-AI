@@ -45,11 +45,13 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
     }
 
     protected final void throwExOnFilterTypeMismatch(ProblemFilterType given) {
-        if (!given.equals(this.handleableFilterType())) {
-            throw new FilterTypeMissMatchException(String.format(
+        ProblemFilterType handleableFilterType = this.handleableFilterType();
+
+        if (!given.equals(handleableFilterType)) {
+            throw new FilterTypeMismatchException(String.format(
                     "Expected to get [%s]-typed filtering request, "
                     + "but encountered [%s] type on adaptor: %s",
-                    this.handleableFilterType(), given, this.getClass().getSimpleName()
+                    handleableFilterType, given, this.getClass().getSimpleName()
             ));
         }
     }

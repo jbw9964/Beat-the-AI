@@ -92,7 +92,7 @@ class IntegerBasedAdaptingStrategyTest {
 
     @ParameterizedTest
     @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
-    @DisplayName("전략과 요청의 filter type 이 일치하지 않으면 FilterTypeMissMatchException 이 발생한다.")
+    @DisplayName("전략과 요청의 filter type 이 일치하지 않으면 FilterTypeMismatchException 이 발생한다.")
     void testFilterTypeMismatch(ProblemFilterType given) {
         ProblemFilterType anyOtherFilterType = Utils.getAnyOtherFilterType(given);
         IntegerBasedAdaptingStrategy strategy = genStrategy(
@@ -104,7 +104,7 @@ class IntegerBasedAdaptingStrategyTest {
         );
 
         assertThatThrownBy(() -> strategy.toFilter(request))
-                .isInstanceOf(FilterTypeMissMatchException.class);
+                .isInstanceOf(FilterTypeMismatchException.class);
     }
 
     @ParameterizedTest
