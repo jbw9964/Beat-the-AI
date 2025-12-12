@@ -1,4 +1,4 @@
-package org.app.problem.service.strategy.filter;
+package org.app.problem.service.strategy.filter.request;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -10,19 +10,19 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class AbstractLongBasedFilterRequestAdaptorTest {
+class AbstractIntegerBasedFilterRequestAdaptorTest {
 
     private static FilteringRequest genReq(
-            ProblemFilterType filterType, Long from, Long to, Long equalTo
+            ProblemFilterType filterType, Integer from, Integer to, Integer equalTo
     ) {
         return Utils.genRequest(filterType, from, to, equalTo, String::valueOf);
     }
 
-    private static AbstractLongBasedFilterRequestAdaptor genStrategy(
-            ProblemFilterType filterType, Long minT, Long maxT,
+    private static AbstractIntegerBasedFilterRequestAdaptor genStrategy(
+            ProblemFilterType filterType, Integer minT, Integer maxT,
             boolean useFrom, boolean useTo, boolean useEqualTo
     ) {
-        return new AbstractLongBasedFilterRequestAdaptor(
+        return new AbstractIntegerBasedFilterRequestAdaptor(
                 minT, maxT, useFrom, useTo, useEqualTo
         ) {
             @Override
@@ -32,25 +32,26 @@ class AbstractLongBasedFilterRequestAdaptorTest {
         };
     }
 
-    private static Long getLongOrNull(Number n) {
-        return n == null ? null : n.longValue();
+    private static Integer getIntOrNull(Number n) {
+        return n == null ? null : n.intValue();
     }
 
     @Test
-    @DisplayName("Long 기반 전략의 comparaotr 가 올바르다.")
+    @DisplayName("Integer 기반 전략의 comparaotr 가 올바르다.")
     void testComparator() {
-        AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
+        AbstractIntegerBasedFilterRequestAdaptor strategy = genStrategy(
                 null, null, null, true, true, true
         );
 
-        long lower = -1L, median = 0L, higher = 1L;
+        int lower = -1, median = 0, higher = 1;
 
         Utils.assertComparator(strategy, lower, median, higher);
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#integerBaseToFilterArguments")
-    @DisplayName("Long 기반 전략의 toFilter 가 정상 작동한다.")
+    @MethodSource("org.app.problem.service.strategy.filter.request."
+                  + "Utils#integerBaseToFilterArguments")
+    @DisplayName("Integer 기반 전략의 toFilter 가 정상 작동한다.")
     void testToFilter(
             ProblemFilterType filterType, Number from, Number to, Number equalTo,
             boolean useFrom, boolean useTo, boolean useEqualTo
@@ -59,29 +60,29 @@ class AbstractLongBasedFilterRequestAdaptorTest {
 
             boolean testWithThreshold = (i & 0b1) == 0b1;
 
-            Long fromL = getLongOrNull(from);
-            Long toL = getLongOrNull(to);
-            Long equalToL = getLongOrNull(equalTo);
+            Integer fromI = getIntOrNull(from);
+            Integer toI = getIntOrNull(to);
+            Integer euqalToI = getIntOrNull(equalTo);
 
-            Long expectedFrom = !useFrom ? null : fromL;
-            Long expectedTo = !useTo ? null : toL;
-            Long expectedEqualTo = !useEqualTo ? null : equalToL;
+            Integer expectedFrom = !useFrom ? null : fromI;
+            Integer expectedTo = !useTo ? null : toI;
+            Integer expectedEqualTo = !useEqualTo ? null : euqalToI;
 
-            Long minT, maxT;
+            Integer minT, maxT;
 
             if (testWithThreshold) {
-                Comparator<Long> comparator = Long::compare;
-                minT = Utils.getMinima(comparator, fromL, toL, equalToL);
-                maxT = Utils.getMaxima(comparator, fromL, toL, equalToL);
+                Comparator<Integer> comparator = Integer::compare;
+                minT = Utils.getMinima(comparator, fromI, toI, euqalToI);
+                maxT = Utils.getMaxima(comparator, fromI, toI, euqalToI);
             } else {
                 minT = maxT = null;
             }
 
-            AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
+            AbstractIntegerBasedFilterRequestAdaptor strategy = genStrategy(
                     filterType, minT, maxT, useFrom, useTo, useEqualTo
             );
 
-            FilteringRequest request = genReq(filterType, fromL, toL, equalToL);
+            FilteringRequest request = genReq(filterType, fromI, toI, euqalToI);
 
             Utils.assertToFilterResponseEquality(
                     request, strategy,
@@ -91,21 +92,22 @@ class AbstractLongBasedFilterRequestAdaptorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.request."
+                  + "Utils#problemFilterTypes")
     @DisplayName("허용 범위 밖 값들이 제공되면 IllegalFilterValueException 이 발생한다.")
     void testIllegalFilterValue1(ProblemFilterType filterType) {
 
-        long minT = 10L, maxT = 20L;
-        AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
+        int minT = 10, maxT = 20;
+        AbstractIntegerBasedFilterRequestAdaptor strategy = genStrategy(
                 filterType, minT, maxT, true, true, true
         );
 
-        long validValue = 15L;
-        long[] invalidValues = {
-                1L, 5L, 9L,
-                21L, 25L, 30L
+        int validValue = 15;
+        int[] invalidValues = {
+                1, 5, 9,
+                21, 25, 30
         };
-        for (long invalid : invalidValues) {
+        for (int invalid : invalidValues) {
 
             var req1 = genReq(filterType, invalid, validValue, validValue);
             var req2 = genReq(filterType, validValue, invalid, validValue);
@@ -123,14 +125,15 @@ class AbstractLongBasedFilterRequestAdaptorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.request."
+                  + "Utils#problemFilterTypes")
     @DisplayName("From, To 가 활성화되고 from 이 to 보다 크면 IllegalFilterValueException 가 발생한다.")
     void testIllegalFilterValue2(ProblemFilterType filterType) {
-        AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
+        AbstractIntegerBasedFilterRequestAdaptor strategy = genStrategy(
                 filterType, null, null, true, true, true
         );
 
-        long from = 10L, to = 1L;
+        int from = 10, to = 1;
         FilteringRequest request = genReq(filterType, from, to, null);
 
         assertThatThrownBy(() -> strategy.toFilter(request))
@@ -140,7 +143,7 @@ class AbstractLongBasedFilterRequestAdaptorTest {
     @Test
     @DisplayName("허용 값 범위가 올바르지 않으면 class 생성 시 IllegalStateException 이 발생한다.")
     void testIllegalStateException() {
-        long minT = 10L, maxT = -10L;
+        int minT = 10, maxT = -10;
 
         assertThatThrownBy(() -> genStrategy(
                 null, minT, maxT,

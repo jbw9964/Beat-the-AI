@@ -1,4 +1,4 @@
-package org.app.problem.service.strategy.filter;
+package org.app.problem.service.strategy.filter.request;
 
 import java.time.*;
 import java.time.format.*;

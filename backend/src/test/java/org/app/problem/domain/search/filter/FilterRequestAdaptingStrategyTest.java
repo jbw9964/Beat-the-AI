@@ -45,6 +45,9 @@ class FilterRequestAdaptingStrategyTest extends IntegrationTestSupport {
     @Test
     @DisplayName("전략과 요청의 filter type 이 일치하지 않으면 FilterTypeMismatchException 이 발생한다.")
     void testFilterTypeMismatchException() {
+
+        assertThat(strategyList).isNotEmpty();
+
         for (FilterRequestAdaptingStrategy<?> strategy : strategyList) {
 
             ProblemFilterType handleableFilterType = strategy.handleableFilterType();
@@ -66,6 +69,9 @@ class FilterRequestAdaptingStrategyTest extends IntegrationTestSupport {
     @Test
     @DisplayName("Parse 할 수 없는 요청은 MalformedFilterRequestException 을 일으킨다.")
     void testMalformedFilteringRequestException() {
+
+        assertThat(strategyList).isNotEmpty();
+
         String malformedFilterValue = "This should raise MalformedFilterRequestException";
 
         for (FilterRequestAdaptingStrategy<?> strategy : strategyList) {

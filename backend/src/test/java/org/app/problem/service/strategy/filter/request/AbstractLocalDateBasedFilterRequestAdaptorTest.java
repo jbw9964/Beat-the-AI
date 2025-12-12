@@ -1,4 +1,4 @@
-package org.app.problem.service.strategy.filter;
+package org.app.problem.service.strategy.filter.request;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -67,7 +67,8 @@ class AbstractLocalDateBasedFilterRequestAdaptorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#integerBaseToFilterArguments")
+    @MethodSource("org.app.problem.service.strategy.filter.request."
+                  + "Utils#integerBaseToFilterArguments")
     @DisplayName("LocaDate 기반 전략의 toFilter 가 정상 작동한다.")
     void testToFilter(
             ProblemFilterType filterType, Number from, Number to, Number equalTo,
@@ -110,7 +111,8 @@ class AbstractLocalDateBasedFilterRequestAdaptorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.request."
+                  + "Utils#problemFilterTypes")
     @DisplayName("허용 범위 밖 값들이 제공되면 IllegalFilterValueException 이 발생한다.")
     void testIllegalFilterValue1(ProblemFilterType filterType) {
 
@@ -152,7 +154,8 @@ class AbstractLocalDateBasedFilterRequestAdaptorTest {
     }
 
     @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
+    @MethodSource("org.app.problem.service.strategy.filter.request."
+                  + "Utils#problemFilterTypes")
     @DisplayName("From, To 가 활성화되고 from 이 to 보다 크면 IllegalFilterValueException 가 발생한다.")
     void testIllegalFilterValue2(ProblemFilterType filterType) {
         AbstractLocalDateBasedFilterRequestAdaptor strategy = genStrategy(
