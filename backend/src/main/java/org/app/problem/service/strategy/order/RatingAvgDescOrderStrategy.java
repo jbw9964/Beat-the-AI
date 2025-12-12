@@ -1,6 +1,7 @@
 package org.app.problem.service.strategy.order;
 
 import com.querydsl.core.types.dsl.*;
+import org.app.entity.*;
 import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.order.*;
 import org.app.problem.dto.request.*;
@@ -19,10 +20,9 @@ public class RatingAvgDescOrderStrategy
     public ProblemOrder toOrder(OrderingRequest request) throws OrderTypeMismatchException {
         super.throwExOnOrderTypeMismatch(request.orderType());
 
-        NumberPath<Long> numOfTotalRatings
-                = super.QPA_TARGET.ratingInfo.numOfTotalRatings;
-        NumberPath<Long> sumOfTotalRatingScore
-                = super.QPA_TARGET.ratingInfo.sumOfTotalRatingScore;
+        QAggregatedProblemRatingInfo ratingInfo = super.QPA_TARGET.ratingInfo;
+        NumberPath<Long> numOfTotalRatings = ratingInfo.numOfTotalRatings;
+        NumberPath<Long> sumOfTotalRatingScore = ratingInfo.sumOfTotalRatingScore;
 
         NumberExpression<Double> getAvgExpression = new CaseBuilder()
                 .when(

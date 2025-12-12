@@ -1,4 +1,4 @@
-package org.app.problem.service.strategy.filter.request;
+package org.app.problem.service.strategy.filter;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -70,7 +70,6 @@ class Utils {
         return maxima;
     }
 
-    @SuppressWarnings("unused")
     public static Stream<Arguments> integerBaseToFilterArguments() {
         return Stream.of(
                 Arguments.of(
@@ -126,7 +125,6 @@ class Utils {
         );
     }
 
-    @SuppressWarnings("unused")
     public static Stream<Arguments> problemFilterTypes() {
         return Stream.of(
                 Arrays.stream(ProblemFilterType.values())

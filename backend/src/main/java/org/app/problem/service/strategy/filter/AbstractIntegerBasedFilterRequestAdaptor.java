@@ -1,4 +1,4 @@
-package org.app.problem.service.strategy.filter.request;
+package org.app.problem.service.strategy.filter;
 
 import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.filter.*;
