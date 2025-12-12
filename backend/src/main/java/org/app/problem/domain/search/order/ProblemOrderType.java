@@ -33,7 +33,7 @@ public enum ProblemOrderType {
 
     public static void assertNoDuplicateOderExists(
             List<OrderingRequest> orderingRequests
-    ) {
+    ) throws ImproperOrderTypesException {
         Map<Integer, List<ProblemOrderType>> orderGroup = orderingRequests.stream()
                 .map(OrderingRequest::orderType)
                 .collect(Collectors.groupingBy(ProblemOrderType::getOrderTypeIndicator));
