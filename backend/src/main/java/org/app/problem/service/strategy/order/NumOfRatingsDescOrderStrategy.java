@@ -8,7 +8,7 @@ import org.springframework.stereotype.*;
 
 @Component
 public class NumOfRatingsDescOrderStrategy
-        extends AbstractOrderRequestAdaptingStrategy {
+        extends AbstractOrderRequestAdaptor {
 
     public NumOfRatingsDescOrderStrategy() {
         super(false, NullValueOrderHandling.NULL_LAST);

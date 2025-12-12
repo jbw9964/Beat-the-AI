@@ -13,10 +13,10 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings("UnnecessaryLocalVariable")
-class LocalDateBasedAdaptingStrategyTest {
+class AbstractLocalDateBasedFilterRequestAdaptorTest {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
-            AbstractFilterRequestAdaptingStrategy.DATE_TIME_FORMATTER;
+            AbstractFilterRequestAdaptor.DATE_TIME_FORMATTER;
 
     private static final LocalDate NOW = LocalDate.now();
 
@@ -38,11 +38,11 @@ class LocalDateBasedAdaptingStrategyTest {
         return minus == null ? null : NOW.plusMonths(minus.longValue());
     }
 
-    private static LocalDateBasedAdaptingStrategy genStrategy(
+    private static AbstractLocalDateBasedFilterRequestAdaptor genStrategy(
             ProblemFilterType filterType, LocalDate minT, LocalDate maxT,
             boolean useFrom, boolean useTo, boolean useEqualTo
     ) {
-        return new LocalDateBasedAdaptingStrategy(
+        return new AbstractLocalDateBasedFilterRequestAdaptor(
                 minT, maxT, useFrom, useTo, useEqualTo
         ) {
             @Override
@@ -55,7 +55,7 @@ class LocalDateBasedAdaptingStrategyTest {
     @Test
     @DisplayName("LocalDate 기반 전략의 comparaotr 가 올바르다.")
     void testComparator() {
-        LocalDateBasedAdaptingStrategy strategy = genStrategy(
+        AbstractLocalDateBasedFilterRequestAdaptor strategy = genStrategy(
                 null, null, null, true, true, true
         );
 
@@ -95,7 +95,7 @@ class LocalDateBasedAdaptingStrategyTest {
                 minT = maxT = null;
             }
 
-            LocalDateBasedAdaptingStrategy strategy = genStrategy(
+            AbstractLocalDateBasedFilterRequestAdaptor strategy = genStrategy(
                     filterType, minT, maxT, useFrom, useTo, useEqualTo
             );
 
@@ -116,7 +116,7 @@ class LocalDateBasedAdaptingStrategyTest {
 
         LocalDate minT = getMonthAfterFromNowOrNull(10L);
         LocalDate maxT = getMonthAfterFromNowOrNull(20L);
-        LocalDateBasedAdaptingStrategy strategy = genStrategy(
+        AbstractLocalDateBasedFilterRequestAdaptor strategy = genStrategy(
                 filterType, minT, maxT, true, true, true
         );
 
@@ -155,7 +155,7 @@ class LocalDateBasedAdaptingStrategyTest {
     @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("From, To 가 활성화되고 from 이 to 보다 크면 IllegalFilterValueException 가 발생한다.")
     void testIllegalFilterValue2(ProblemFilterType filterType) {
-        LocalDateBasedAdaptingStrategy strategy = genStrategy(
+        AbstractLocalDateBasedFilterRequestAdaptor strategy = genStrategy(
                 filterType, null, null, true, true, true
         );
 

@@ -10,19 +10,19 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class IntegerBasedAdaptingStrategyTest {
+class AbstractDoubleBasedFilterRueqestAdaptorTest {
 
     private static FilteringRequest genReq(
-            ProblemFilterType filterType, Integer from, Integer to, Integer equalTo
+            ProblemFilterType filterType, Double from, Double to, Double equalTo
     ) {
         return Utils.genRequest(filterType, from, to, equalTo, String::valueOf);
     }
 
-    private static IntegerBasedAdaptingStrategy genStrategy(
-            ProblemFilterType filterType, Integer minT, Integer maxT,
+    private static AbstractDoubleBasedFilterRueqestAdaptor genStrategy(
+            ProblemFilterType filterType, Double minT, Double maxT,
             boolean useFrom, boolean useTo, boolean useEqualTo
     ) {
-        return new IntegerBasedAdaptingStrategy(
+        return new AbstractDoubleBasedFilterRueqestAdaptor(
                 minT, maxT, useFrom, useTo, useEqualTo
         ) {
             @Override
@@ -32,25 +32,25 @@ class IntegerBasedAdaptingStrategyTest {
         };
     }
 
-    private static Integer getIntOrNull(Number n) {
-        return n == null ? null : n.intValue();
+    private static Double getDoubleOrNull(Number n) {
+        return n == null ? null : n.doubleValue();
     }
 
     @Test
-    @DisplayName("Integer 기반 전략의 comparaotr 가 올바르다.")
+    @DisplayName("Double 기반 전략의 comparaotr 가 올바르다.")
     void testComparator() {
-        IntegerBasedAdaptingStrategy strategy = genStrategy(
+        AbstractDoubleBasedFilterRueqestAdaptor strategy = genStrategy(
                 null, null, null, true, true, true
         );
 
-        int lower = -1, median = 0, higher = 1;
+        double lower = -1.d, median = 0.d, higher = 1.d;
 
         Utils.assertComparator(strategy, lower, median, higher);
     }
 
     @ParameterizedTest
     @MethodSource("org.app.problem.service.strategy.filter.Utils#integerBaseToFilterArguments")
-    @DisplayName("Integer 기반 전략의 toFilter 가 정상 작동한다.")
+    @DisplayName("Double 기반 전략의 toFilter 가 정상 작동한다.")
     void testToFilter(
             ProblemFilterType filterType, Number from, Number to, Number equalTo,
             boolean useFrom, boolean useTo, boolean useEqualTo
@@ -59,29 +59,29 @@ class IntegerBasedAdaptingStrategyTest {
 
             boolean testWithThreshold = (i & 0b1) == 0b1;
 
-            Integer fromI = getIntOrNull(from);
-            Integer toI = getIntOrNull(to);
-            Integer euqalToI = getIntOrNull(equalTo);
+            Double fromD = getDoubleOrNull(from);
+            Double toD = getDoubleOrNull(to);
+            Double equalToD = getDoubleOrNull(equalTo);
 
-            Integer expectedFrom = !useFrom ? null : fromI;
-            Integer expectedTo = !useTo ? null : toI;
-            Integer expectedEqualTo = !useEqualTo ? null : euqalToI;
-
-            Integer minT, maxT;
+            Double minT, maxT;
 
             if (testWithThreshold) {
-                Comparator<Integer> comparator = Integer::compare;
-                minT = Utils.getMinima(comparator, fromI, toI, euqalToI);
-                maxT = Utils.getMaxima(comparator, fromI, toI, euqalToI);
+                Comparator<Double> comparator = Double::compare;
+                minT = Utils.getMinima(comparator, fromD, toD, equalToD);
+                maxT = Utils.getMaxima(comparator, fromD, toD, equalToD);
             } else {
                 minT = maxT = null;
             }
 
-            IntegerBasedAdaptingStrategy strategy = genStrategy(
+            AbstractDoubleBasedFilterRueqestAdaptor strategy = genStrategy(
                     filterType, minT, maxT, useFrom, useTo, useEqualTo
             );
 
-            FilteringRequest request = genReq(filterType, fromI, toI, euqalToI);
+            Double expectedFrom = !useFrom ? null : fromD;
+            Double expectedTo = !useTo ? null : toD;
+            Double expectedEqualTo = !useEqualTo ? null : equalToD;
+
+            FilteringRequest request = genReq(filterType, fromD, toD, equalToD);
 
             Utils.assertToFilterResponseEquality(
                     request, strategy,
@@ -95,17 +95,17 @@ class IntegerBasedAdaptingStrategyTest {
     @DisplayName("허용 범위 밖 값들이 제공되면 IllegalFilterValueException 이 발생한다.")
     void testIllegalFilterValue1(ProblemFilterType filterType) {
 
-        int minT = 10, maxT = 20;
-        IntegerBasedAdaptingStrategy strategy = genStrategy(
+        double minT = 10.d, maxT = 20.d;
+        AbstractDoubleBasedFilterRueqestAdaptor strategy = genStrategy(
                 filterType, minT, maxT, true, true, true
         );
 
-        int validValue = 15;
-        int[] invalidValues = {
-                1, 5, 9,
-                21, 25, 30
+        double validValue = 15.d;
+        double[] invalidValues = {
+                1.d, 5.d, 9.d,
+                21.d, 25.d, 30.d
         };
-        for (int invalid : invalidValues) {
+        for (double invalid : invalidValues) {
 
             var req1 = genReq(filterType, invalid, validValue, validValue);
             var req2 = genReq(filterType, validValue, invalid, validValue);
@@ -126,11 +126,11 @@ class IntegerBasedAdaptingStrategyTest {
     @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("From, To 가 활성화되고 from 이 to 보다 크면 IllegalFilterValueException 가 발생한다.")
     void testIllegalFilterValue2(ProblemFilterType filterType) {
-        IntegerBasedAdaptingStrategy strategy = genStrategy(
+        AbstractDoubleBasedFilterRueqestAdaptor strategy = genStrategy(
                 filterType, null, null, true, true, true
         );
 
-        int from = 10, to = 1;
+        double from = 10.d, to = 1.d;
         FilteringRequest request = genReq(filterType, from, to, null);
 
         assertThatThrownBy(() -> strategy.toFilter(request))
@@ -140,7 +140,7 @@ class IntegerBasedAdaptingStrategyTest {
     @Test
     @DisplayName("허용 값 범위가 올바르지 않으면 class 생성 시 IllegalStateException 이 발생한다.")
     void testIllegalStateException() {
-        int minT = 10, maxT = -10;
+        double minT = 10.d, maxT = -10.d;
 
         assertThatThrownBy(() -> genStrategy(
                 null, minT, maxT,

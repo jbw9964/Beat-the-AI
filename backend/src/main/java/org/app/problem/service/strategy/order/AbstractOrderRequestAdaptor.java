@@ -7,7 +7,7 @@ import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.*;
 import org.app.problem.domain.search.order.*;
 
-public abstract class AbstractOrderRequestAdaptingStrategy
+public abstract class AbstractOrderRequestAdaptor
         implements OrderRequestAdaptingStrategy {
 
     protected final QProblem QP = QProblemExpressions.QPROBLEM_ROOT;
@@ -17,7 +17,7 @@ public abstract class AbstractOrderRequestAdaptingStrategy
     private final boolean ascendingOrder;
     private final NullValueOrderHandling nullValueOrderHandling;
 
-    protected AbstractOrderRequestAdaptingStrategy(
+    protected AbstractOrderRequestAdaptor(
             boolean ascendingOrder,
             NullValueOrderHandling nullValueOrderHandling
     ) {

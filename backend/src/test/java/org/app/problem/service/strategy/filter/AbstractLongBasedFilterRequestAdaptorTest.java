@@ -10,7 +10,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-class LongBasedAdaptingStrategyTest {
+class AbstractLongBasedFilterRequestAdaptorTest {
 
     private static FilteringRequest genReq(
             ProblemFilterType filterType, Long from, Long to, Long equalTo
@@ -18,11 +18,11 @@ class LongBasedAdaptingStrategyTest {
         return Utils.genRequest(filterType, from, to, equalTo, String::valueOf);
     }
 
-    private static LongBasedAdaptingStrategy genStrategy(
+    private static AbstractLongBasedFilterRequestAdaptor genStrategy(
             ProblemFilterType filterType, Long minT, Long maxT,
             boolean useFrom, boolean useTo, boolean useEqualTo
     ) {
-        return new LongBasedAdaptingStrategy(
+        return new AbstractLongBasedFilterRequestAdaptor(
                 minT, maxT, useFrom, useTo, useEqualTo
         ) {
             @Override
@@ -39,7 +39,7 @@ class LongBasedAdaptingStrategyTest {
     @Test
     @DisplayName("Long 기반 전략의 comparaotr 가 올바르다.")
     void testComparator() {
-        LongBasedAdaptingStrategy strategy = genStrategy(
+        AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
                 null, null, null, true, true, true
         );
 
@@ -77,7 +77,7 @@ class LongBasedAdaptingStrategyTest {
                 minT = maxT = null;
             }
 
-            LongBasedAdaptingStrategy strategy = genStrategy(
+            AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
                     filterType, minT, maxT, useFrom, useTo, useEqualTo
             );
 
@@ -96,7 +96,7 @@ class LongBasedAdaptingStrategyTest {
     void testIllegalFilterValue1(ProblemFilterType filterType) {
 
         long minT = 10L, maxT = 20L;
-        LongBasedAdaptingStrategy strategy = genStrategy(
+        AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
                 filterType, minT, maxT, true, true, true
         );
 
@@ -126,7 +126,7 @@ class LongBasedAdaptingStrategyTest {
     @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("From, To 가 활성화되고 from 이 to 보다 크면 IllegalFilterValueException 가 발생한다.")
     void testIllegalFilterValue2(ProblemFilterType filterType) {
-        LongBasedAdaptingStrategy strategy = genStrategy(
+        AbstractLongBasedFilterRequestAdaptor strategy = genStrategy(
                 filterType, null, null, true, true, true
         );
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.*;
 
 @Component
 public class CreatedTimeDescOrderAdaptingStrategy
-        extends AbstractOrderRequestAdaptingStrategy {
+        extends AbstractOrderRequestAdaptor {
 
     public CreatedTimeDescOrderAdaptingStrategy() {
         super(false, NullValueOrderHandling.NULL_LAST);

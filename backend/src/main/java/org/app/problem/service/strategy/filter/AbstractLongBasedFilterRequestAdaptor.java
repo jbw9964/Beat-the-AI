@@ -4,12 +4,12 @@ import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 
-public abstract non-sealed class LongBasedAdaptingStrategy
-        extends AbstractFilterRequestAdaptingStrategy<Long> {
+public abstract non-sealed class AbstractLongBasedFilterRequestAdaptor
+        extends AbstractFilterRequestAdaptor<Long> {
 
     private final boolean useFrom, useTo, useEqual;
 
-    protected LongBasedAdaptingStrategy(
+    protected AbstractLongBasedFilterRequestAdaptor(
             Long minimumThreshold, Long maximumThreshold,
             boolean useFrom, boolean useTo, boolean useEqual
     ) {

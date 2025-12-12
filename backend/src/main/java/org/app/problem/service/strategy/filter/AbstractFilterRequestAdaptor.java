@@ -9,12 +9,12 @@ import org.app.problem.domain.search.filter.*;
 
 @Getter
 @SuppressWarnings({"SameParameterValue", "DuplicatedCode"})
-public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
+public abstract sealed class AbstractFilterRequestAdaptor<T>
         implements FilterRequestAdaptingStrategy<T>
-        permits DoubleBasedAdaptingStrategy,
-        IntegerBasedAdaptingStrategy,
-        LocalDateBasedAdaptingStrategy,
-        LongBasedAdaptingStrategy {
+        permits AbstractDoubleBasedFilterRueqestAdaptor,
+        AbstractIntegerBasedFilterRequestAdaptor,
+        AbstractLocalDateBasedFilterRequestAdaptor,
+        AbstractLongBasedFilterRequestAdaptor {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd";
     public static final DateTimeFormatter DATE_TIME_FORMATTER
@@ -24,7 +24,7 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
     private final T maximumThreshold;
     private final Comparator<T> comparator;
 
-    protected AbstractFilterRequestAdaptingStrategy(
+    protected AbstractFilterRequestAdaptor(
             T minimumThreshold, T maximumThreshold,
             @NonNull Comparator<T> comparator
     ) {

@@ -4,12 +4,12 @@ import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 
-public abstract non-sealed class DoubleBasedAdaptingStrategy
-        extends AbstractFilterRequestAdaptingStrategy<Double> {
+public abstract non-sealed class AbstractDoubleBasedFilterRueqestAdaptor
+        extends AbstractFilterRequestAdaptor<Double> {
 
     private final boolean useFrom, useTo, useEqualTo;
 
-    protected DoubleBasedAdaptingStrategy(
+    protected AbstractDoubleBasedFilterRueqestAdaptor(
             Double minimumThreshold, Double maximumThreshold,
             boolean useFrom, boolean useTo, boolean useEqualTo
     ) {

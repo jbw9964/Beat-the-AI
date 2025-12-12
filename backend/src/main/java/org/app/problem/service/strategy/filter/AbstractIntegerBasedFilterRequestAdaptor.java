@@ -4,12 +4,12 @@ import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 
-public abstract non-sealed class IntegerBasedAdaptingStrategy
-        extends AbstractFilterRequestAdaptingStrategy<Integer> {
+public abstract non-sealed class AbstractIntegerBasedFilterRequestAdaptor
+        extends AbstractFilterRequestAdaptor<Integer> {
 
     private final boolean useFrom, useTo, useEqualTo;
 
-    protected IntegerBasedAdaptingStrategy(
+    protected AbstractIntegerBasedFilterRequestAdaptor(
             Integer minimumThreshold, Integer maximumThreshold,
             boolean useFrom, boolean useTo, boolean useEqualTo
     ) {

@@ -8,7 +8,7 @@ import org.springframework.stereotype.*;
 
 @Component
 public class NumOfRewardsAscOrderStrategy
-        extends AbstractOrderRequestAdaptingStrategy {
+        extends AbstractOrderRequestAdaptor {
 
     public NumOfRewardsAscOrderStrategy() {
         super(true, NullValueOrderHandling.NULL_LAST);

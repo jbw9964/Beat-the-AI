@@ -8,7 +8,7 @@ import org.springframework.stereotype.*;
 
 @Component
 public class NumOfProblemScenariosDescOrderStrategy
-        extends AbstractOrderRequestAdaptingStrategy {
+        extends AbstractOrderRequestAdaptor {
 
     public NumOfProblemScenariosDescOrderStrategy() {
         super(false, NullValueOrderHandling.NULL_LAST);

@@ -5,12 +5,12 @@ import org.app.problem.domain.exception.*;
 import org.app.problem.domain.search.filter.*;
 import org.app.problem.dto.request.*;
 
-public abstract non-sealed class LocalDateBasedAdaptingStrategy
-        extends AbstractFilterRequestAdaptingStrategy<LocalDate> {
+public abstract non-sealed class AbstractLocalDateBasedFilterRequestAdaptor
+        extends AbstractFilterRequestAdaptor<LocalDate> {
 
     private final boolean useFrom, useTo, useEqualTo;
 
-    protected LocalDateBasedAdaptingStrategy(
+    protected AbstractLocalDateBasedFilterRequestAdaptor(
             LocalDate minimumThreshold,
             LocalDate maximumThreshold,
             boolean useFrom, boolean useTo, boolean useEqualTo

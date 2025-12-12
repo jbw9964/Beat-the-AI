@@ -8,7 +8,7 @@ import org.springframework.stereotype.*;
 
 @Component
 public class RatingAvgAscOrderStrategy
-        extends AbstractOrderRequestAdaptingStrategy {
+        extends AbstractOrderRequestAdaptor {
 
     public RatingAvgAscOrderStrategy() {
         super(true, NullValueOrderHandling.NULL_LAST);

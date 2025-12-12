@@ -70,13 +70,6 @@ class Utils {
         return maxima;
     }
 
-    public static ProblemFilterType getAnyOtherFilterType(ProblemFilterType given) {
-        return Arrays.stream(ProblemFilterType.values())
-                .filter(pt -> !pt.equals(given))
-                .findAny()
-                .orElseThrow(AssertionError::new);
-    }
-
     public static Stream<Arguments> integerBaseToFilterArguments() {
         return Stream.of(
                 Arguments.of(
@@ -142,7 +135,7 @@ class Utils {
 
     @SuppressWarnings("EqualsWithItself")
     public static <T> void assertComparator(
-            AbstractFilterRequestAdaptingStrategy<T> strategy,
+            AbstractFilterRequestAdaptor<T> strategy,
             T lower, T median, T higher
     ) {
         Comparator<T> comparator = strategy.getComparator();
@@ -162,7 +155,7 @@ class Utils {
     }
 
     public static <T> void assertToFilterResponseEquality(
-            FilteringRequest request, AbstractFilterRequestAdaptingStrategy<T> strategy,
+            FilteringRequest request, AbstractFilterRequestAdaptor<T> strategy,
             T expectedFrom, T expectedTo, T expectedEqualTo
     ) {
         ProblemFilter<T> response = strategy.toFilter(request);
