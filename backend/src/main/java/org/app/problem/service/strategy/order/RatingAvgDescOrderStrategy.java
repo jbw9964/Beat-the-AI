@@ -11,7 +11,7 @@ public class RatingAvgDescOrderStrategy
         extends AbstractOrderRequestAdaptingStrategy {
 
     public RatingAvgDescOrderStrategy() {
-        super(true, NullValueOrderHandling.NULL_LAST);
+        super(false, NullValueOrderHandling.NULL_LAST);
     }
 
     @Override
@@ -20,9 +20,9 @@ public class RatingAvgDescOrderStrategy
         super.throwExOnOrderTypeMismatch(request.orderType());
 
         NumberPath<Long> numOfTotalRatings
-                = super.PROBLEM_AGGREGATION.ratingInfo.numOfTotalRatings;
+                = super.QPA_TARGET.ratingInfo.numOfTotalRatings;
         NumberPath<Long> sumOfTotalRatingScore
-                = super.PROBLEM_AGGREGATION.ratingInfo.sumOfTotalRatingScore;
+                = super.QPA_TARGET.ratingInfo.sumOfTotalRatingScore;
 
         NumberExpression<Double> getAvgExpression = new CaseBuilder()
                 .when(

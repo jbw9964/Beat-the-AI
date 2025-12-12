@@ -19,7 +19,7 @@ public class CreatedTimeAscOrderAdaptingStrategy
     public ProblemOrder toOrder(OrderingRequest request) throws OrderTypeMismatchException {
         super.throwExOnOrderTypeMismatch(request.orderType());
 
-        DateTimePath<LocalDateTime> createdAt = super.PROBLEM.createdAt;
+        DateTimePath<LocalDateTime> createdAt = super.QP.createdAt;
 
         return super.buildProblemOrder(createdAt);
     }

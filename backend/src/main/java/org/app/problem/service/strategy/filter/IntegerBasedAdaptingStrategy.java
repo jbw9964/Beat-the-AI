@@ -22,7 +22,7 @@ public abstract non-sealed class IntegerBasedAdaptingStrategy
     @Override
     public final ProblemFilter<Integer> toFilter(FilteringRequest request)
             throws FilterTypeMismatchException,
-            MalformedFilteringRequestException,
+            MalformedFilterRequestException,
             IllegalFilterValueException {
 
         super.throwExOnFilterTypeMismatch(request.filterType());

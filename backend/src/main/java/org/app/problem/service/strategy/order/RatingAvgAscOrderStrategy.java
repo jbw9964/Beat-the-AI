@@ -25,9 +25,9 @@ public class RatingAvgAscOrderStrategy
         // super.PROBLEM_AGGREGATION.ratingInfo.ratingAverage;
 
         NumberPath<Long> numOfTotalRatings
-                = super.PROBLEM_AGGREGATION.ratingInfo.numOfTotalRatings;
+                = super.QPA_TARGET.ratingInfo.numOfTotalRatings;
         NumberPath<Long> sumOfTotalRatingScore
-                = super.PROBLEM_AGGREGATION.ratingInfo.sumOfTotalRatingScore;
+                = super.QPA_TARGET.ratingInfo.sumOfTotalRatingScore;
 
         NumberExpression<Double> getAvgExpression = new CaseBuilder()
                 .when(

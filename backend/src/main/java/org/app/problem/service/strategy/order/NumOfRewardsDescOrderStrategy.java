@@ -19,7 +19,7 @@ public class NumOfRewardsDescOrderStrategy
         super.throwExOnOrderTypeMismatch(request.orderType());
 
         NumberPath<Integer> numOfRewardSet =
-                super.PROBLEM_AGGREGATION.problemInfo.numOfRewardSet;
+                super.QPA_TARGET.problemInfo.numOfRewardSet;
 
         return super.buildProblemOrder(numOfRewardSet);
     }

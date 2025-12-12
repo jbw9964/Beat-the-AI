@@ -19,7 +19,7 @@ public class NumOfRatingsDescOrderStrategy
         super.throwExOnOrderTypeMismatch(request.orderType());
 
         NumberPath<Long> numOfTotalRatings =
-                super.PROBLEM_AGGREGATION.ratingInfo.numOfTotalRatings;
+                super.QPA_TARGET.ratingInfo.numOfTotalRatings;
 
         return super.buildProblemOrder(numOfTotalRatings);
     }

@@ -19,7 +19,7 @@ public class NumOfProblemScenariosDescOrderStrategy
         super.throwExOnOrderTypeMismatch(request.orderType());
 
         NumberPath<Integer> numOfScenarioSet =
-                super.PROBLEM_AGGREGATION.problemInfo.numOfScenarioSet;
+                super.QPA_TARGET.problemInfo.numOfScenarioSet;
 
         return super.buildProblemOrder(numOfScenarioSet);
     }

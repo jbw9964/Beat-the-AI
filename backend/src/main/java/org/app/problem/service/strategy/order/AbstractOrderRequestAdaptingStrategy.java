@@ -4,14 +4,15 @@ import com.querydsl.core.types.*;
 import com.querydsl.core.types.OrderSpecifier.*;
 import org.app.entity.*;
 import org.app.problem.domain.exception.*;
+import org.app.problem.domain.search.*;
 import org.app.problem.domain.search.order.*;
 
 public abstract class AbstractOrderRequestAdaptingStrategy
         implements OrderRequestAdaptingStrategy {
 
-    protected final QProblem PROBLEM = QProblem.problem;
-    protected final QProblemAggregation PROBLEM_AGGREGATION
-            = this.PROBLEM.problemAggregation;
+    protected final QProblem QP = QProblemExpressions.QPROBLEM_ROOT;
+    protected final QProblemAggregation QPA_TARGET
+            = QProblemExpressions.QP__QPROBLEM_AGGREGATION_TARGET;
 
     private final boolean ascendingOrder;
     private final NullValueOrderHandling nullValueOrderHandling;

@@ -19,7 +19,7 @@ public class NumOfPlaysDescOrderStrategy
         super.throwExOnOrderTypeMismatch(request.orderType());
 
         NumberPath<Long> numOfTotalPlays =
-                super.PROBLEM_AGGREGATION.playInfo.numOfTotalPlays;
+                super.QPA_TARGET.playInfo.numOfTotalPlays;
 
         return super.buildProblemOrder(numOfTotalPlays);
     }

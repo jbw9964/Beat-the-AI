@@ -56,7 +56,7 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
         }
     }
 
-    protected final Long parseLong(String given) throws MalformedFilteringRequestException {
+    protected final Long parseLong(String given) throws MalformedFilterRequestException {
         if (given == null) {
             return null;
         }
@@ -70,7 +70,7 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
         return result;
     }
 
-    protected final Integer parseInteger(String given) throws MalformedFilteringRequestException {
+    protected final Integer parseInteger(String given) throws MalformedFilterRequestException {
         if (given == null) {
             return null;
         }
@@ -84,7 +84,7 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
         return result;
     }
 
-    protected final Double parseDouble(String given) throws MalformedFilteringRequestException {
+    protected final Double parseDouble(String given) throws MalformedFilterRequestException {
         if (given == null) {
             return null;
         }
@@ -99,7 +99,7 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
     }
 
     protected final LocalDate parseLocalDate(String given)
-            throws MalformedFilteringRequestException {
+            throws MalformedFilterRequestException {
         if (given == null) {
             return null;
         }
@@ -324,10 +324,10 @@ public abstract sealed class AbstractFilterRequestAdaptingStrategy<T>
         return !inRange;
     }
 
-    private MalformedFilteringRequestException buildEx(
+    private MalformedFilterRequestException buildEx(
             String given, Class<?> targetClass, RuntimeException e
     ) {
-        return new MalformedFilteringRequestException(String.format(
+        return new MalformedFilterRequestException(String.format(
                 "주어진 값 (%s) 을 [%s] 로 변환하는데 실패했습니다: %s",
                 given, targetClass.getSimpleName(), e.getMessage()
         ));

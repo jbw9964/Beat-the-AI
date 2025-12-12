@@ -22,7 +22,7 @@ public abstract non-sealed class DoubleBasedAdaptingStrategy
     @Override
     public final ProblemFilter<Double> toFilter(FilteringRequest request)
             throws FilterTypeMismatchException,
-            MalformedFilteringRequestException,
+            MalformedFilterRequestException,
             IllegalFilterValueException {
 
         super.throwExOnFilterTypeMismatch(request.filterType());

@@ -7,7 +7,7 @@ public interface FilterRequestAdaptingStrategy<T> {
 
     ProblemFilter<T> toFilter(FilteringRequest request)
             throws FilterTypeMismatchException,
-            MalformedFilteringRequestException,
+            MalformedFilterRequestException,
             IllegalFilterValueException;
 
     ProblemFilterType handleableFilterType();
