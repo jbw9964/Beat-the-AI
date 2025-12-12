@@ -2,13 +2,15 @@ package org.app.util.exception;
 
 import org.springframework.http.*;
 
-public class GatewayTimeoutException extends CustomException {
+public class GatewayTimeoutException extends ExpectableServerErrorException {
 
-    public GatewayTimeoutException(String message) {
-        super(HttpStatus.GATEWAY_TIMEOUT.value(), message);
-    }
-
-    public static GatewayTimeoutException of(String message) {
-        return new GatewayTimeoutException(message);
+    public GatewayTimeoutException(
+            String message, String clientResponseMessage,
+            Throwable cause
+    ) {
+        super(
+                HttpStatus.GATEWAY_TIMEOUT.value(), message,
+                clientResponseMessage, cause
+        );
     }
 }

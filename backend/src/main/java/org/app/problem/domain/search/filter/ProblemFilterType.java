@@ -7,7 +7,7 @@ import org.app.util.exception.*;
 
 @RequiredArgsConstructor
 public enum ProblemFilterType {
-    CREATED_TIME(true, true, false),
+    CREATED_DATE(true, true, false),
     CREATED_USER(false, false, true),
 
     NUM_OF_REWARDS(true, true, false),

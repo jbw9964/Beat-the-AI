@@ -22,6 +22,24 @@ public class ExceptionHandlerConfig {
     public ApiResponse<?> handle(CustomException e) {
         int code = e.getCode();
         String message = e.getMessage();
+
+        if (e instanceof ExpectableServerErrorException ee) {
+            message = ee.getClientResponseMessage();
+            Throwable cause = ee.getCause();
+
+            String logMsg = String.format(
+                    "Expectable server error [%s] has been raised.%s",
+                    ee.getClass().getSimpleName(),
+                    cause != null ?
+                            String.format(
+                                    " Caused by: %s",
+                                    cause.getClass().getSimpleName()
+                            ) : ""
+            );
+
+            log.error(logMsg, ee);
+        }
+
         return ApiResponse.fail(code, null, message);
     }
 

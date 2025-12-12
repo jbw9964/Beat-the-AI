@@ -2,13 +2,15 @@ package org.app.util.exception;
 
 import org.springframework.http.*;
 
-public class BadGatewayException extends CustomException {
+public class BadGatewayException extends ExpectableServerErrorException {
 
-    public BadGatewayException(String message) {
-        super(HttpStatus.BAD_GATEWAY.value(), message);
-    }
-
-    public static BadGatewayException of(String message) {
-        return new BadGatewayException(message);
+    public BadGatewayException(
+            String message, String clientResponseMessage,
+            Throwable cause
+    ) {
+        super(
+                HttpStatus.BAD_GATEWAY.value(), message,
+                clientResponseMessage, cause
+        );
     }
 }

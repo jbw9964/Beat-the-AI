@@ -12,4 +12,10 @@ public abstract class CustomException extends RuntimeException {
         this.code = code;
         this.message = message;
     }
+
+    protected CustomException(int code, String message, Throwable cause) {
+        super(message, cause);
+        this.code = code;
+        this.message = message;
+    }
 }

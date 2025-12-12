@@ -16,13 +16,13 @@ class ProblemFilterTypeTest {
     private static Stream<Arguments> getValidArgs() {
         return Stream.of(
                 Arguments.of(
-                        ProblemFilterType.CREATED_TIME, STR, null, null
+                        ProblemFilterType.CREATED_DATE, STR, null, null
                 ),
                 Arguments.of(
-                        ProblemFilterType.CREATED_TIME, null, STR, null
+                        ProblemFilterType.CREATED_DATE, null, STR, null
                 ),
                 Arguments.of(
-                        ProblemFilterType.CREATED_TIME, STR, STR, null
+                        ProblemFilterType.CREATED_DATE, STR, STR, null
                 ),
                 Arguments.of(
                         ProblemFilterType.CREATED_USER, null, null, STR
@@ -78,7 +78,7 @@ class ProblemFilterTypeTest {
     private static Stream<Arguments> getInvalidArgs() {
         return Stream.of(
                 Arguments.of(
-                        ProblemFilterType.CREATED_TIME, null, null, STR
+                        ProblemFilterType.CREATED_DATE, null, null, STR
                 ),
                 Arguments.of(
                         ProblemFilterType.CREATED_USER, STR, STR, null
