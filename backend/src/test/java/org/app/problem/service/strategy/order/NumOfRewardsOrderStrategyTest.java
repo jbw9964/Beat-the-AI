@@ -100,11 +100,11 @@ class NumOfRewardsOrderStrategyTest extends IntegrationTestSupport {
         log.info("Executing query");
 
         List<Problem> result = queryFactory.selectFrom(
-                        QProblemExpressions.QPROBLEM_ROOT
+                        QProblemPaths.QPROBLEM_ROOT
                 )
                 .leftJoin(
-                        QProblemExpressions.QP__QPROBLEM_AGGREGATION_TARGET,
-                        QProblemExpressions.QPROBLEM_AGGREGATION_ROOT
+                        QProblemPaths.QP__QPROBLEM_AGGREGATION_TARGET,
+                        QProblemPaths.QPROBLEM_AGGREGATION_ROOT
                 )
                 .fetchJoin()
                 .orderBy(orderSpecifier)

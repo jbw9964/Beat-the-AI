@@ -10,9 +10,9 @@ import org.app.problem.domain.search.order.*;
 public abstract class AbstractOrderRequestAdaptor
         implements OrderRequestAdaptingStrategy {
 
-    protected final QProblem QP = QProblemExpressions.QPROBLEM_ROOT;
+    protected final QProblem QP = QProblemPaths.QPROBLEM_ROOT;
     protected final QProblemAggregation QPA_TARGET
-            = QProblemExpressions.QP__QPROBLEM_AGGREGATION_TARGET;
+            = QProblemPaths.QP__QPROBLEM_AGGREGATION_TARGET;
 
     private final boolean ascendingOrder;
     private final NullValueOrderHandling nullValueOrderHandling;
