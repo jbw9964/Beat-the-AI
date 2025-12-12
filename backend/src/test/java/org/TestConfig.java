@@ -15,6 +15,7 @@ public class TestConfig {
     private final TestNotificationRepository notificationRepo;
     private final TestPlayRecordRepository playRecordRepo;
     private final TestProblemRepository problemRepo;
+    private final TestProblemAggregationRepository problemAggregationRepo;
 
     private final TestRatingRepository ratingRepo;
     private final TestReceivedInvitationRepository receivedInvitationRepo;
@@ -28,8 +29,8 @@ public class TestConfig {
     public GeneralDataInitializer generalDataInitializer() {
         return new GeneralDataInitializer(
                 gainedRewardRepo, invitationRepo, notificationRepo, playRecordRepo,
-                problemRepo, ratingRepo, receivedInvitationRepo, rewardRepo, scenarioRecordRepo,
-                temporalProblemRepo, userRepo
+                problemRepo, problemAggregationRepo, ratingRepo, receivedInvitationRepo,
+                rewardRepo, scenarioRecordRepo, temporalProblemRepo, userRepo
         );
     }
 

@@ -7,19 +7,41 @@ import lombok.*;
 @Embeddable
 public class AggregatedProblemRatingInfo {
 
-    private long numOfTotalRatings = 0L;
+    @Column(nullable = false)
+    private long numOfTotalRatings;
 
-    private long sumOfTotalRatingScore = 0L;
+    @Column(nullable = false)
+    private long sumOfTotalRatingScore;
+
+    public AggregatedProblemRatingInfo() {
+        this(0L, 0L);
+    }
+
+    public AggregatedProblemRatingInfo(
+            long numOfTotalRatings, long sumOfTotalRatingScore
+    ) {
+        this.numOfTotalRatings = numOfTotalRatings;
+        this.sumOfTotalRatingScore = sumOfTotalRatingScore;
+    }
 
     public double getRatingAverage() {
-        return (double) sumOfTotalRatingScore / numOfTotalRatings;
+        return numOfTotalRatings <= 0 ? 0.d :
+                (double) sumOfTotalRatingScore / numOfTotalRatings;
     }
 
     public void increaseNumOfTotalRatings() {
         this.numOfTotalRatings++;
     }
 
-    public void addRatingScore(long addition) {
+    public void decreaseNumOfTotalRatings() {
+        this.numOfTotalRatings--;
+    }
+
+    public void increaseRatingScore(long addition) {
         this.sumOfTotalRatingScore += addition;
+    }
+
+    public void decreaseRatingScore(long subtraction) {
+        this.sumOfTotalRatingScore -= subtraction;
     }
 }

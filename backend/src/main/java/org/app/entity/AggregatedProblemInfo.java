@@ -7,9 +7,20 @@ import lombok.*;
 @Embeddable
 public class AggregatedProblemInfo {
 
-    private int numOfRewardSet = 0;
+    @Column(nullable = false)
+    private int numOfRewardSet;
 
-    private int numOfScenarioSet = 0;
+    @Column(nullable = false)
+    private int numOfScenarioSet;
+
+    public AggregatedProblemInfo() {
+        this(0, 0);
+    }
+
+    public AggregatedProblemInfo(int numOfRewardSet, int numOfScenarioSet) {
+        this.numOfRewardSet = numOfRewardSet;
+        this.numOfScenarioSet = numOfScenarioSet;
+    }
 
     public void increaseNumOfRewardSet() {
         this.numOfRewardSet++;
