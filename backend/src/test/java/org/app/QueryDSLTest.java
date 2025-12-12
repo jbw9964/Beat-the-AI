@@ -10,10 +10,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.transaction.annotation.*;
 
+@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 class QueryDSLTest extends IntegrationTestSupport {
 
     @Autowired
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     EntityManager em;
 
     @Test

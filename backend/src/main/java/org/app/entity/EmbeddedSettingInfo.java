@@ -9,12 +9,16 @@ import lombok.experimental.*;
 @Accessors(fluent = true, chain = false)
 public final class EmbeddedSettingInfo {
 
+    @Column(nullable = false)
     private boolean notiRating;
 
+    @Column(nullable = false)
     private boolean notiSolved;
 
+    @Column(nullable = false)
     private boolean notiRewardGain;
 
+    @Column(nullable = false)
     private boolean notiRewardDispose;
 
     public EmbeddedSettingInfo() {

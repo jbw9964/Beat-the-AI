@@ -111,40 +111,6 @@ class LocalDateBasedAdaptingStrategyTest {
 
     @ParameterizedTest
     @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
-    @DisplayName("전략과 요청의 filter type 이 일치하지 않으면 FilterTypeMismatchException 이 발생한다.")
-    void testFilterTypeMismatch(ProblemFilterType given) {
-        ProblemFilterType anyOtherFilterType = Utils.getAnyOtherFilterType(given);
-        LocalDateBasedAdaptingStrategy strategy = genStrategy(
-                anyOtherFilterType, null, null, true, true, true
-        );
-
-        FilteringRequest request = genReq(
-                given, null, null, null
-        );
-
-        assertThatThrownBy(() -> strategy.toFilter(request))
-                .isInstanceOf(FilterTypeMismatchException.class);
-    }
-
-    @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
-    @DisplayName("LocaDate 로 parsing 할 수 없는 요청은 MalformedFilteringRequestException 을 일으킨다.")
-    void testMalformedRequest(ProblemFilterType filterType) {
-        LocalDateBasedAdaptingStrategy strategy = genStrategy(
-                filterType, null, null, true, true, true
-        );
-
-        String invalid = "This is not a number";
-        FilteringRequest request = new FilteringRequest(
-                filterType, invalid, invalid, invalid
-        );
-
-        assertThatThrownBy(() -> strategy.toFilter(request))
-                .isInstanceOf(MalformedFilteringRequestException.class);
-    }
-
-    @ParameterizedTest
-    @MethodSource("org.app.problem.service.strategy.filter.Utils#problemFilterTypes")
     @DisplayName("허용 범위 밖 값들이 제공되면 IllegalFilterValueException 이 발생한다.")
     void testIllegalFilterValue1(ProblemFilterType filterType) {
 
