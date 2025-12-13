@@ -7,7 +7,7 @@ import org.springframework.stereotype.*;
 public class RatingAvgFilterRequestAdaptingStrategy extends
         AbstractDoubleBasedFilterRueqestAdaptor {
 
-    private static final Double MIN = 0.d, MAX = 5.d;
+    private static final Double MIN = 0.d, MAX = 10.d;
 
     public RatingAvgFilterRequestAdaptingStrategy() {
         super(

@@ -32,16 +32,22 @@ class RatingAvgFilterRequestAdaptingStrategyTest {
     }
 
     @Test
-    @DisplayName("문제 설정 보상 개수 필터링 요청 값은 0 보다 크거나 같아야 한다.")
+    @DisplayName("문제 설정 보상 개수 필터링 요청 값은 [0 ~ 10] 범위의 값이어야한다.")
     void testIllegalFilterValueException() {
         ProblemFilterType filterType = strategy.handleableFilterType();
 
-        Double invalid = -0.1d;
-        FilteringRequest request = Utils.genRequest(
-                filterType, invalid, invalid, null, String::valueOf
+        Double invalid1 = -0.1d;
+        Double invalid2 = 10.1d;
+        FilteringRequest request1 = Utils.genRequest(
+                filterType, invalid1, invalid1, null, String::valueOf
+        );
+        FilteringRequest request2 = Utils.genRequest(
+                filterType, invalid2, invalid2, null, String::valueOf
         );
 
-        assertThatThrownBy(() -> strategy.toFilter(request))
+        assertThatThrownBy(() -> strategy.toFilter(request1))
+                .isInstanceOf(IllegalFilterValueException.class);
+        assertThatThrownBy(() -> strategy.toFilter(request2))
                 .isInstanceOf(IllegalFilterValueException.class);
     }
 }
