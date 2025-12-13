@@ -1,5 +1,8 @@
 package org.app.problem.domain.search.filter;
 
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 import lombok.*;
 import lombok.experimental.*;
 import org.app.problem.dto.request.*;
@@ -21,6 +24,24 @@ public enum ProblemFilterType {
     @Getter
     @Accessors(fluent = true, chain = false)
     private final boolean useFrom, useTo, useEqualTo;
+
+    public static void assertNoDuplicateFilterExists(
+            List<FilteringRequest> filteringRequests
+    ) throws BadRequestException {
+        Map<ProblemFilterType, Long> filterGroup = filteringRequests.stream()
+                .map(FilteringRequest::filterType)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        for (Map.Entry<ProblemFilterType, Long> entry : filterGroup.entrySet()) {
+            long count = entry.getValue();
+            if (count > 1) {
+                throw new BadRequestException(String.format(
+                        "중복된 필터링 요청이 제공되었습니다: [%s]=%d개",
+                        entry.getKey(), count
+                ));
+            }
+        }
+    }
 
     public static void assertValidParams(FilteringRequest filteringRequest)
             throws BadRequestException {

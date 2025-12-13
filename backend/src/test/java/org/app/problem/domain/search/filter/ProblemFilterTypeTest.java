@@ -2,6 +2,7 @@ package org.app.problem.domain.search.filter;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.*;
 import java.util.stream.*;
 import org.app.problem.dto.request.*;
 import org.app.util.exception.*;
@@ -119,5 +120,28 @@ class ProblemFilterTypeTest {
 
         assertThatThrownBy(() -> ProblemFilterType.assertValidParams(request))
                 .isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
+    @DisplayName("중복된 필터링 요청이 제공되면 BadRequestException 이 발생한다.")
+    void testDuplicateCase() {
+        ProblemFilterType[] filterTypes = ProblemFilterType.values();
+
+        String temp = "Temp";
+        List<FilteringRequest> validRequest = Arrays.stream(filterTypes)
+                .map(t -> new FilteringRequest(
+                        t, temp, temp, temp
+                ))
+                .toList();
+
+        for (ProblemFilterType duplicateType : filterTypes) {
+            List<FilteringRequest> duplicateRequest = new ArrayList<>(validRequest);
+            duplicateRequest.add(new FilteringRequest(duplicateType, temp, temp, temp));
+
+            assertThatThrownBy(() -> ProblemFilterType.assertNoDuplicateFilterExists(
+                    duplicateRequest
+            ))
+                    .isInstanceOf(BadRequestException.class);
+        }
     }
 }
