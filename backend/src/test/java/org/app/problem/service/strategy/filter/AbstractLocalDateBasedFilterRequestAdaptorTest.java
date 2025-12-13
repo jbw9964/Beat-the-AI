@@ -18,7 +18,7 @@ class AbstractLocalDateBasedFilterRequestAdaptorTest {
     private static final DateTimeFormatter DATE_TIME_FORMATTER =
             AbstractFilterRequestAdaptor.DATE_TIME_FORMATTER;
 
-    private static final LocalDate NOW = LocalDate.now();
+    private static final LocalDate TODAY = LocalDate.now();
 
     private static FilteringRequest genReq(
             ProblemFilterType filterType,
@@ -31,11 +31,11 @@ class AbstractLocalDateBasedFilterRequestAdaptorTest {
     }
 
     private static LocalDate getMonthBeforeFromNowOrNull(Number minus) {
-        return minus == null ? null : NOW.minusMonths(minus.longValue());
+        return minus == null ? null : TODAY.minusMonths(minus.longValue());
     }
 
     private static LocalDate getMonthAfterFromNowOrNull(Number minus) {
-        return minus == null ? null : NOW.plusMonths(minus.longValue());
+        return minus == null ? null : TODAY.plusMonths(minus.longValue());
     }
 
     private static AbstractLocalDateBasedFilterRequestAdaptor genStrategy(
@@ -59,9 +59,9 @@ class AbstractLocalDateBasedFilterRequestAdaptorTest {
                 null, null, null, true, true, true
         );
 
-        LocalDate lower = NOW.minusMonths(1);
-        LocalDate median = NOW;
-        LocalDate higher = NOW.plusMonths(1);
+        LocalDate lower = TODAY.minusMonths(1);
+        LocalDate median = TODAY;
+        LocalDate higher = TODAY.plusMonths(1);
 
         Utils.assertComparator(strategy, lower, median, higher);
     }
