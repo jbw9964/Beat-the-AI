@@ -22,6 +22,24 @@ public class ExceptionHandlerConfig {
     public ApiResponse<?> handle(CustomException e) {
         int code = e.getCode();
         String message = e.getMessage();
+
+        if (e instanceof ExpectableServerErrorException ee) {
+            message = ee.getClientResponseMessage();
+            Throwable cause = ee.getCause();
+
+            String logMsg = String.format(
+                    "Expectable server error [%s] has been raised.%s",
+                    ee.getClass().getSimpleName(),
+                    cause != null ?
+                            String.format(
+                                    " Caused by: %s",
+                                    cause.getClass().getSimpleName()
+                            ) : ""
+            );
+
+            log.error(logMsg, ee);
+        }
+
         return ApiResponse.fail(code, null, message);
     }
 
@@ -76,15 +94,20 @@ public class ExceptionHandlerConfig {
                 data = jsonParseEx.getOriginalMessage();
             }
             case InvalidFormatException invalidFormatEx -> {
-                message = "올바르지 않은 형식입니다.";
+                message = String.format(
+                        "주어진 값 %s 은 올바르지 않은 형식입니다.",
+                        invalidFormatEx.getValue()
+                );
 
                 List<String> description = (List<String>) (data = new ArrayList<>());
 
                 for (Reference path : invalidFormatEx.getPath()) {
                     String fieldName = path.getFieldName();
-                    description.add(String.format(
-                            "파라미터 '%s' 의 형식이 올바르지 않습니다.", fieldName
-                    ));
+                    if (fieldName != null) {
+                        description.add(String.format(
+                                "파라미터 '%s' 의 형식이 올바르지 않습니다.", fieldName
+                        ));
+                    }
                 }
             }
             case JsonMappingException mappingEx -> {

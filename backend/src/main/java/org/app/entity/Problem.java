@@ -7,6 +7,7 @@ import lombok.*;
 @Entity
 @Table(name = "problem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SuppressWarnings("DefaultAnnotationParam")
 public class Problem extends BaseTimeEntity {
 
     @Id
@@ -42,6 +43,14 @@ public class Problem extends BaseTimeEntity {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private String serializedScenarioInfo;
+
+    // TODO : Public 속성인 문제에 대해서만 집계 정보 존재해야 함.
+    @OneToOne(
+            fetch = FetchType.EAGER, mappedBy = "problem"
+            // TODO : gemini 말로는 remove 해도 jpa 가 똑똑하게 먼저 삭제해 준다 함. 나중에 테스트 만들면서 확인해보고 정상 작동하면 적용하기.
+            //, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
+    )
+    private ProblemAggregation problemAggregation;
 
     public Problem(
             User user, String title,

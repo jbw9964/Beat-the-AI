@@ -2,13 +2,27 @@ package org.app.util.exception;
 
 import org.springframework.http.*;
 
-public class NotImplementedException extends CustomException {
+public class NotImplementedException extends ExpectableServerErrorException {
 
-    public NotImplementedException(String message) {
-        super(HttpStatus.NOT_IMPLEMENTED.value(), message);
+    private static final String defaultClientShowMsg = "해당 기능은 아직 구현되지 않았습니다.";
+
+    public NotImplementedException(
+            String message, String clientResponseMessage,
+            Throwable cause
+    ) {
+        super(
+                HttpStatus.NOT_IMPLEMENTED.value(), message,
+                clientResponseMessage, cause
+        );
     }
 
-    public static NotImplementedException of(String message) {
-        return new NotImplementedException(message);
+    public NotImplementedException(
+            String message, String clientResponseMessage
+    ) {
+        this(message, clientResponseMessage, null);
+    }
+
+    public NotImplementedException(String message) {
+        this(message, defaultClientShowMsg);
     }
 }

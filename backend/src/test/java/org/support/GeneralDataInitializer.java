@@ -17,6 +17,7 @@ public class GeneralDataInitializer {
     private final TestNotificationRepository notificationRepo;
     private final TestPlayRecordRepository playRecordRepo;
     private final TestProblemRepository problemRepo;
+    private final TestProblemAggregationRepository problemAggregationRepo;
     private final TestRatingRepository ratingRepo;
     private final TestReceivedInvitationRepository receivedInvitationRepo;
     private final TestRewardRepository rewardRepo;
@@ -136,6 +137,20 @@ public class GeneralDataInitializer {
         return problemRepo.save(problem);
     }
 
+    @Builder(builderMethodName = "problemAggregationBuilder")
+    public ProblemAggregation createProblemAggregation(
+            Long problemId, AggregatedProblemRatingInfo ratingInfo,
+            AggregatedProblemPlayInfo playInfo, AggregatedProblemInfo problemInfo
+    ) {
+        Problem find = problemRepo.findById(problemId).orElseThrow(AssertionError::new);
+
+        ProblemAggregation problemAggregation = new ProblemAggregation(
+                find, ratingInfo, playInfo, problemInfo
+        );
+
+        return problemAggregationRepo.save(problemAggregation);
+    }
+
     @Builder(builderMethodName = "temporalProblemBuilder")
     public TemporalProblem createTemporalProblem(
             Long userId, String title, String description, String rewardMessage,
@@ -175,6 +190,7 @@ public class GeneralDataInitializer {
         this.deleteAll(invitationRepo);
         this.deleteAll(rewardRepo);
         this.deleteAll(ratingRepo);
+        this.deleteAll(problemAggregationRepo);
         this.deleteAll(problemRepo);
     }
 
