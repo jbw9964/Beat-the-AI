@@ -54,8 +54,8 @@ public enum ProblemFilterType {
         boolean useExactValueSearch = type.useEqualTo();
 
         boolean noSearchRangeProvided =
-                (from == null || from.isEmpty()) && (to == null || to.isEmpty());
-        boolean noExactValueProvided = equalTo == null || equalTo.isEmpty();
+                (from == null || from.isBlank()) && (to == null || to.isBlank());
+        boolean noExactValueProvided = equalTo == null || equalTo.isBlank();
 
         if (useBoundedSearchRange && noSearchRangeProvided) {
             throw new BadRequestException(String.format(

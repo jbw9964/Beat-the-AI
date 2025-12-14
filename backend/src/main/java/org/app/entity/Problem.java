@@ -47,7 +47,7 @@ public class Problem extends BaseTimeEntity {
     // TODO : Public 속성인 문제에 대해서만 집계 정보 존재해야 함.
     @OneToOne(
             fetch = FetchType.EAGER, mappedBy = "problem"
-            // TODO : cascade 한번 사용해볼까? 일단 주석처리해둠.
+            // TODO : gemini 말로는 remove 해도 jpa 가 똑똑하게 먼저 삭제해 준다 함. 나중에 테스트 만들면서 확인해보고 정상 작동하면 적용하기.
             //, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
     private ProblemAggregation problemAggregation;
