@@ -40,7 +40,7 @@ public class AnonymousUserService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<PlayRecord> find
                 = playRecordRepo.findPublicRecordsByUserId(userId, pageable);
 

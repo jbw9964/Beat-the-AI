@@ -33,7 +33,7 @@ public class UserTemporalProblemService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<TemporalProblem> find = temporalProblemRepo.findByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);

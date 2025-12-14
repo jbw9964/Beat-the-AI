@@ -117,7 +117,7 @@ public class SimpleUserService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<Problem> find = problemRepo.findByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
@@ -149,7 +149,7 @@ public class SimpleUserService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<Rating> find = ratingRepo.findByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toInfo);

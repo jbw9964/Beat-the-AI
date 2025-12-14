@@ -6,11 +6,12 @@ import lombok.extern.slf4j.*;
 import org.app.entity.*;
 import org.app.util.api.*;
 import org.springframework.data.domain.*;
+import org.springframework.data.domain.Sort.*;
 import org.springframework.stereotype.*;
 
 @Slf4j
 @Component
-public class GlobalUtil {
+public class GlobalUtil implements PageableProvider {
 
     public <E, I> E getOrThrow(
             I identity, Function<I, Optional<E>> func,
@@ -63,5 +64,13 @@ public class GlobalUtil {
         List<I> infos = find.map(mapperFunc).toList();
 
         return new SimplePageResponse<>(pageNo, pageSize, numOfTotalElements, hasNext, infos);
+    }
+
+    @Override
+    public Pageable pageable(int pageNo, int pageSize) {
+        return PageRequest.of(
+                pageNo, pageSize,
+                Direction.DESC, "createdAt"
+        );
     }
 }

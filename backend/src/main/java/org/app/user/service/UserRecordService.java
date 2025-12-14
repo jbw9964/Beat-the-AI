@@ -35,7 +35,7 @@ public class UserRecordService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<PlayRecord> find = playRecordRepo.findByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
@@ -113,7 +113,7 @@ public class UserRecordService {
             );
         }
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
 
         Page<GainedReward> find = gainedRewardRepo.findByPlayRecordId(playRecordId, pageable);
 

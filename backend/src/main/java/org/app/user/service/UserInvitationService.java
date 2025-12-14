@@ -36,7 +36,7 @@ public class UserInvitationService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<ReceivedInvitation> find = receivedInvitationRepo.findByUserId(userId, pageable);
 
         // 주어진 코드가 유효한지 확인한다
