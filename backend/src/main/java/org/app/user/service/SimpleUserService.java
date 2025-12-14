@@ -39,10 +39,7 @@ public class SimpleUserService {
     // 자기 정보 보기
     public GetUserResponse getMe(Long userId) {
 
-        User find = globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         String username = find.getName();
         String email = find.getEmail();
@@ -59,10 +56,7 @@ public class SimpleUserService {
         //  이후 다른부분 개발하면서 다른 삭제시키는거 만들어야됨.
         //  아님 batch 처리로 일정 기한 넘어가면 다 삭제시키거나.
 
-        User find = globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         LocalDateTime now = dateTimeProvider.localDateTimeNow();
         LocalDate removalDate = softDeletePolicy.getRemovalDateOn(now);
@@ -79,10 +73,7 @@ public class SimpleUserService {
             Long userId, String newUsername, String newEmail, String newThumbnail
     ) {
 
-        User find = globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         find.changeName(newUsername);
         find.changeEmail(newEmail);
@@ -95,10 +86,7 @@ public class SimpleUserService {
     @Transactional
     public Long updateMySetting(Long userId) {
         // TODO : 설정 수정 구현
-        User find = globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         throw new NotImplementedException("설정 수정 미구현");
     }
@@ -109,10 +97,7 @@ public class SimpleUserService {
             Long userId, String oldPassword, String newPassword
     ) {
 
-        User find = globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         String encryptedPassword = find.getEncryptedPassword();
         if (!pwEncoder.matches(oldPassword, encryptedPassword)) {
@@ -130,10 +115,7 @@ public class SimpleUserService {
             Long userId, int pageNo, int pageSize
     ) {
 
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Problem> find = problemRepo.findByUserId(userId, pageable);
@@ -144,10 +126,7 @@ public class SimpleUserService {
     // 내가 만든 문제 내용 보기
     public DetailedProblemInfo getMyProblem(Long userId, Long problemId) {
 
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         Problem find = globalUtil.getOrThrow(
                 problemId, problemRepo::findById, ProblemNotFoundException::new
@@ -168,10 +147,7 @@ public class SimpleUserService {
             Long userId, int pageNo, int pageSize
     ) {
 
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Rating> find = ratingRepo.findByUserId(userId, pageable);
@@ -182,10 +158,7 @@ public class SimpleUserService {
     // 내가 평가한 내용 보기
     public RatingInfo getMyRating(Long userId, Long ratingId) {
 
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         Rating find = globalUtil.getOrThrow(
                 ratingId, ratingRepo::findById, RatingNotFoundException::new
@@ -196,6 +169,12 @@ public class SimpleUserService {
         }
 
         return Util.toInfo(find);
+    }
+
+    private User findNonWithdrawnUserOrThrowUserNotFoundEx(Long userId) {
+        return globalUtil.getNonSoftDeltedOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new
+        );
     }
 
     private record Util() {

@@ -41,9 +41,8 @@ public class TokenService implements UserPrincipalProvider {
 
         try {
             userId = atManager.getClaimsFrom(accessToken).getUserId();
-            return globalUtil.getOrThrow(
-                    userId, userRepo::findById, this::invalidTokenEx,
-                    Predicate.not(User::withdrawn)
+            return globalUtil.getNonSoftDeltedOrThrow(
+                    userId, userRepo::findById, this::invalidTokenEx
             );
         } catch (JwtException e) {
             log.warn(e.getMessage(), e);

@@ -2,7 +2,6 @@ package org.app.user.service;
 
 import java.time.*;
 import java.util.*;
-import java.util.function.*;
 import java.util.stream.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
@@ -119,9 +118,8 @@ public class UserInvitationService {
     }
 
     private User findNonWithdrawnUserOrThrowUserNotFoundEx(Long userId) {
-        return globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
+        return globalUtil.getNonSoftDeltedOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new
         );
     }
 

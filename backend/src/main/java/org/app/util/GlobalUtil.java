@@ -3,6 +3,7 @@ package org.app.util;
 import java.util.*;
 import java.util.function.*;
 import lombok.extern.slf4j.*;
+import org.app.entity.*;
 import org.app.util.api.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
@@ -29,6 +30,22 @@ public class GlobalUtil {
                 (opt = opt.filter(filter)).isEmpty()
         ) {
             log.info("Value has been filtered by: {}", filter);
+        }
+
+        return opt.orElseThrow(ex);
+    }
+
+    public <E extends SoftDelete, I> E getNonSoftDeltedOrThrow(
+            I identity, Function<I, Optional<E>> func,
+            Supplier<RuntimeException> ex
+    ) {
+        Optional<E> opt = func.apply(identity);
+
+        if (
+                opt.isPresent() &&
+                (opt = opt.filter(e -> !e.doesRemovalScheduled())).isEmpty()
+        ) {
+            log.info("Found value but reserved soft deletion.");
         }
 
         return opt.orElseThrow(ex);

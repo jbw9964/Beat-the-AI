@@ -1,6 +1,5 @@
 package org.app.auth.service;
 
-import java.util.function.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.auth.domain.exception.*;
@@ -26,9 +25,8 @@ public class SimpleAuthService {
 
     public Tokens loginWithIdPw(String loginId, String password) {
 
-        User find = globalUtil.getOrThrow(
-                loginId, userRepo::findByLoginId,
-                this::loginFailEx, Predicate.not(User::withdrawn)
+        User find = globalUtil.getNonSoftDeltedOrThrow(
+                loginId, userRepo::findByLoginId, this::loginFailEx
         );
 
         if (!pwEncoder.matches(password, find.getEncryptedPassword())) {
