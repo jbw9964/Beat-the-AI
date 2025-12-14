@@ -366,7 +366,8 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
         }
 
         User createWithdrawnUser() {
-            return dataInitializer.createUser("test", null, null, null, null, true, null);
+            return dataInitializer.createUser("test", null, null, null, null, true,
+                    LocalDateTime.now());
         }
 
         ReceivedInvitation createNewReceivedInvitation(Long userId, Long problemId, String code) {

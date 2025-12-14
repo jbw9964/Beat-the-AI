@@ -2,7 +2,6 @@ package org.app.user.service;
 
 import java.time.*;
 import java.util.*;
-import java.util.function.*;
 import lombok.*;
 import org.app.config.domain.*;
 import org.app.entity.*;
@@ -25,6 +24,7 @@ import org.springframework.transaction.annotation.*;
 public class SimpleUserService {
 
     private final GlobalUtil globalUtil;
+    private final SoftDeletePolicy softDeletePolicy;
     private final DateTimeProvider dateTimeProvider;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -64,8 +64,9 @@ public class SimpleUserService {
                 Predicate.not(User::withdrawn)
         );
 
-        LocalDate now = dateTimeProvider.localDateNow();
-        find.withdrawUser(now);
+        LocalDateTime now = dateTimeProvider.localDateTimeNow();
+        LocalDate removalDate = softDeletePolicy.getRemovalDateOn(now);
+        find.withdrawUser(now, removalDate);
 
         eventPublisher.publishEvent(new UserWithdrawEvent(userId));
 

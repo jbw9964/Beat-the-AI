@@ -8,7 +8,7 @@ import lombok.*;
 @Table(name = "problem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuppressWarnings("DefaultAnnotationParam")
-public class Problem extends BaseTimeEntity {
+public class Problem extends BaseTimeEntity implements SoftDelete {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +52,9 @@ public class Problem extends BaseTimeEntity {
     )
     private ProblemAggregation problemAggregation;
 
+    @Embedded
+    private SchedueldRemoval schedueldRemoval;
+
     public Problem(
             User user, String title,
             int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
@@ -63,6 +66,7 @@ public class Problem extends BaseTimeEntity {
         this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
         this.visibility = visibility;
         this.serializedScenarioInfo = serializedScenarioInfo;
+        this.schedueldRemoval = SchedueldRemoval.notScheduled();
     }
 
     public void changeDescription(String newDescription) {

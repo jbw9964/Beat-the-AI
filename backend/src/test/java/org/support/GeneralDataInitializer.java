@@ -2,6 +2,7 @@ package org.support;
 
 import java.time.*;
 import lombok.*;
+import org.app.config.domain.*;
 import org.app.entity.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.transaction.annotation.*;
@@ -23,8 +24,9 @@ public class GeneralDataInitializer {
     private final TestRewardRepository rewardRepo;
     private final TestScenarioRecordRepository scenarioRecordRepo;
     private final TestTemporalProblemRepository temporalProblemRepo;
-
     private final TestUserRepository userRepo;
+
+    private final SoftDeletePolicy softDeletePolicy;
 
     @Builder(builderMethodName = "gainedRewardBuilder")
     public GainedReward createGainedReward(
@@ -53,13 +55,14 @@ public class GeneralDataInitializer {
     public User createUser(
             String name, String email, String loginId,
             String encryptedPassword, String thumbnail,
-            boolean withdrawn, LocalDate withdrawnAt
+            boolean withdrawn, LocalDateTime withdrawnAt
     ) {
         User user = new User(name, loginId, encryptedPassword);
         user.changeEmail(email);
         user.changeThumbnailUrl(thumbnail);
         if (withdrawn) {
-            user.withdrawUser(withdrawnAt);
+            LocalDate removalDate = softDeletePolicy.getRemovalDateOn(withdrawnAt);
+            user.withdrawUser(withdrawnAt, removalDate);
         }
         return userRepo.save(user);
     }
