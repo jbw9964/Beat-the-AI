@@ -118,7 +118,7 @@ public class SimpleUserService {
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         Pageable pageable = globalUtil.pageable(pageNo, pageSize);
-        Page<Problem> find = problemRepo.findByUserId(userId, pageable);
+        Page<Problem> find = problemRepo.findNonSoftDeletedProblemsByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
     }
@@ -128,7 +128,7 @@ public class SimpleUserService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Problem find = globalUtil.getOrThrow(
+        Problem find = globalUtil.getNonSoftDeltedOrThrow(
                 problemId, problemRepo::findById, ProblemNotFoundException::new
         );
 

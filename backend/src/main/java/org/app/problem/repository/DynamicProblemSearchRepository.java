@@ -17,7 +17,7 @@ public interface DynamicProblemSearchRepository {
             readOnly = true
             //, isolation = Isolation.REPEATABLE_READ
     )
-    Page<Problem> searchPublicProblemWithFilters(
+    Page<Problem> searchNonSoftDeletedPublicProblemWithFilters(
             List<ProblemFilter<?>> filters,
             List<ProblemOrder> orders,
             Pageable pageable
