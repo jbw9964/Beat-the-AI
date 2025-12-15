@@ -130,12 +130,10 @@ public class GeneralDataInitializer {
         User find = userRepo.findById(userId).orElseThrow(AssertionError::new);
 
         Problem problem = new Problem(
-                find, title, numOfScenariosToGetReward, numOfScenariosToFailPlay,
+                find, title, description, rewardMessage,
+                numOfScenariosToGetReward, numOfScenariosToFailPlay,
                 visibility, serializedScenarioInfo
         );
-
-        problem.changeDescription(description);
-        problem.changeRewardMessage(rewardMessage);
 
         return problemRepo.save(problem);
     }

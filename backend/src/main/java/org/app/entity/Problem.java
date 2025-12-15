@@ -56,12 +56,14 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
     private SchedueldRemoval schedueldRemoval;
 
     public Problem(
-            User user, String title,
+            User user, String title, String description, String rewardMessage,
             int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
             ProblemVisibility visibility, String serializedScenarioInfo
     ) {
         this.user = user;
         this.title = title;
+        this.description = description;
+        this.rewardMessage = rewardMessage;
         this.numOfScenariosToGetReward = numOfScenariosToGetReward;
         this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
         this.visibility = visibility;
