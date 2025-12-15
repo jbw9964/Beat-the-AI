@@ -158,6 +158,8 @@ public class UserRecordService {
     @Transactional
     public DeleteMyRewardResponse deleteMyRewards(Long userId, Long playRecordId) {
 
+        // TODO : 이것도 생각해보니까 실제 이미지도 삭제해야됨.
+
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         PlayRecord playRecord = globalUtil.getOrThrow(

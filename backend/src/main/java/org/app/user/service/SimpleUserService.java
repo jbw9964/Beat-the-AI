@@ -56,6 +56,10 @@ public class SimpleUserService {
         //  이후 다른부분 개발하면서 다른 삭제시키는거 만들어야됨.
         //  아님 batch 처리로 일정 기한 넘어가면 다 삭제시키거나.
 
+        // TODO : 생각해보니 유저 삭제도 간단하지 않음.
+        //  유저 삭제하려면 관련 문제도 삭제시키고 DB 저장된 보상들도 다 삭제해야함.
+        //  처음엔 단순 이벤트 기반으로도 가능할 거라 생각했는데 뭔가 batch 처리 해야할 것 같음.
+
         User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         LocalDateTime now = dateTimeProvider.localDateTimeNow();
