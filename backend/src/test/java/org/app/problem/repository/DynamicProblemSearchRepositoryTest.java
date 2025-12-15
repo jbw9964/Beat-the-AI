@@ -165,7 +165,7 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("복수의 검색, 정렬 조건을 제시해 문제를 검색할 수 있다.")
-    void searchPublicProblemWithFilters() {
+    void searchNonSoftDeletedPublicProblemWithFilters() {
         /*
         데이터 설명:
         1.  데이터엔 사용자 3 명이 존재한다. 2 명은 모든 검색 조건에 포함되지 않을 데이터를 가지고 있고,
@@ -215,7 +215,7 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
         List<ProblemOrder> problemOrders = this.createProblemOrders();
         Pageable pageable = PageRequest.of(0, coreDataSize);
 
-        Page<Problem> response = dynamicSearchRepo.searchPublicProblemWithFilters(
+        Page<Problem> response = dynamicSearchRepo.searchNonSoftDeletedPublicProblemWithFilters(
                 problemFilters, problemOrders, pageable
         );
 

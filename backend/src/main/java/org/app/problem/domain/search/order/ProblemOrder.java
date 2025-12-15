@@ -6,4 +6,5 @@ public interface ProblemOrder {
 
     OrderSpecifier<?> orderSpecifier();
 
+    ProblemOrderType getOrderType();
 }

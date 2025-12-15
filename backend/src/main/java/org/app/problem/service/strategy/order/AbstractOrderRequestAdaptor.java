@@ -41,8 +41,19 @@ public abstract class AbstractOrderRequestAdaptor
             Expression<T> expression
     ) {
         OrderSpecifier<T> orderSpecifier = this.buildOrderSpecifier(expression);
+        ProblemOrderType orderType = this.handleableOrderType();
 
-        return () -> orderSpecifier;
+        return new ProblemOrder() {
+            @Override
+            public OrderSpecifier<?> orderSpecifier() {
+                return orderSpecifier;
+            }
+
+            @Override
+            public ProblemOrderType getOrderType() {
+                return orderType;
+            }
+        };
     }
 
     private <T extends Comparable<?>> OrderSpecifier<T> buildOrderSpecifier(
