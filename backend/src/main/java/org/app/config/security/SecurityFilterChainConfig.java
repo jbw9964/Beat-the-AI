@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
 import org.springframework.core.*;
 import org.springframework.core.annotation.*;
+import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.builders.*;
 import org.springframework.security.config.annotation.method.configuration.*;
@@ -114,6 +115,16 @@ public class SecurityFilterChainConfig {
                                 "/api/user/{user-id:\\d+}",
                                 "/api/user/{user-id:\\d+}/public-record",
                                 "/api/user/{user-id:\\d+}/public-record/{record-id:\\d+}"
+                        ).permitAll()
+
+                        // problem domain
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/problem",
+                                "/api/problem/{problem-id:\\d+}"
+                        ).permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST, "/api/problem/search-public"
                         ).permitAll()
 
                         // endpoints for auth testing
