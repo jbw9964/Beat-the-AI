@@ -18,8 +18,7 @@ public class NumOfRewardsDescOrderStrategy
     public ProblemOrder toOrder(OrderingRequest request) throws OrderTypeMismatchException {
         super.throwExOnOrderTypeMismatch(request.orderType());
 
-        NumberPath<Integer> numOfRewardSet =
-                super.QPA_TARGET.problemInfo.numOfRewardSet;
+        NumberPath<Integer> numOfRewardSet = super.QP.numOfRewardSets;
 
         return super.buildProblemOrder(numOfRewardSet);
     }

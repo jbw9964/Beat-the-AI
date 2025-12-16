@@ -115,7 +115,7 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
     }
 
     private static int getRewardCnt(Problem p) {
-        return p.getProblemAggregation().getProblemInfo().getNumOfRewardSet();
+        return p.getNumOfRewardSets();
     }
 
     private static long getPlayCnt(Problem p) {
@@ -123,7 +123,7 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
     }
 
     private static int getScCount(Problem p) {
-        return p.getProblemAggregation().getProblemInfo().getNumOfScenarioSet();
+        return p.getNumOfTotalScenarios();
     }
 
     private static Comparator<Problem> expectedOrdering() {
@@ -262,8 +262,8 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
             );
             long randomRatingNum = Utils.getRandom(LONG_FROM, LONG_TO);
             long randomTotalPlayNum = Utils.getRandom(LONG_FROM, LONG_TO);
-            int randomRewardSetNum = Utils.getRandom(INT_FROM, INT_TO);
             int randomScenarioSetNum = Utils.getRandom(INT_FROM, INT_TO);
+            int randomRewardSetNum = Utils.getRandom(INT_FROM, INT_TO);
 
             AggregatedProblemRatingInfo ratingInfo = new AggregatedProblemRatingInfo(
                     randomRatingNum, randomRatingAvgScore * randomRatingNum
@@ -271,16 +271,14 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
             AggregatedProblemPlayInfo playInfo = new AggregatedProblemPlayInfo(
                     randomTotalPlayNum
             );
-            AggregatedProblemInfo problemInfo = new AggregatedProblemInfo(
-                    randomRewardSetNum, randomScenarioSetNum
-            );
 
             when(auditingProvider.provideLocalDateTime())
                     .thenReturn(randomCreatedTime);
 
             Problem dummpyProblem = data.createNewProblemWithAggregation(
                     dummyUserId, title, isPublic,
-                    ratingInfo, playInfo, problemInfo
+                    randomScenarioSetNum, randomRewardSetNum,
+                    ratingInfo, playInfo
             );
 
             problems.add(dummpyProblem);
@@ -313,8 +311,9 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
             );
             long randomRatingNum = Utils.getRandom(LONG_FROM, LONG_TO);
             long randomTotalPlayNum = Utils.getRandom(LONG_FROM, LONG_TO);
-            int randomRewardSetNum = Utils.getRandom(INT_FROM, INT_TO);
+
             int randomScenarioSetNum = Utils.getRandom(INT_FROM, INT_TO);
+            int randomRewardSetNum = Utils.getRandom(INT_FROM, INT_TO);
 
             AggregatedProblemRatingInfo ratingInfo = new AggregatedProblemRatingInfo(
                     randomRatingNum, randomRatingAvgScore * randomRatingNum
@@ -322,16 +321,14 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
             AggregatedProblemPlayInfo playInfo = new AggregatedProblemPlayInfo(
                     randomTotalPlayNum
             );
-            AggregatedProblemInfo problemInfo = new AggregatedProblemInfo(
-                    randomRewardSetNum, randomScenarioSetNum
-            );
 
             when(auditingProvider.provideLocalDateTime())
                     .thenReturn(randomCreatedTime);
 
             Problem dummpyProblem = data.createNewProblemWithAggregation(
                     userId, title, true,
-                    ratingInfo, playInfo, problemInfo
+                    randomScenarioSetNum, randomRewardSetNum,
+                    ratingInfo, playInfo
             );
 
             problems.add(dummpyProblem);
@@ -400,24 +397,19 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
                     randomUpperLongTo
             );
 
-            AggregatedProblemInfo problemInfo1 = new AggregatedProblemInfo(
-                    randomLowerIntFrom, randomLowerIntFrom
-            );
-            AggregatedProblemInfo problemInfo2 = new AggregatedProblemInfo(
-                    randomUpperIntFrom, randomUpperIntFrom
-            );
-
             when(auditingProvider.provideLocalDateTime())
                     .thenReturn(randomBeforeCtFrom)
                     .thenReturn(randomAfterCtTo);
 
             Problem p1 = data.createNewProblemWithAggregation(
                     userId, title1, true,
-                    ratingInfo1, playInfo1, problemInfo1
+                    randomLowerIntFrom, randomLowerIntFrom,
+                    ratingInfo1, playInfo1
             );
             Problem p2 = data.createNewProblemWithAggregation(
                     userId, title2, true,
-                    ratingInfo2, playInfo2, problemInfo2
+                    randomUpperIntFrom, randomUpperIntFrom,
+                    ratingInfo2, playInfo2
             );
 
             problems.add(p1);
@@ -471,9 +463,9 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
 
         Problem createNewProblemWithAggregation(
                 Long userId, String title, boolean isPublic,
+                int numOftotalScenarios, int numOfRewardSets,
                 AggregatedProblemRatingInfo ratingInfo,
-                AggregatedProblemPlayInfo playInfo,
-                AggregatedProblemInfo problemInfo
+                AggregatedProblemPlayInfo playInfo
         ) {
             Problem problem = initializer.problemBuilder()
                     .userId(userId)
@@ -481,13 +473,15 @@ class DynamicProblemSearchRepositoryTest extends IntegrationTestSupport {
                     .visibility(isPublic ?
                             ProblemVisibility.PUBLIC :
                             ProblemVisibility.PRIVATE)
+                    .numOfTotalScenarios(numOftotalScenarios)
+                    .serializedScenarioInfo("hi")
+                    .numOfRewardSets(numOfRewardSets)
                     .build();
 
             initializer.problemAggregationBuilder()
                     .problemId(problem.getId())
                     .ratingInfo(ratingInfo)
                     .playInfo(playInfo)
-                    .problemInfo(problemInfo)
                     .build();
 
             return problem;

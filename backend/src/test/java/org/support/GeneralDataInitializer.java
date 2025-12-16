@@ -67,6 +67,7 @@ public class GeneralDataInitializer {
         return userRepo.save(user);
     }
 
+    @Builder(builderMethodName = "receivedInvitationBuilder")
     public ReceivedInvitation createReceivedInvitation(
             Long userId, Long problemId, String title, String code
     ) {
@@ -125,14 +126,15 @@ public class GeneralDataInitializer {
     public Problem createProblem(
             Long userId, String title, String description, String rewardMessage,
             int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
-            ProblemVisibility visibility, String serializedScenarioInfo
+            ProblemVisibility visibility, int numOfTotalScenarios, String serializedScenarioInfo,
+            int numOfRewardSets
     ) {
         User find = userRepo.findById(userId).orElseThrow(AssertionError::new);
 
         Problem problem = new Problem(
                 find, title, description, rewardMessage,
                 numOfScenariosToGetReward, numOfScenariosToFailPlay,
-                visibility, serializedScenarioInfo
+                visibility, numOfTotalScenarios, serializedScenarioInfo, numOfRewardSets
         );
 
         return problemRepo.save(problem);
@@ -141,12 +143,12 @@ public class GeneralDataInitializer {
     @Builder(builderMethodName = "problemAggregationBuilder")
     public ProblemAggregation createProblemAggregation(
             Long problemId, AggregatedProblemRatingInfo ratingInfo,
-            AggregatedProblemPlayInfo playInfo, AggregatedProblemInfo problemInfo
+            AggregatedProblemPlayInfo playInfo
     ) {
         Problem find = problemRepo.findById(problemId).orElseThrow(AssertionError::new);
 
         ProblemAggregation problemAggregation = new ProblemAggregation(
-                find, ratingInfo, playInfo, problemInfo
+                find, playInfo, ratingInfo
         );
 
         return problemAggregationRepo.save(problemAggregation);
@@ -167,12 +169,14 @@ public class GeneralDataInitializer {
         return temporalProblemRepo.save(temporalProblem);
     }
 
+    @Builder(builderMethodName = "ratingBuilder")
     public Rating createRating(Long problemId, Long userId, String comment, int score) {
         Problem find = problemRepo.findById(problemId).orElseThrow(AssertionError::new);
         Rating rating = new Rating(find, userId, comment, score);
         return ratingRepo.save(rating);
     }
 
+    @Builder(builderMethodName = "invitationBuilder")
     public Invitation createInvitation(Long problemId, String code) {
         Problem find = problemRepo.findById(problemId).orElseThrow(AssertionError::new);
         Invitation invitation = new Invitation(find, code);

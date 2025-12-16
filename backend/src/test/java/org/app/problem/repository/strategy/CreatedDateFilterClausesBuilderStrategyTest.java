@@ -213,6 +213,7 @@ class CreatedDateFilterClausesBuilderStrategyTest extends IntegrationTestSupport
                     .userId(userId)
                     .title(title)
                     .visibility(ProblemVisibility.PUBLIC)
+                    .serializedScenarioInfo("hi")
                     .build();
         }
 

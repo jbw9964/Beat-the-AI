@@ -66,9 +66,7 @@ class NumOfRewardsFilterClausesBuilderStrategyTest extends IntegrationTestSuppor
         Utils.assertADoesNotContainsAnyB(searchResult1, p30to40s, Problem::getId);
         Utils.assertAllElementsSatisfies(
                 searchResult1, p -> {
-                    int n = p.getProblemAggregation()
-                            .getProblemInfo()
-                            .getNumOfRewardSet();
+                    int n = p.getNumOfRewardSets();
 
                     return i10 <= n && n <= i20;
                 }
@@ -78,9 +76,7 @@ class NumOfRewardsFilterClausesBuilderStrategyTest extends IntegrationTestSuppor
         Utils.assertADoesNotContainsAnyB(searchResult2, p10to20s, Problem::getId);
         Utils.assertAllElementsSatisfies(
                 searchResult2, p -> {
-                    int n = p.getProblemAggregation()
-                            .getProblemInfo()
-                            .getNumOfRewardSet();
+                    int n = p.getNumOfRewardSets();
 
                     return i30 <= n && n <= i40;
                 }
@@ -116,17 +112,13 @@ class NumOfRewardsFilterClausesBuilderStrategyTest extends IntegrationTestSuppor
         Utils.assertAContainsAllB(searchResult1, pls, Problem::getId);
         Utils.assertADoesNotContainsAnyB(searchResult1, pus, Problem::getId);
         Utils.assertAllElementsSatisfies(
-                searchResult1, p -> p.getProblemAggregation()
-                                            .getProblemInfo()
-                                            .getNumOfRewardSet() <= threshold
+                searchResult1, p -> p.getNumOfRewardSets() <= threshold
         );
 
         Utils.assertAContainsAllB(searchResult2, pus, Problem::getId);
         Utils.assertADoesNotContainsAnyB(searchResult2, pls, Problem::getId);
         Utils.assertAllElementsSatisfies(
-                searchResult2, p -> p.getProblemAggregation()
-                                            .getProblemInfo()
-                                            .getNumOfRewardSet() >= threshold
+                searchResult2, p -> p.getNumOfRewardSets() >= threshold
         );
     }
 
@@ -146,9 +138,8 @@ class NumOfRewardsFilterClausesBuilderStrategyTest extends IntegrationTestSuppor
         for (int i = 0; i < testSize; i++) {
             String title = String.format("Title %d", i);
             Integer rand = randoms.get(i);
-            AggregatedProblemInfo problemInfo = new AggregatedProblemInfo(rand, 0);
             problems.add(data.createNewProblemWithPlayInfo(
-                    testUserId, title, problemInfo
+                    testUserId, title, rand
             ));
         }
 
@@ -193,17 +184,19 @@ class NumOfRewardsFilterClausesBuilderStrategyTest extends IntegrationTestSuppor
 
         Problem createNewProblemWithPlayInfo(
                 Long userId, String title,
-                AggregatedProblemInfo problemInfo
+                int numOfRewardSets
         ) {
             Problem problem = initializer.problemBuilder()
                     .userId(userId)
                     .title(title)
                     .visibility(ProblemVisibility.PUBLIC)
+                    .numOfTotalScenarios(0)
+                    .serializedScenarioInfo("hi")
+                    .numOfRewardSets(numOfRewardSets)
                     .build();
 
             initializer.problemAggregationBuilder()
                     .problemId(problem.getId())
-                    .problemInfo(problemInfo)
                     .build();
 
             return problem;

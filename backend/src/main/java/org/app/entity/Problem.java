@@ -1,13 +1,14 @@
 package org.app.entity;
 
 import jakarta.persistence.*;
+import java.time.*;
 import lombok.*;
 
 @Getter
 @Entity
 @Table(name = "problem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SuppressWarnings("DefaultAnnotationParam")
+@SuppressWarnings({"DefaultAnnotationParam", "UnusedReturnValue"})
 public class Problem extends BaseTimeEntity implements SoftDelete {
 
     @Id
@@ -40,9 +41,16 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
     @Column(nullable = false)
     private ProblemVisibility visibility;
 
+    @Column(nullable = false)
+    private int numOfTotalScenarios;
+
     @Lob
+    @Column(nullable = false)
     @Basic(fetch = FetchType.LAZY)
     private String serializedScenarioInfo;
+
+    @Column(nullable = false)
+    private int numOfRewardSets;
 
     // TODO : Public 속성인 문제에 대해서만 집계 정보 존재해야 함.
     @OneToOne(
@@ -50,6 +58,7 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
             // TODO : gemini 말로는 remove 해도 jpa 가 똑똑하게 먼저 삭제해 준다 함. 나중에 테스트 만들면서 확인해보고 정상 작동하면 적용하기.
             //, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
     )
+    @Setter(AccessLevel.PACKAGE)
     private ProblemAggregation problemAggregation;
 
     @Embedded
@@ -58,7 +67,22 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
     public Problem(
             User user, String title, String description, String rewardMessage,
             int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
-            ProblemVisibility visibility, String serializedScenarioInfo
+            ProblemVisibility visibility, int numOfTotalScenarios,
+            String serializedScenarioInfo
+    ) {
+        this(
+                user, title, description, rewardMessage,
+                numOfScenariosToGetReward, numOfScenariosToFailPlay,
+                visibility, numOfTotalScenarios,
+                serializedScenarioInfo, 0
+        );
+    }
+
+    public Problem(
+            User user, String title, String description, String rewardMessage,
+            int numOfScenariosToGetReward, int numOfScenariosToFailPlay,
+            ProblemVisibility visibility, int numOfTotalScenarios,
+            String serializedScenarioInfo, int numOfRewardSets
     ) {
         this.user = user;
         this.title = title;
@@ -67,23 +91,68 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
         this.numOfScenariosToGetReward = numOfScenariosToGetReward;
         this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
         this.visibility = visibility;
+        this.numOfTotalScenarios = numOfTotalScenarios;
         this.serializedScenarioInfo = serializedScenarioInfo;
+        this.numOfRewardSets = numOfRewardSets;
         this.schedueldRemoval = SchedueldRemoval.notScheduled();
     }
 
-    public void changeDescription(String newDescription) {
-        this.description = newDescription;
+    public Problem changeTitle(String title) {
+        this.title = title;
+        return this;
     }
 
-    public void changeRewardMessage(String rewardMessage) {
+    public Problem changeDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Problem changeRewardMessage(String rewardMessage) {
         this.rewardMessage = rewardMessage;
+        return this;
     }
 
-    /*
-        TODO : 직렬화된 시나리오 info 관련해서 작업 필요함.
-        1. 엔티티 serializedScenarioInfo 를 List<ScenarioInfo> 로 제공하는 메서드
-        2. List<ScenarioInfo> 를 직렬화해 serializedScenarioInfo 로 저장하는 메서드
-        위 과정에서 ScenarioInfo 의 scenarioOrder 잘 생각해서 작업해야 함.
-     */
+    public Problem changeNumOfScenariosToGetReward(int numOfScenariosToGetReward) {
+        this.numOfScenariosToGetReward = numOfScenariosToGetReward;
+        return this;
+    }
 
+    public Problem changeNumOfScenariosToFailPlay(int numOfScenariosToFailPlay) {
+        this.numOfScenariosToFailPlay = numOfScenariosToFailPlay;
+        return this;
+    }
+
+    public void changeVisibility(ProblemVisibility visibility) {
+        this.visibility = visibility;
+    }
+
+    public Problem changeSerializedScenarioInfo(
+            int numOfTotalScenarios, String serializedScenarioInfo
+    ) {
+        this.numOfTotalScenarios = numOfTotalScenarios;
+        this.serializedScenarioInfo = serializedScenarioInfo;
+        return this;
+    }
+
+    public void increaseNumOfRewardSets() {
+        this.numOfRewardSets++;
+    }
+
+    public void increaseNumOfRewardSets(int addition) {
+        this.numOfRewardSets += addition;
+    }
+
+    public void decreaseNumOfRewardSets() {
+        this.numOfRewardSets--;
+    }
+
+    public void decreaseNumOfRewardSets(int subtraction) {
+        this.numOfRewardSets -= subtraction;
+    }
+
+    public void reserveRemoval(
+            LocalDateTime now, LocalDate scheduledRemovalDate
+    ) {
+        this.schedueldRemoval = SchedueldRemoval.scheduled(now, scheduledRemovalDate);
+    }
 }

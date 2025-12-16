@@ -24,7 +24,7 @@ public class NumOfProblemScenariosFilterClausesBuilderStrategy
         Integer to = super.castValueOrThrowEx(filter.getTo());
 
         BooleanExpression betweenValues
-                = super.QPA_TARGET.problemInfo.numOfScenarioSet.between(from, to);
+                = super.QP.numOfTotalScenarios.between(from, to);
 
         super.addAndPredicate(filteringClauses, betweenValues);
     }

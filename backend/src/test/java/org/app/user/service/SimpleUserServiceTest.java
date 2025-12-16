@@ -622,19 +622,26 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 String name, String email,
                 String thumbnailUrl, String password
         ) {
-            return initializer.createUser(
-                    name, email, null, pwEncoder.encode(password), thumbnailUrl, false, null
-            );
+            return initializer.userBuilder()
+                    .name(name)
+                    .email(email)
+                    .thumbnail(thumbnailUrl)
+                    .encryptedPassword(pwEncoder.encode(password))
+                    .build();
         }
 
         User createNewWithdrawnUser(
                 String name, String email,
                 String thumbnailUrl, String password
         ) {
-            return initializer.createUser(
-                    name, email, null, pwEncoder.encode(password), thumbnailUrl, true,
-                    LocalDateTime.now()
-            );
+            return initializer.userBuilder()
+                    .name(name)
+                    .email(email)
+                    .encryptedPassword(pwEncoder.encode(password))
+                    .thumbnail(thumbnailUrl)
+                    .withdrawn(true)
+                    .withdrawnAt(LocalDateTime.now())
+                    .build();
         }
 
         @SneakyThrows
@@ -645,16 +652,26 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         ) {
             String serializedSIs = scenarioInfoSerializer.serialize(scenarioInfos);
 
-            return initializer.createProblem(
-                    userId, title, null, null, numOfScenariosToGetReward,
-                    numOfScenariosToFailPlay, visibility, serializedSIs
-            );
+            return initializer.problemBuilder()
+                    .userId(userId)
+                    .title(title)
+                    .numOfScenariosToGetReward(numOfScenariosToGetReward)
+                    .numOfScenariosToFailPlay(numOfScenariosToFailPlay)
+                    .visibility(visibility)
+                    .numOfTotalScenarios(scenarioInfos.length)
+                    .serializedScenarioInfo(serializedSIs)
+                    .build();
         }
 
         Rating createNewRating(
                 Long problemId, Long userId, String comment, int score
         ) {
-            return initializer.createRating(problemId, userId, comment, score);
+            return initializer.ratingBuilder()
+                    .problemId(problemId)
+                    .userId(userId)
+                    .comment(comment)
+                    .score(score)
+                    .build();
         }
 
         protected void initAll() {
