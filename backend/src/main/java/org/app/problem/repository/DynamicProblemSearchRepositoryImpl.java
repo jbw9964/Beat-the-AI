@@ -63,7 +63,7 @@ public class DynamicProblemSearchRepositoryImpl implements DynamicProblemSearchR
                 .from(QP);
 
         Predicate publicProblemClauses = QP.visibility.eq(ProblemVisibility.PUBLIC);
-        Predicate nonRemovalScheduledClauses = QP.schedueldRemoval.doesRemovalScheduled.not();
+        Predicate nonRemovalScheduledClauses = QP.scheduledRemoval.doesRemovalScheduled.not();
         BooleanBuilder filteringClauses = this.buildFilterClauses(filters);
         OrderSpecifier<?>[] orderClauses = this.buildOrderClauses(orders);
 

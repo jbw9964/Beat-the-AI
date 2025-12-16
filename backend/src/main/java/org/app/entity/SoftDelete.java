@@ -2,10 +2,10 @@ package org.app.entity;
 
 public interface SoftDelete {
 
-    SchedueldRemoval getSchedueldRemoval();
+    ScheduledRemoval getScheduledRemoval();
 
     default boolean doesRemovalScheduled() {
-        SchedueldRemoval scheduled = this.getSchedueldRemoval();
+        ScheduledRemoval scheduled = this.getScheduledRemoval();
         return scheduled != null && scheduled.doesRemovalScheduled();
     }
 }

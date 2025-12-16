@@ -40,7 +40,7 @@ public class User extends AuditingCreation implements SoftDelete {
 
     // TODO : 유저 탈퇴 시 관련 자원 배치 삭제도 생각해야 함.
     @Embedded
-    private SchedueldRemoval schedueldRemoval;
+    private ScheduledRemoval scheduledRemoval;
 
     public User(String name) {
         this(name, null, null);
@@ -50,7 +50,7 @@ public class User extends AuditingCreation implements SoftDelete {
         this.name = name;
         this.loginId = loginId;
         this.encryptedPassword = encryptedPassword;
-        this.schedueldRemoval = SchedueldRemoval.notScheduled();
+        this.scheduledRemoval = ScheduledRemoval.notScheduled();
     }
 
     public void changeName(String name) {
@@ -72,7 +72,7 @@ public class User extends AuditingCreation implements SoftDelete {
     public void withdrawUser(
             LocalDateTime now, LocalDate scheduledRemovalDate
     ) {
-        this.schedueldRemoval = SchedueldRemoval.scheduled(
+        this.scheduledRemoval = ScheduledRemoval.scheduled(
                 now, scheduledRemovalDate
         );
     }

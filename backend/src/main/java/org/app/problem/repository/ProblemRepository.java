@@ -12,7 +12,7 @@ public interface ProblemRepository
             select p from Problem p
             left join fetch p.problemAggregation
                 where p.visibility = org.app.entity.ProblemVisibility.PUBLIC
-                and p.schedueldRemoval.doesRemovalScheduled is false
+                and p.scheduledRemoval.doesRemovalScheduled is false
             """)
     Page<Problem> findPublicAndNonSoftDeletedProblemsFetchingAgg(Pageable pageable);
 
@@ -21,7 +21,7 @@ public interface ProblemRepository
             inner join fetch p.user
             left join fetch p.problemAggregation
                 where p.id = :problemId
-                and p.schedueldRemoval.doesRemovalScheduled is false
+                and p.scheduledRemoval.doesRemovalScheduled is false
             """)
     Optional<Problem> findNonSoftDeletedProblemFetchingUserAndAgg(Long problemId);
 }

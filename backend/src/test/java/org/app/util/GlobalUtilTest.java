@@ -125,7 +125,7 @@ class GlobalUtilTest {
     ) implements SoftDelete {
 
         @Override
-        public SchedueldRemoval getSchedueldRemoval() {
+        public ScheduledRemoval getScheduledRemoval() {
             return null;
         }
 

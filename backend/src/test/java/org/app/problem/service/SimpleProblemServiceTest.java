@@ -513,9 +513,9 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
 
         assertThat(problemFind.doesRemovalScheduled()).isFalse();
 
-        SchedueldRemoval schedueldRemoval = problemFind.getSchedueldRemoval();
-        assertThat(schedueldRemoval).isNotNull();
-        assertThat(schedueldRemoval.doesRemovalScheduled()).isFalse();
+        ScheduledRemoval scheduledRemoval = problemFind.getScheduledRemoval();
+        assertThat(scheduledRemoval).isNotNull();
+        assertThat(scheduledRemoval.doesRemovalScheduled()).isFalse();
 
         ProblemAggregation problemAggFind = problemAggregationRepo.findById(response)
                 .orElseThrow(AssertionError::new);
@@ -575,9 +575,9 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
 
         assertThat(problemFind.doesRemovalScheduled()).isFalse();
 
-        SchedueldRemoval schedueldRemoval = problemFind.getSchedueldRemoval();
-        assertThat(schedueldRemoval).isNotNull();
-        assertThat(schedueldRemoval.doesRemovalScheduled()).isFalse();
+        ScheduledRemoval scheduledRemoval = problemFind.getScheduledRemoval();
+        assertThat(scheduledRemoval).isNotNull();
+        assertThat(scheduledRemoval.doesRemovalScheduled()).isFalse();
 
         Optional<ProblemAggregation> empty = problemAggregationRepo.findById(response);
         assertThat(empty).isEmpty();
@@ -776,12 +776,12 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
 
             assertThat(find.doesRemovalScheduled()).isTrue();
 
-            SchedueldRemoval schedueldRemoval = find.getSchedueldRemoval();
-            assertThat(schedueldRemoval).isNotNull();
-            assertThat(schedueldRemoval.doesRemovalScheduled()).isTrue();
-            assertThat(schedueldRemoval.requestedAt())
+            ScheduledRemoval scheduledRemoval = find.getScheduledRemoval();
+            assertThat(scheduledRemoval).isNotNull();
+            assertThat(scheduledRemoval.doesRemovalScheduled()).isTrue();
+            assertThat(scheduledRemoval.requestedAt())
                     .isCloseTo(requestedTime, within(Duration.ofSeconds(5L)));
-            assertThat(schedueldRemoval.scheduedAt()).isNotNull();
+            assertThat(scheduledRemoval.scheduedAt()).isNotNull();
 
             Optional<ProblemAggregation> opt = problemAggregationRepo.findById(response);
             assertThat(opt).isEmpty();

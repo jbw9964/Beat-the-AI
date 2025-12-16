@@ -62,7 +62,7 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
     private ProblemAggregation problemAggregation;
 
     @Embedded
-    private SchedueldRemoval schedueldRemoval;
+    private ScheduledRemoval scheduledRemoval;
 
     public Problem(
             User user, String title, String description, String rewardMessage,
@@ -94,7 +94,7 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
         this.numOfTotalScenarios = numOfTotalScenarios;
         this.serializedScenarioInfo = serializedScenarioInfo;
         this.numOfRewardSets = numOfRewardSets;
-        this.schedueldRemoval = SchedueldRemoval.notScheduled();
+        this.scheduledRemoval = ScheduledRemoval.notScheduled();
     }
 
     public Problem changeTitle(String title) {
@@ -153,7 +153,7 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
     public void reserveRemoval(
             LocalDateTime now, LocalDate scheduledRemovalDate
     ) {
-        this.schedueldRemoval = SchedueldRemoval.scheduled(now, scheduledRemovalDate);
+        this.scheduledRemoval = ScheduledRemoval.scheduled(now, scheduledRemovalDate);
     }
 
     void removeProblemAggregation() {

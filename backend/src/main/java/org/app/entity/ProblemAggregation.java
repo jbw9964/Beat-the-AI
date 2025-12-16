@@ -73,8 +73,8 @@ public class ProblemAggregation extends BaseTimeEntity {
     }
 
     public void prepareAggregationRemoval() {
-        Problem realted = this.getProblem();
-        realted.removeProblemAggregation();
+        Problem related = this.getProblem();
+        related.removeProblemAggregation();
         this.problem = null;
     }
 }

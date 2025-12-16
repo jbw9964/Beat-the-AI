@@ -9,7 +9,7 @@ public interface UserProblemRepository extends JpaRepository<Problem, Long> {
     @Query("""
             select p from Problem p
                 where p.user.id = :userId
-                and p.schedueldRemoval.doesRemovalScheduled is false
+                and p.scheduledRemoval.doesRemovalScheduled is false
             """)
     Page<Problem> findNonSoftDeletedProblemsByUserId(Long userId, Pageable pageable);
 

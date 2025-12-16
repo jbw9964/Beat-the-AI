@@ -8,7 +8,7 @@ import lombok.experimental.*;
 @Getter
 @Embeddable
 @Accessors(fluent = true, chain = false)
-public class SchedueldRemoval {
+public class ScheduledRemoval {
 
     @Column(nullable = false)
     private boolean doesRemovalScheduled;
@@ -17,12 +17,12 @@ public class SchedueldRemoval {
 
     private LocalDateTime scheduedAt;
 
-    protected SchedueldRemoval() {
+    protected ScheduledRemoval() {
         this.doesRemovalScheduled = false;
         this.requestedAt = this.scheduedAt = null;
     }
 
-    protected SchedueldRemoval(
+    protected ScheduledRemoval(
             LocalDateTime requestedAt, LocalDate scheduledDate
     ) {
         this.doesRemovalScheduled = true;
@@ -30,13 +30,13 @@ public class SchedueldRemoval {
         this.scheduedAt = scheduledDate.atStartOfDay().minusMinutes(5L);
     }
 
-    public static SchedueldRemoval notScheduled() {
-        return new SchedueldRemoval();
+    public static ScheduledRemoval notScheduled() {
+        return new ScheduledRemoval();
     }
 
-    public static SchedueldRemoval scheduled(
+    public static ScheduledRemoval scheduled(
             LocalDateTime removalRequestedAt, LocalDate removalScheduledDate
     ) {
-        return new SchedueldRemoval(removalRequestedAt, removalScheduledDate);
+        return new ScheduledRemoval(removalRequestedAt, removalScheduledDate);
     }
 }
