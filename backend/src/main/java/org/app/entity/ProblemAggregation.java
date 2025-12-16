@@ -20,6 +20,7 @@ public class ProblemAggregation extends BaseTimeEntity {
             foreignKey = @ForeignKey(name = "FK__PROBLEM_AGGREGATION_TO_PROBLEM")
     )
     private Problem problem;
+
     @Embedded
     private AggregatedProblemRatingInfo ratingInfo;
 
@@ -69,5 +70,11 @@ public class ProblemAggregation extends BaseTimeEntity {
                 playInfo : new AggregatedProblemPlayInfo();
         this.ratingInfo = ratingInfo != null ?
                 ratingInfo : new AggregatedProblemRatingInfo();
+    }
+
+    public void prepareAggregationRemoval() {
+        Problem realted = this.getProblem();
+        realted.removeProblemAggregation();
+        this.problem = null;
     }
 }

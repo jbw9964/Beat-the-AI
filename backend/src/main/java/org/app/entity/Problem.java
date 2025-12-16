@@ -155,4 +155,8 @@ public class Problem extends BaseTimeEntity implements SoftDelete {
     ) {
         this.schedueldRemoval = SchedueldRemoval.scheduled(now, scheduledRemovalDate);
     }
+
+    void removeProblemAggregation() {
+        this.problemAggregation = null;
+    }
 }
