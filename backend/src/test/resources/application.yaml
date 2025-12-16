@@ -37,6 +37,3 @@ mdc-key:
 logging:
   pattern:
     dateformat: yyyy-MM-dd'T'HH:mm:ss.SSSz,Asia/Seoul
-
-  level:
-    sql: debug
