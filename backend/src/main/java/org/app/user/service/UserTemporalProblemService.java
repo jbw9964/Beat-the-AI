@@ -1,7 +1,6 @@
 package org.app.user.service;
 
 import java.time.*;
-import java.util.function.*;
 import lombok.*;
 import org.app.config.domain.*;
 import org.app.entity.*;
@@ -34,7 +33,7 @@ public class UserTemporalProblemService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<TemporalProblem> find = temporalProblemRepo.findByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
@@ -141,9 +140,8 @@ public class UserTemporalProblemService {
     }
 
     private User findNonWithdrawnUserOrThrowUserNotFoundEx(Long userId) {
-        return globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
+        return globalUtil.getNonSoftDeltedOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new
         );
     }
 

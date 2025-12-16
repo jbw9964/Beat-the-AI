@@ -3,7 +3,6 @@ package org.app.entity;
 import jakarta.persistence.*;
 import java.time.*;
 import lombok.*;
-import lombok.experimental.*;
 
 @Getter
 @Entity
@@ -18,7 +17,7 @@ import lombok.experimental.*;
         }
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends AuditingCreation {
+public class User extends AuditingCreation implements SoftDelete {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,20 +38,19 @@ public class User extends AuditingCreation {
     @Column(length = 255)
     private String thumbnailUrl;
 
-    @Column(nullable = false)
-    @Accessors(fluent = true, chain = false)
-    private boolean withdrawn = false;
-
-    private LocalDate withdrawnAt;
+    // TODO : 유저 탈퇴 시 관련 자원 배치 삭제도 생각해야 함.
+    @Embedded
+    private ScheduledRemoval scheduledRemoval;
 
     public User(String name) {
-        this.name = name;
+        this(name, null, null);
     }
 
     public User(String name, String loginId, String encryptedPassword) {
         this.name = name;
         this.loginId = loginId;
         this.encryptedPassword = encryptedPassword;
+        this.scheduledRemoval = ScheduledRemoval.notScheduled();
     }
 
     public void changeName(String name) {
@@ -71,8 +69,15 @@ public class User extends AuditingCreation {
         this.encryptedPassword = encryptedPw;
     }
 
-    public void withdrawUser(LocalDate withdrawnAt) {
-        this.withdrawn = true;
-        this.withdrawnAt = withdrawnAt;
+    public void withdrawUser(
+            LocalDateTime now, LocalDate scheduledRemovalDate
+    ) {
+        this.scheduledRemoval = ScheduledRemoval.scheduled(
+                now, scheduledRemovalDate
+        );
+    }
+
+    public boolean withdrawn() {
+        return this.doesRemovalScheduled();
     }
 }

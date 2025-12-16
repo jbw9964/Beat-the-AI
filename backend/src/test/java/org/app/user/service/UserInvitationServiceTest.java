@@ -359,40 +359,58 @@ class UserInvitationServiceTest extends IntegrationTestSupport {
     protected static class DataInitFacade {
 
         @Autowired
-        GeneralDataInitializer dataInitializer;
+        GeneralDataInitializer initializer;
 
         User createNewUser() {
-            return dataInitializer.createUser("test", null, null, null, null, false, null);
+            return initializer.userBuilder()
+                    .name("test")
+                    .build();
         }
 
         User createWithdrawnUser() {
-            return dataInitializer.createUser("test", null, null, null, null, true, null);
+            return initializer.userBuilder()
+                    .name("test - withdrawn")
+                    .withdrawn(true)
+                    .withdrawnAt(LocalDateTime.now())
+                    .build();
         }
 
         ReceivedInvitation createNewReceivedInvitation(Long userId, Long problemId, String code) {
-            return dataInitializer.createReceivedInvitation(userId, problemId, code, code);
+            return initializer.receivedInvitationBuilder()
+                    .userId(userId)
+                    .problemId(problemId)
+                    .title("Problem title")
+                    .code(code)
+                    .build();
         }
 
         Problem createNewProblem(Long userId) {
-            return dataInitializer.createProblem(
-                    userId, "temp", null, null, 3, 5,
-                    ProblemVisibility.PRIVATE, "temp"
-            );
+            return initializer.problemBuilder()
+                    .userId(userId)
+                    .title("Temp problem title")
+                    .visibility(ProblemVisibility.PRIVATE)
+                    .serializedScenarioInfo("hi")
+                    .build();
         }
 
         Problem createNewProblem(Long userId, String title) {
-            return dataInitializer.createProblem(
-                    userId, title, null, null, 3, 5,
-                    ProblemVisibility.PRIVATE, "temp"
-            );
+            return initializer.problemBuilder()
+                    .userId(userId)
+                    .title(title)
+                    .visibility(ProblemVisibility.PRIVATE)
+                    .serializedScenarioInfo("hi")
+                    .build();
         }
 
         Invitation createNewInvitation(Long problemId, String code) {
-            return dataInitializer.createInvitation(problemId, code);
+            return initializer.invitationBuilder()
+                    .problemId(problemId)
+                    .code(code)
+                    .build();
         }
 
         void initAll() {
-            dataInitializer.initAll();
+            initializer.initAll();
         }
     }
 }

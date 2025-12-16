@@ -50,7 +50,7 @@ public class DynamicProblemSearchRepositoryImpl implements DynamicProblemSearchR
     }
 
     @Override
-    public Page<Problem> searchPublicProblemWithFilters(
+    public Page<Problem> searchNonSoftDeletedPublicProblemWithFilters(
             List<ProblemFilter<?>> filters,
             List<ProblemOrder> orders,
             Pageable pageable
@@ -63,21 +63,36 @@ public class DynamicProblemSearchRepositoryImpl implements DynamicProblemSearchR
                 .from(QP);
 
         Predicate publicProblemClauses = QP.visibility.eq(ProblemVisibility.PUBLIC);
+        Predicate nonRemovalScheduledClauses = QP.scheduledRemoval.doesRemovalScheduled.not();
         BooleanBuilder filteringClauses = this.buildFilterClauses(filters);
         OrderSpecifier<?>[] orderClauses = this.buildOrderClauses(orders);
 
         log.info("Builded filter clauses: {}", filteringClauses);
 
         List<Problem> result = mainQuery
-                .where(publicProblemClauses, filteringClauses)
-                .orderBy(orderClauses)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .where(
+                        publicProblemClauses,
+                        nonRemovalScheduledClauses,
+                        filteringClauses
+                )
+                .orderBy(
+                        orderClauses
+                )
+                .offset(
+                        pageable.getOffset()
+                )
+                .limit(
+                        pageable.getPageSize()
+                )
                 .setHint(JPA_COMMENT_KEY, MAIN_QUERY_COMMENT)
                 .fetch();
 
         Long count = countQuery
-                .where(publicProblemClauses, filteringClauses)
+                .where(
+                        publicProblemClauses,
+                        nonRemovalScheduledClauses,
+                        filteringClauses
+                )
                 .setHint(JPA_COMMENT_KEY, COUNT_QUERY_COMMENT)
                 .fetchOne();
 

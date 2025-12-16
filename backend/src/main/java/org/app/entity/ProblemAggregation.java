@@ -10,6 +10,7 @@ import lombok.*;
 public class ProblemAggregation extends BaseTimeEntity {
 
     @Id
+    @SuppressWarnings("unused")
     private Long problemId;
 
     @MapsId
@@ -20,25 +21,15 @@ public class ProblemAggregation extends BaseTimeEntity {
     )
     private Problem problem;
 
-    public ProblemAggregation(
-            Problem problem, AggregatedProblemRatingInfo ratingInfo,
-            AggregatedProblemPlayInfo playInfo, AggregatedProblemInfo problemInfo
-    ) {
-        // 원래 this.problemId = problem.getId() 로 하려 했었는데
-        // 테스트 중 org.springframework.orm.ObjectOptimisticLockingFailureException:
-        // Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect)
-        // 에러 발생함.
-        // 아마 entity id 존재하면 일반적으로 deteached 상태로 간주되는데
-        // 이게 @MapsId 랑 뭔가 충돌? 나서 이렇게 발생하는 듯.
-        //this.problemId = problem.getId();
+    @Embedded
+    private AggregatedProblemRatingInfo ratingInfo;
 
-        this.problem = problem;
-        this.ratingInfo = ratingInfo != null ?
-                ratingInfo : new AggregatedProblemRatingInfo();
-        this.playInfo = playInfo != null ?
-                playInfo : new AggregatedProblemPlayInfo();
-        this.problemInfo = problemInfo != null ?
-                problemInfo : new AggregatedProblemInfo();
+    public ProblemAggregation(Problem problem) {
+        this(
+                problem,
+                new AggregatedProblemPlayInfo(),
+                new AggregatedProblemRatingInfo()
+        );
     }
 
     /*
@@ -57,11 +48,33 @@ public class ProblemAggregation extends BaseTimeEntity {
      */
 
     @Embedded
-    private AggregatedProblemRatingInfo ratingInfo;
-
-    @Embedded
     private AggregatedProblemPlayInfo playInfo;
 
-    @Embedded
-    private AggregatedProblemInfo problemInfo;
+    public ProblemAggregation(
+            Problem problem,
+            AggregatedProblemPlayInfo playInfo,
+            AggregatedProblemRatingInfo ratingInfo
+    ) {
+        // 원래 this.problemId = problem.getId() 로 하려 했었는데
+        // 테스트 중 org.springframework.orm.ObjectOptimisticLockingFailureException:
+        // Row was updated or deleted by another transaction (or unsaved-value mapping was incorrect)
+        // 에러 발생함.
+        // 아마 entity id 존재하면 일반적으로 deteached 상태로 간주되는데
+        // 이게 @MapsId 랑 뭔가 충돌? 나서 이렇게 발생하는 듯.
+        //this.problemId = problem.getId();
+
+        this.problem = problem;
+        problem.setProblemAggregation(this);
+
+        this.playInfo = playInfo != null ?
+                playInfo : new AggregatedProblemPlayInfo();
+        this.ratingInfo = ratingInfo != null ?
+                ratingInfo : new AggregatedProblemRatingInfo();
+    }
+
+    public void prepareAggregationRemoval() {
+        Problem related = this.getProblem();
+        related.removeProblemAggregation();
+        this.problem = null;
+    }
 }

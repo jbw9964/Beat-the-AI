@@ -50,7 +50,7 @@ class NumOfProblemScenariosOrderStrategyTest extends IntegrationTestSupport {
         List<Problem> searchResult = this.executeQuery(order);
 
         Comparator<Problem> nopsAscAndNullLast = Comparator.comparing(
-                p -> p.getProblemAggregation().getProblemInfo().getNumOfScenarioSet(),
+                Problem::getNumOfTotalScenarios,
                 Comparator.nullsLast(Comparator.naturalOrder())
         );
 
@@ -73,7 +73,7 @@ class NumOfProblemScenariosOrderStrategyTest extends IntegrationTestSupport {
         List<Problem> searchResult = this.executeQuery(order);
 
         Comparator<Problem> nopsDescAndNullLast = Comparator.comparing(
-                p -> p.getProblemAggregation().getProblemInfo().getNumOfScenarioSet(),
+                Problem::getNumOfTotalScenarios,
                 Comparator.nullsLast(Comparator.reverseOrder())
         );
 
@@ -89,8 +89,7 @@ class NumOfProblemScenariosOrderStrategyTest extends IntegrationTestSupport {
 
         for (int i = 0; i < testSize; i++) {
             String title = String.format("Title %d", i);
-            AggregatedProblemInfo problemInfo = new AggregatedProblemInfo(0, i);
-            data.createNewProblemWithPlayInfo(testUserId, title, problemInfo);
+            data.createNewProblemWithPlayInfo(testUserId, title, i);
         }
 
         log.info("Data has been prepared.");
@@ -130,18 +129,14 @@ class NumOfProblemScenariosOrderStrategyTest extends IntegrationTestSupport {
 
         void createNewProblemWithPlayInfo(
                 Long userId, String title,
-                AggregatedProblemInfo problemInfo
+                int numOfTotalScenarios
         ) {
-            Long problemId = initializer.problemBuilder()
+            initializer.problemBuilder()
                     .userId(userId)
                     .title(title)
                     .visibility(ProblemVisibility.PUBLIC)
-                    .build()
-                    .getId();
-
-            initializer.problemAggregationBuilder()
-                    .problemId(problemId)
-                    .problemInfo(problemInfo)
+                    .numOfTotalScenarios(numOfTotalScenarios)
+                    .serializedScenarioInfo("hi")
                     .build();
         }
 

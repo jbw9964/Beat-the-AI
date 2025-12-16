@@ -18,8 +18,7 @@ public class NumOfProblemScenariosDescOrderStrategy
     public ProblemOrder toOrder(OrderingRequest request) throws OrderTypeMismatchException {
         super.throwExOnOrderTypeMismatch(request.orderType());
 
-        NumberPath<Integer> numOfScenarioSet =
-                super.QPA_TARGET.problemInfo.numOfScenarioSet;
+        NumberPath<Integer> numOfScenarioSet = super.QP.numOfTotalScenarios;
 
         return super.buildProblemOrder(numOfScenarioSet);
     }

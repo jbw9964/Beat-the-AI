@@ -201,6 +201,7 @@ class RatingAvgFilterClausesBuilderStrategyTest extends IntegrationTestSupport {
                     .userId(userId)
                     .title(title)
                     .visibility(ProblemVisibility.PUBLIC)
+                    .serializedScenarioInfo("hi")
                     .build();
 
             initializer.problemAggregationBuilder()

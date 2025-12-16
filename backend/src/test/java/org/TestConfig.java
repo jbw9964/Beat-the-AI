@@ -1,6 +1,7 @@
 package org;
 
 import lombok.*;
+import org.app.config.domain.*;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.*;
 import org.support.*;
@@ -25,12 +26,15 @@ public class TestConfig {
 
     private final TestUserRepository userRepo;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    private final SoftDeletePolicy softDeletePolicy;
+
     @Bean
     public GeneralDataInitializer generalDataInitializer() {
         return new GeneralDataInitializer(
                 gainedRewardRepo, invitationRepo, notificationRepo, playRecordRepo,
                 problemRepo, problemAggregationRepo, ratingRepo, receivedInvitationRepo,
-                rewardRepo, scenarioRecordRepo, temporalProblemRepo, userRepo
+                rewardRepo, scenarioRecordRepo, temporalProblemRepo, userRepo, softDeletePolicy
         );
     }
 

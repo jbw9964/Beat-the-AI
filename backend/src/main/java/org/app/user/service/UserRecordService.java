@@ -2,7 +2,6 @@ package org.app.user.service;
 
 import java.time.*;
 import java.util.*;
-import java.util.function.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.entity.*;
@@ -36,7 +35,7 @@ public class UserRecordService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<PlayRecord> find = playRecordRepo.findByUserId(userId, pageable);
 
         return globalUtil.toSimplePageResponse(find, Util::toSimpleInfo);
@@ -114,7 +113,7 @@ public class UserRecordService {
             );
         }
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
 
         Page<GainedReward> find = gainedRewardRepo.findByPlayRecordId(playRecordId, pageable);
 
@@ -159,6 +158,8 @@ public class UserRecordService {
     @Transactional
     public DeleteMyRewardResponse deleteMyRewards(Long userId, Long playRecordId) {
 
+        // TODO : 이것도 생각해보니까 실제 이미지도 삭제해야됨.
+
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         PlayRecord playRecord = globalUtil.getOrThrow(
@@ -182,9 +183,8 @@ public class UserRecordService {
     }
 
     private void findNonWithdrawnUserOrThrowUserNotFoundEx(Long userId) {
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
+        globalUtil.getNonSoftDeltedOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new
         );
     }
 

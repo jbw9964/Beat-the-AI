@@ -67,9 +67,7 @@ class NumOfProblemScenariosFilterClausesBuilderStrategyTest
         Utils.assertADoesNotContainsAnyB(searchResult1, p30to40s, Problem::getId);
         Utils.assertAllElementsSatisfies(
                 searchResult1, p -> {
-                    int n = p.getProblemAggregation()
-                            .getProblemInfo()
-                            .getNumOfScenarioSet();
+                    int n = p.getNumOfTotalScenarios();
 
                     return i10 <= n && n <= i20;
                 }
@@ -79,9 +77,7 @@ class NumOfProblemScenariosFilterClausesBuilderStrategyTest
         Utils.assertADoesNotContainsAnyB(searchResult2, p10to20s, Problem::getId);
         Utils.assertAllElementsSatisfies(
                 searchResult2, p -> {
-                    int n = p.getProblemAggregation()
-                            .getProblemInfo()
-                            .getNumOfScenarioSet();
+                    int n = p.getNumOfTotalScenarios();
 
                     return i30 <= n && n <= i40;
                 }
@@ -117,17 +113,13 @@ class NumOfProblemScenariosFilterClausesBuilderStrategyTest
         Utils.assertAContainsAllB(searchResult1, pls, Problem::getId);
         Utils.assertADoesNotContainsAnyB(searchResult1, pus, Problem::getId);
         Utils.assertAllElementsSatisfies(
-                searchResult1, p -> p.getProblemAggregation()
-                                            .getProblemInfo()
-                                            .getNumOfScenarioSet() <= threshold
+                searchResult1, p -> p.getNumOfTotalScenarios() <= threshold
         );
 
         Utils.assertAContainsAllB(searchResult2, pus, Problem::getId);
         Utils.assertADoesNotContainsAnyB(searchResult2, pls, Problem::getId);
         Utils.assertAllElementsSatisfies(
-                searchResult2, p -> p.getProblemAggregation()
-                                            .getProblemInfo()
-                                            .getNumOfScenarioSet() >= threshold
+                searchResult2, p -> p.getNumOfTotalScenarios() >= threshold
         );
     }
 
@@ -147,9 +139,8 @@ class NumOfProblemScenariosFilterClausesBuilderStrategyTest
         for (int i = 0; i < testSize; i++) {
             String title = String.format("Title %d", i);
             Integer rand = randoms.get(i);
-            AggregatedProblemInfo playInfo = new AggregatedProblemInfo(0, rand);
             problems.add(data.createNewProblemWithPlayInfo(
-                    testUserId, title, playInfo
+                    testUserId, title, rand
             ));
         }
 
@@ -194,17 +185,19 @@ class NumOfProblemScenariosFilterClausesBuilderStrategyTest
 
         Problem createNewProblemWithPlayInfo(
                 Long userId, String title,
-                AggregatedProblemInfo problemInfo
+                int numOfTotalScenarios
         ) {
             Problem problem = initializer.problemBuilder()
                     .userId(userId)
                     .title(title)
                     .visibility(ProblemVisibility.PUBLIC)
+                    .numOfTotalScenarios(numOfTotalScenarios)
+                    .serializedScenarioInfo("hi")
+                    .numOfRewardSets(0)
                     .build();
 
             initializer.problemAggregationBuilder()
                     .problemId(problem.getId())
-                    .problemInfo(problemInfo)
                     .build();
 
             return problem;

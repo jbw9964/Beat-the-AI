@@ -24,7 +24,7 @@ public class NumOfRewardsFilterClausesBuilderStrategy
         Integer to = super.castValueOrThrowEx(filter.getTo());
 
         BooleanExpression betweenValues
-                = super.QPA_TARGET.problemInfo.numOfRewardSet.between(from, to);
+                = super.QP.numOfRewardSets.between(from, to);
 
         super.addAndPredicate(filteringClauses, betweenValues);
     }

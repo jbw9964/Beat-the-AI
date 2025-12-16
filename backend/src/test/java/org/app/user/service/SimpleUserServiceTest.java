@@ -2,7 +2,6 @@ package org.app.user.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.*;
-import static org.mockito.Mockito.*;
 
 import java.time.*;
 import java.util.*;
@@ -17,7 +16,6 @@ import org.app.user.dto.*;
 import org.app.user.event.*;
 import org.app.user.repository.*;
 import org.app.user.service.SimpleUserServiceTest.*;
-import org.app.util.*;
 import org.app.util.api.*;
 import org.app.util.exception.*;
 import org.junit.jupiter.api.*;
@@ -25,7 +23,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
-import org.springframework.test.context.bean.override.mockito.*;
 import org.springframework.test.context.event.*;
 import org.springframework.transaction.annotation.*;
 import org.support.*;
@@ -54,9 +51,6 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     @Autowired
     PasswordEncoder pwEncoder;
 
-    @MockitoSpyBean
-    DateTimeProvider dateTimeProvider;
-
     @BeforeEach
     void setUp() {
         applicationEvents.clear();
@@ -75,10 +69,6 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
     void withdrawMe() {
         Long userId = testUser.getId();
 
-        LocalDate withdrawnAt = dateTimeProvider.localDateNow();
-        doAnswer(invocation -> withdrawnAt)
-                .when(dateTimeProvider).localDateNow();
-
         Long response = simpleUserService.withdrawMe(userId);
 
         assertThat(response).isNotNull().isEqualTo(userId);
@@ -88,7 +78,6 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
 
         User get = find.get();
         assertThat(get.withdrawn()).isTrue();
-        assertThat(get.getWithdrawnAt()).isNotNull().isEqualTo(withdrawnAt);
     }
 
     @Test
@@ -450,11 +439,9 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         String tempStr = "SOMETHING";
 
         {
-            LocalDate withdrawnDate = dateTimeProvider.localDateNow();
-
             User newWithdrawnUser = data.createNewWithdrawnUser(
                     "testWITHDRAWN", "testWITHDRAWNEMAIL",
-                    "testTHUMBNAIL", "testPW", withdrawnDate
+                    "testTHUMBNAIL", "testPW"
             );
 
             withdrawnUserId = newWithdrawnUser.getId();
@@ -635,19 +622,26 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
                 String name, String email,
                 String thumbnailUrl, String password
         ) {
-            return initializer.createUser(
-                    name, email, null, pwEncoder.encode(password), thumbnailUrl, false, null
-            );
+            return initializer.userBuilder()
+                    .name(name)
+                    .email(email)
+                    .thumbnail(thumbnailUrl)
+                    .encryptedPassword(pwEncoder.encode(password))
+                    .build();
         }
 
         User createNewWithdrawnUser(
                 String name, String email,
-                String thumbnailUrl, String password,
-                LocalDate withdrawnAt
+                String thumbnailUrl, String password
         ) {
-            return initializer.createUser(
-                    name, email, null, pwEncoder.encode(password), thumbnailUrl, true, withdrawnAt
-            );
+            return initializer.userBuilder()
+                    .name(name)
+                    .email(email)
+                    .encryptedPassword(pwEncoder.encode(password))
+                    .thumbnail(thumbnailUrl)
+                    .withdrawn(true)
+                    .withdrawnAt(LocalDateTime.now())
+                    .build();
         }
 
         @SneakyThrows
@@ -658,16 +652,26 @@ class SimpleUserServiceTest extends IntegrationTestSupport {
         ) {
             String serializedSIs = scenarioInfoSerializer.serialize(scenarioInfos);
 
-            return initializer.createProblem(
-                    userId, title, null, null, numOfScenariosToGetReward,
-                    numOfScenariosToFailPlay, visibility, serializedSIs
-            );
+            return initializer.problemBuilder()
+                    .userId(userId)
+                    .title(title)
+                    .numOfScenariosToGetReward(numOfScenariosToGetReward)
+                    .numOfScenariosToFailPlay(numOfScenariosToFailPlay)
+                    .visibility(visibility)
+                    .numOfTotalScenarios(scenarioInfos.length)
+                    .serializedScenarioInfo(serializedSIs)
+                    .build();
         }
 
         Rating createNewRating(
                 Long problemId, Long userId, String comment, int score
         ) {
-            return initializer.createRating(problemId, userId, comment, score);
+            return initializer.ratingBuilder()
+                    .problemId(problemId)
+                    .userId(userId)
+                    .comment(comment)
+                    .score(score)
+                    .build();
         }
 
         protected void initAll() {

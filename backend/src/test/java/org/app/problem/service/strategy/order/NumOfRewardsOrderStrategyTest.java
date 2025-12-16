@@ -50,7 +50,7 @@ class NumOfRewardsOrderStrategyTest extends IntegrationTestSupport {
         List<Problem> searchResult = this.executeQuery(order);
 
         Comparator<Problem> norAscAndNullLast = Comparator.comparing(
-                p -> p.getProblemAggregation().getProblemInfo().getNumOfRewardSet(),
+                Problem::getNumOfRewardSets,
                 Comparator.nullsLast(Comparator.naturalOrder())
         );
 
@@ -73,7 +73,7 @@ class NumOfRewardsOrderStrategyTest extends IntegrationTestSupport {
         List<Problem> searchResult = this.executeQuery(order);
 
         Comparator<Problem> norDescAndNullLast = Comparator.comparing(
-                p -> p.getProblemAggregation().getProblemInfo().getNumOfRewardSet(),
+                Problem::getNumOfRewardSets,
                 Comparator.nullsLast(Comparator.reverseOrder())
         );
 
@@ -89,8 +89,7 @@ class NumOfRewardsOrderStrategyTest extends IntegrationTestSupport {
 
         for (int i = 0; i < testSize; i++) {
             String title = String.format("Title %d", i);
-            AggregatedProblemInfo problemInfo = new AggregatedProblemInfo(i, 0);
-            data.createNewProblemWithPlayInfo(testUserId, title, problemInfo);
+            data.createNewProblemWithPlayInfo(testUserId, title, i);
         }
 
         log.info("Data has been prepared.");
@@ -130,18 +129,14 @@ class NumOfRewardsOrderStrategyTest extends IntegrationTestSupport {
 
         void createNewProblemWithPlayInfo(
                 Long userId, String title,
-                AggregatedProblemInfo problemInfo
+                int numOfRewardSets
         ) {
-            Long problemId = initializer.problemBuilder()
+            initializer.problemBuilder()
                     .userId(userId)
                     .title(title)
                     .visibility(ProblemVisibility.PUBLIC)
-                    .build()
-                    .getId();
-
-            initializer.problemAggregationBuilder()
-                    .problemId(problemId)
-                    .problemInfo(problemInfo)
+                    .numOfRewardSets(numOfRewardSets)
+                    .serializedScenarioInfo("hi")
                     .build();
         }
 

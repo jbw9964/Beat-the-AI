@@ -455,6 +455,7 @@ class UserTemporalProblemServiceTest extends IntegrationTestSupport {
             return initializer.userBuilder()
                     .name("withdrawn test user")
                     .withdrawn(true)
+                    .withdrawnAt(LocalDateTime.now())
                     .build();
         }
 

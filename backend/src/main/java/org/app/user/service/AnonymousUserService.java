@@ -2,7 +2,6 @@ package org.app.user.service;
 
 import java.time.*;
 import java.util.*;
-import java.util.function.*;
 import lombok.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
@@ -24,10 +23,7 @@ public class AnonymousUserService {
 
     public GetUserResponse getUser(Long userId, Long authenticatedUserId) {
 
-        User find = globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        User find = this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         String username = find.getName();
         String email = find.getEmail();
@@ -42,12 +38,9 @@ public class AnonymousUserService {
             Long userId, int pageNo, int pageSize, Long authenticatedUserId
     ) {
 
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = globalUtil.pageable(pageNo, pageSize);
         Page<PlayRecord> find
                 = playRecordRepo.findPublicRecordsByUserId(userId, pageable);
 
@@ -62,10 +55,7 @@ public class AnonymousUserService {
             Long userId, Long recordId, Long authenticatedUserId
     ) {
 
-        globalUtil.getOrThrow(
-                userId, userRepo::findById, UserNotFoundException::new,
-                Predicate.not(User::withdrawn)
-        );
+        this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
         PlayRecord find = globalUtil.getOrThrow(
                 recordId, playRecordRepo::findPublicRecordsByIdFetchingScenarioRecords,
@@ -83,6 +73,12 @@ public class AnonymousUserService {
 
         return new GetPublicRecordResponse(
                 detailedPlayRecordInfo, submittedScenarioInfos, isMine
+        );
+    }
+
+    private User findNonWithdrawnUserOrThrowUserNotFoundEx(Long userId) {
+        return globalUtil.getNonSoftDeltedOrThrow(
+                userId, userRepo::findById, UserNotFoundException::new
         );
     }
 

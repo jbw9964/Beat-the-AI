@@ -6,5 +6,11 @@ import org.springframework.data.jpa.repository.*;
 
 public interface UserProblemRepository extends JpaRepository<Problem, Long> {
 
-    Page<Problem> findByUserId(Long userId, Pageable pageable);
+    @Query("""
+            select p from Problem p
+                where p.user.id = :userId
+                and p.scheduledRemoval.doesRemovalScheduled is false
+            """)
+    Page<Problem> findNonSoftDeletedProblemsByUserId(Long userId, Pageable pageable);
+
 }
