@@ -102,7 +102,7 @@ public class ProblemInfoAdaptor {
                 request.title(), request.description(),
                 request.rewardMessage(), toGetReward,
                 toFailPlay != null ? toFailPlay : scenarioInfos.length,
-                request.visibility(), serializedScenarioInfo
+                request.visibility(), scenarioInfos.length, serializedScenarioInfo
         );
     }
 
@@ -127,7 +127,7 @@ public class ProblemInfoAdaptor {
                 request.title(), request.description(),
                 request.rewardMessage(), toGetReward,
                 toFailPlay != null ? toFailPlay : scenarioInfos.length,
-                serializedScenarioInfo
+                scenarioInfos.length, serializedScenarioInfo
         );
     }
 }

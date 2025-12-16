@@ -6,6 +6,7 @@ public record SerializedProblemUpdateInfo(
         String rewardMessage,
         int numOfScenariosToGetReward,
         int numOfScenariosToFailPlay,
+        int numOfTotalScenarios,
         String serializedScenarioInfo
 ) {
 

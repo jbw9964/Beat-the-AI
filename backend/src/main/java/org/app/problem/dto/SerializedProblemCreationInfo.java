@@ -9,6 +9,7 @@ public record SerializedProblemCreationInfo(
         int numOfScenariosToGetReward,
         int numOfScenariosToFailPlay,
         ProblemVisibility visibility,
+        int numOfTotalScenarios,
         String serializedScenarioInfo
 ) {
 
