@@ -13,6 +13,10 @@ import org.springframework.transaction.annotation.*;
 public class GeneralDataInitializer {
 
     private static final NotificationSetting setting = null;
+
+    private final TestOverviewRewardImageRepository overviewRewardImageRepo;
+    private final TestActualRewardImageRepository actualRewardImageRepo;
+
     private final TestGainedRewardRepository gainedRewardRepo;
     private final TestInvitationRepository invitationRepo;
     private final TestNotificationRepository notificationRepo;
@@ -27,6 +31,42 @@ public class GeneralDataInitializer {
     private final TestUserRepository userRepo;
 
     private final SoftDeletePolicy softDeletePolicy;
+
+    @Builder(builderMethodName = "actualRewardImageBuilder")
+    public ActualRewardImage createActualRewardImage(
+            RewardStorageType storageType,
+            byte[] actualImage, String actualImagePath
+    ) {
+        ActualRewardImage actualRewardImage;
+
+        switch (storageType) {
+            case LOCAL_STORAGE -> actualRewardImage
+                    = new LocalStorageActualRewardImage(actualImage);
+            case AWS_S3 -> actualRewardImage
+                    = new AwsS3ActualRewardImage(actualImagePath);
+            default -> throw new IllegalArgumentException("Unsupported storage type");
+        }
+
+        return actualRewardImageRepo.save(actualRewardImage);
+    }
+
+    @Builder(builderMethodName = "overviewRewardImageBuilder")
+    public OverviewRewardImage createOverviewRewardImage(
+            RewardStorageType storageType,
+            byte[] overviewImage, String overviewImagePath
+    ) {
+        OverviewRewardImage overviewRewardImage;
+
+        switch (storageType) {
+            case LOCAL_STORAGE -> overviewRewardImage
+                    = new LocalStorageOverviewRewardImage(overviewImage);
+            case AWS_S3 -> overviewRewardImage
+                    = new AwsS3OverviewRewardImage(overviewImagePath);
+            default -> throw new IllegalArgumentException("Unsupported storage type");
+        }
+
+        return overviewRewardImageRepo.save(overviewRewardImage);
+    }
 
     @Builder(builderMethodName = "gainedRewardBuilder")
     public GainedReward createGainedReward(

@@ -11,6 +11,9 @@ import org.support.*;
 @EnableJpaRepositories(basePackageClasses = TestConfig.class, considerNestedRepositories = true)
 public class TestConfig {
 
+    private final TestOverviewRewardImageRepository overviewRewardImageRepo;
+    private final TestActualRewardImageRepository actualRewardImageRepo;
+
     private final TestGainedRewardRepository gainedRewardRepo;
     private final TestInvitationRepository invitationRepo;
     private final TestNotificationRepository notificationRepo;
@@ -32,6 +35,7 @@ public class TestConfig {
     @Bean
     public GeneralDataInitializer generalDataInitializer() {
         return new GeneralDataInitializer(
+                overviewRewardImageRepo, actualRewardImageRepo,
                 gainedRewardRepo, invitationRepo, notificationRepo, playRecordRepo,
                 problemRepo, problemAggregationRepo, ratingRepo, receivedInvitationRepo,
                 rewardRepo, scenarioRecordRepo, temporalProblemRepo, userRepo, softDeletePolicy
