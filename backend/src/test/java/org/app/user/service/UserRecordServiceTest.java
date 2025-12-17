@@ -267,11 +267,10 @@ class UserRecordServiceTest extends IntegrationTestSupport {
             playRecordId = playRecord.getId();
 
             gainedRewards = new ArrayList<>(numOfTotal);
-            RewardStorageType storageType = RewardStorageType.LOCAL_STORAGE;
 
             for (int i = 0; i < numOfTotal; i++) {
                 gainedRewards.add(data.createGainedReward(
-                        userId, playRecordId, (long) i, storageType
+                        userId, playRecordId, (long) i
                 ));
             }
         }
@@ -322,7 +321,7 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                     userId, 35L, PlayRecordStatus.CLEARED, PlayRecordVisibility.PRIVATE
             ).getId();
             entity = data.createGainedReward(
-                    userId, playRecordId, 355L, RewardStorageType.LOCAL_STORAGE
+                    userId, playRecordId, 355L
             );
             gainedRewardId = entity.getId();
         }
@@ -357,7 +356,7 @@ class UserRecordServiceTest extends IntegrationTestSupport {
             entities = new ArrayList<>(numOfTotal);
             for (int i = 0; i < numOfTotal; i++) {
                 entities.add(data.createGainedReward(
-                        userId, playRecordId, (long) i, RewardStorageType.LOCAL_STORAGE
+                        userId, playRecordId, (long) i
                 ));
             }
         }
@@ -394,8 +393,7 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                     PlayRecordStatus.CLEARED, PlayRecordVisibility.PRIVATE
             ).getId();
             existingGainedRewardId = data.createGainedReward(
-                    existingUserId, existingPlayRecordId,
-                    33L, RewardStorageType.LOCAL_STORAGE
+                    existingUserId, existingPlayRecordId, 33L
             ).getId();
         }
 
@@ -532,8 +530,7 @@ class UserRecordServiceTest extends IntegrationTestSupport {
                     PlayRecordStatus.PLAYING, PlayRecordVisibility.PUBLIC
             ).getId();
             anotherUserOwnedGainedRewardId = data.createGainedReward(
-                    anotherUserId, anotherUserOwnedPlayRecordId,
-                    333L, RewardStorageType.LOCAL_STORAGE
+                    anotherUserId, anotherUserOwnedPlayRecordId, 333L
             ).getId();
         }
 
@@ -642,18 +639,22 @@ class UserRecordServiceTest extends IntegrationTestSupport {
         }
 
         GainedReward createGainedReward(
-                Long userId, Long playRecordId, Long rewardId,
-                RewardStorageType storageType
+                Long userId, Long playRecordId, Long rewardId
         ) {
+            byte[] tempImg = "temp".getBytes();
+            Long actaulImageId = initializer.actualRewardImageBuilder()
+                    .storageType(RewardStorageType.LOCAL_STORAGE)
+                    .actualImage(tempImg)
+                    .build()
+                    .getId();
+
             String description = UUID.randomUUID().toString();
-            String location = UUID.randomUUID().toString();
             return initializer.gainedRewardBuilder()
                     .userId(userId)
                     .playRecordId(playRecordId)
+                    .actualRewardImageId(actaulImageId)
                     .rewardId(rewardId)
                     .description(description)
-                    .location(location)
-                    .storageType(storageType)
                     .build();
         }
 

@@ -13,6 +13,10 @@ import org.springframework.transaction.annotation.*;
 public class GeneralDataInitializer {
 
     private static final NotificationSetting setting = null;
+
+    private final TestOverviewRewardImageRepository overviewRewardImageRepo;
+    private final TestActualRewardImageRepository actualRewardImageRepo;
+
     private final TestGainedRewardRepository gainedRewardRepo;
     private final TestInvitationRepository invitationRepo;
     private final TestNotificationRepository notificationRepo;
@@ -28,17 +32,56 @@ public class GeneralDataInitializer {
 
     private final SoftDeletePolicy softDeletePolicy;
 
+    @Builder(builderMethodName = "actualRewardImageBuilder")
+    public ActualRewardImage createActualRewardImage(
+            RewardStorageType storageType,
+            byte[] actualImage, String actualImagePath
+    ) {
+        ActualRewardImage actualRewardImage;
+
+        switch (storageType) {
+            case LOCAL_STORAGE -> actualRewardImage
+                    = new LocalStorageActualRewardImage(actualImage);
+            case AWS_S3 -> actualRewardImage
+                    = new AwsS3ActualRewardImage(actualImagePath);
+            default -> throw new IllegalArgumentException("Unsupported storage type");
+        }
+
+        return actualRewardImageRepo.save(actualRewardImage);
+    }
+
+    @Builder(builderMethodName = "overviewRewardImageBuilder")
+    public OverviewRewardImage createOverviewRewardImage(
+            RewardStorageType storageType,
+            byte[] overviewImage, String overviewImagePath
+    ) {
+        OverviewRewardImage overviewRewardImage;
+
+        switch (storageType) {
+            case LOCAL_STORAGE -> overviewRewardImage
+                    = new LocalStorageOverviewRewardImage(overviewImage);
+            case AWS_S3 -> overviewRewardImage
+                    = new AwsS3OverviewRewardImage(overviewImagePath);
+            default -> throw new IllegalArgumentException("Unsupported storage type");
+        }
+
+        return overviewRewardImageRepo.save(overviewRewardImage);
+    }
+
     @Builder(builderMethodName = "gainedRewardBuilder")
     public GainedReward createGainedReward(
-            Long userId, Long playRecordId, Long rewardId,
-            String description, String location,
-            RewardStorageType storageType
+            Long userId, Long playRecordId, Long actualRewardImageId,
+            Long rewardId, String description
     ) {
         User findUser = userRepo.findById(userId).orElseThrow(AssertionError::new);
         PlayRecord findRecord = playRecordRepo.findById(playRecordId)
                 .orElseThrow(AssertionError::new);
+        ActualRewardImage findActualImg = actualRewardImageRepo.findById(actualRewardImageId)
+                .orElseThrow(AssertionError::new);
+
         GainedReward gainedReward = new GainedReward(
-                findUser, findRecord, rewardId, description, location, storageType
+                findUser, findRecord, rewardId, description,
+                findActualImg
         );
         return gainedRewardRepo.save(gainedReward);
     }
@@ -92,14 +135,20 @@ public class GeneralDataInitializer {
     }
 
     public Reward createReward(
-            Long problemId, String description, String originLocation,
-            String overviewLocation,
-            RewardStorageType storageType, boolean hasTransferred
+            Long problemId, Long actualRewardImageId,
+            Long overviewRewardImageId, String description,
+            boolean hasTransferred
     ) {
         Problem find = problemRepo.findById(problemId).orElseThrow(AssertionError::new);
+        OverviewRewardImage findOverviewImg = overviewRewardImageRepo.findById(
+                        overviewRewardImageId)
+                .orElseThrow(AssertionError::new);
+        ActualRewardImage findActualImg = actualRewardImageRepo.findById(actualRewardImageId)
+                .orElseThrow(AssertionError::new);
+
         Reward reward = new Reward(
-                find, description, originLocation, overviewLocation,
-                storageType, hasTransferred
+                find, description, hasTransferred,
+                findOverviewImg, findActualImg
         );
         return rewardRepo.save(reward);
     }
