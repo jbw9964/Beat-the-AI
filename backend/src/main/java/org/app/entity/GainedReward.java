@@ -34,33 +34,22 @@ public class GainedReward extends AuditingCreation {
     @Column(length = 50, updatable = false)
     private String description;
 
-    @Column(length = 255, nullable = false, updatable = false)
-    private String location;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, updatable = false)
-    private RewardStorageType storageType;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "actual_reward_image_id", nullable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "FK__GAINED_REWARD_TO_ACTUAL_IMAGE")
+    )
+    private ActualRewardImage actualRewardImage;
 
     public GainedReward(
             User user, PlayRecord playRecord,
-            String location, RewardStorageType storageType
-    ) {
-        this.user = user;
-        this.playRecord = playRecord;
-        this.location = location;
-        this.storageType = storageType;
-    }
-
-    public GainedReward(
-            User user, PlayRecord playRecord, Long rewardId,
-            String description, String location,
-            RewardStorageType storageType
+            Long rewardId, String description,
+            ActualRewardImage actualRewardImage
     ) {
         this.user = user;
         this.playRecord = playRecord;
         this.rewardId = rewardId;
         this.description = description;
-        this.location = location;
-        this.storageType = storageType;
+        this.actualRewardImage = actualRewardImage;
     }
 }

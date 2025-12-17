@@ -6,19 +6,7 @@ import lombok.experimental.*;
 
 @Getter
 @Entity
-@Table(
-        name = "reward",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "UK__REWARD_ORIGIN_LOCATION",
-                        columnNames = "origin_location"
-                ),
-                @UniqueConstraint(
-                        name = "UK__REWARD_OVERVIEW_LOCATION",
-                        columnNames = "overview_location"
-                )
-        }
-)
+@Table(name = "reward")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reward extends AuditingCreation {
 
@@ -36,41 +24,44 @@ public class Reward extends AuditingCreation {
     @Column(length = 50)
     private String description;
 
-    @Column(name = "origin_location", length = 255, nullable = false, updatable = false)
-    private String originLocation;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "overview_reward_image_id", nullable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "FK__REWARD_TO_OVERVIEW_IMAGE")
+    )
+    private OverviewRewardImage overviewRewardImage;
 
-    @Column(name = "overview_location", length = 255, nullable = false, updatable = false)
-    private String overviewLocation;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RewardStorageType storageType;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "actual_reward_image_id", nullable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "FK__REWARD_TO_ACTUAL_IMAGE")
+    )
+    private ActualRewardImage actualRewardImage;
 
     @Column(nullable = false)
     @Accessors(fluent = true, chain = false)
     private boolean hasTransferred;
 
     public Reward(
-            Problem problem, String originLocation,
-            String overviewLocation, RewardStorageType storageType
+            Problem problem,
+            OverviewRewardImage overviewRewardImage,
+            ActualRewardImage actualRewardImage
     ) {
-        this.problem = problem;
-        this.originLocation = originLocation;
-        this.overviewLocation = overviewLocation;
-        this.storageType = storageType;
-        this.hasTransferred = false;
+        this(
+                problem, null, false,
+                overviewRewardImage, actualRewardImage
+        );
     }
 
     public Reward(
-            Problem problem, String description,
-            String originLocation, String overviewLocation,
-            RewardStorageType storageType, boolean hasTransferred
+            Problem problem, String description, boolean hasTransferred,
+            OverviewRewardImage overviewRewardImage,
+            ActualRewardImage actualRewardImage
     ) {
         this.problem = problem;
         this.description = description;
-        this.originLocation = originLocation;
-        this.overviewLocation = overviewLocation;
-        this.storageType = storageType;
         this.hasTransferred = hasTransferred;
+        this.overviewRewardImage = overviewRewardImage;
+        this.actualRewardImage = actualRewardImage;
     }
 }

@@ -70,15 +70,18 @@ public class GeneralDataInitializer {
 
     @Builder(builderMethodName = "gainedRewardBuilder")
     public GainedReward createGainedReward(
-            Long userId, Long playRecordId, Long rewardId,
-            String description, String location,
-            RewardStorageType storageType
+            Long userId, Long playRecordId, Long actualRewardImageId,
+            Long rewardId, String description
     ) {
         User findUser = userRepo.findById(userId).orElseThrow(AssertionError::new);
         PlayRecord findRecord = playRecordRepo.findById(playRecordId)
                 .orElseThrow(AssertionError::new);
+        ActualRewardImage findActualImg = actualRewardImageRepo.findById(actualRewardImageId)
+                .orElseThrow(AssertionError::new);
+
         GainedReward gainedReward = new GainedReward(
-                findUser, findRecord, rewardId, description, location, storageType
+                findUser, findRecord, rewardId, description,
+                findActualImg
         );
         return gainedRewardRepo.save(gainedReward);
     }
@@ -132,14 +135,20 @@ public class GeneralDataInitializer {
     }
 
     public Reward createReward(
-            Long problemId, String description, String originLocation,
-            String overviewLocation,
-            RewardStorageType storageType, boolean hasTransferred
+            Long problemId, Long actualRewardImageId,
+            Long overviewRewardImageId, String description,
+            boolean hasTransferred
     ) {
         Problem find = problemRepo.findById(problemId).orElseThrow(AssertionError::new);
+        OverviewRewardImage findOverviewImg = overviewRewardImageRepo.findById(
+                        overviewRewardImageId)
+                .orElseThrow(AssertionError::new);
+        ActualRewardImage findActualImg = actualRewardImageRepo.findById(actualRewardImageId)
+                .orElseThrow(AssertionError::new);
+
         Reward reward = new Reward(
-                find, description, originLocation, overviewLocation,
-                storageType, hasTransferred
+                find, description, hasTransferred,
+                findOverviewImg, findActualImg
         );
         return rewardRepo.save(reward);
     }
