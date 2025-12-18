@@ -2,7 +2,7 @@ package org.app.user.service;
 
 import java.util.*;
 import lombok.*;
-import org.app.config.domain.*;
+import org.app.config.domain.scenario.*;
 import org.app.entity.*;
 import org.app.user.dto.*;
 import org.app.user.dto.request.*;

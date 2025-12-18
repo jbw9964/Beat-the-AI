@@ -1,4 +1,4 @@
-package org.app.config.domain;
+package org.app.config.domain.scenario;
 
 public class InvalidScenarioInfoException extends RuntimeException {
 

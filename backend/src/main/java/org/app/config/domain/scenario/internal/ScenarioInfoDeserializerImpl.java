@@ -1,10 +1,10 @@
-package org.app.config.domain.internal;
+package org.app.config.domain.scenario.internal;
 
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import lombok.*;
 import lombok.extern.slf4j.*;
-import org.app.config.domain.*;
+import org.app.config.domain.scenario.*;
 import org.app.entity.*;
 
 @Slf4j

@@ -3,7 +3,7 @@ package org.app.problem.service;
 import com.fasterxml.jackson.core.*;
 import java.util.*;
 import lombok.*;
-import org.app.config.domain.*;
+import org.app.config.domain.scenario.*;
 import org.app.entity.*;
 import org.app.problem.dto.*;
 import org.app.problem.dto.request.*;
