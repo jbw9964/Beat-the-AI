@@ -643,7 +643,7 @@ class UserRecordServiceTest extends IntegrationTestSupport {
         ) {
             byte[] tempImg = "temp".getBytes();
             Long actaulImageId = initializer.actualRewardImageBuilder()
-                    .storageType(RewardStorageType.LOCAL_STORAGE)
+                    .storageType(RewardStorageType.DB)
                     .actualImage(tempImg)
                     .build()
                     .getId();

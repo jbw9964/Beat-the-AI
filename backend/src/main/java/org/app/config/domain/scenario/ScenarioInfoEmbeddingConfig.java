@@ -1,7 +1,7 @@
-package org.app.config.domain;
+package org.app.config.domain.scenario;
 
 import com.fasterxml.jackson.databind.*;
-import org.app.config.domain.internal.*;
+import org.app.config.domain.scenario.internal.*;
 import org.springframework.context.annotation.*;
 
 @Configuration

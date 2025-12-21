@@ -1,7 +1,7 @@
-package org.app.config.domain.internal;
+package org.app.config.domain.scenario.internal;
 
 import java.util.*;
-import org.app.config.domain.*;
+import org.app.config.domain.scenario.*;
 import org.app.entity.*;
 
 public class ScenarioInfoValidatorImpl implements ScenarioInfoValidator {

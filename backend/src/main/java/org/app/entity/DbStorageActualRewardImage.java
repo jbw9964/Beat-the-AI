@@ -5,22 +5,22 @@ import lombok.*;
 
 @Getter
 @Entity
-@Table(name = "local_storage_actual_reward_image")
-@DiscriminatorValue(value = RewardStorageType.Names.LOCAL_STORAGE)
+@Table(name = "db_storage_actual_reward_image")
+@DiscriminatorValue(value = RewardStorageType.Names.DB)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LocalStorageActualRewardImage extends ActualRewardImage {
+public class DbStorageActualRewardImage extends ActualRewardImage {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(nullable = false)
     private byte[] actualImage;
 
-    public LocalStorageActualRewardImage(byte[] actualImage) {
+    public DbStorageActualRewardImage(byte[] actualImage) {
         this.actualImage = actualImage;
     }
 
     @Override
     public RewardStorageType getStorageType() {
-        return RewardStorageType.LOCAL_STORAGE;
+        return RewardStorageType.DB;
     }
 }

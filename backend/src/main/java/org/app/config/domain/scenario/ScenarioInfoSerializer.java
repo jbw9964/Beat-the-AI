@@ -1,4 +1,4 @@
-package org.app.config.domain;
+package org.app.config.domain.scenario;
 
 import com.fasterxml.jackson.core.*;
 import java.util.*;

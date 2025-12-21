@@ -5,10 +5,15 @@ spring:
   modulith.detection-strategy: explicitly-annotated
 
   profiles:
-    default: test
+    default: test-local
     group:
-      test:
+      test-local:
         - test-secret
+        - directory-secret
+
+      test-github-ci:
+        - test-secret
+        - github-ci-directory-secret
 
   ai:
     openai:
@@ -36,6 +41,11 @@ mdc-key:
 
 soft-delete:
   hours-to-schedule-removal: 72
+
+reward-image:
+  base-directory: "${directory.backed-data}/reward-image"
+  temporal-saving-abs-location: "${reward-image.base-directory}/temp"
+  server-storing-abs-location: "${reward-image.base-directory}/storage"
 
 logging:
   pattern:

@@ -4,6 +4,7 @@ import java.time.*;
 import java.util.*;
 import lombok.*;
 import org.app.config.domain.*;
+import org.app.config.domain.scenario.*;
 import org.app.entity.*;
 import org.app.user.domain.exception.*;
 import org.app.user.dto.*;

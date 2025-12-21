@@ -4,11 +4,9 @@ import jakarta.validation.*;
 import lombok.extern.slf4j.*;
 import org.app.util.api.*;
 import org.springdoc.core.annotations.*;
-import org.springframework.context.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Profile("test")
 @RestController
 @RequestMapping(PagingTestController.BASE_URL)
 public class PagingTestController {

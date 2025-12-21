@@ -86,6 +86,14 @@ tasks.named('test') {
     jvmArgs += ['-Xshare:off', '-Duser.timezone=Asia/Seoul']
 }
 
+// gradle test 시 pass 된 jvm arg 스프링 테스트에도 넘어가도록 구성
+tasks.withType(Test).configureEach {
+    def profile = System.getProperty("spring.profiles.active")
+    if (profile) {
+        jvmArgs "-Dspring.profiles.active=${profile}"
+    }
+}
+
 jar {
     enabled = false
 }

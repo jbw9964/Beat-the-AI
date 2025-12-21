@@ -13,6 +13,7 @@ spring:
         - local-database
         - local-redis
         - common-secret
+        - directory-secret
 
   ai:
     openai:
@@ -61,6 +62,11 @@ mdc-key:
 
 soft-delete:
   hours-to-schedule-removal: 72
+
+reward-image:
+  base-directory: "${directory.backed-data}/reward-image"
+  temporal-saving-abs-location: "${reward-image.base-directory}/temp"
+  server-storing-abs-location: "${reward-image.base-directory}/storage"
 
 logging:
   pattern:

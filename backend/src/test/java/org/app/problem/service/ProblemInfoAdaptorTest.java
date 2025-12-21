@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.*;
 import org.*;
-import org.app.config.domain.*;
+import org.app.config.domain.scenario.*;
 import org.app.entity.*;
 import org.app.problem.dto.*;
 import org.app.problem.dto.request.*;

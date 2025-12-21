@@ -14,7 +14,7 @@ services:
       TZ: 'Asia/Seoul'
 
     volumes:
-      - ../app/backend/mysql:/var/lib/mysql
+      - ../app/data/backend/mysql:/var/lib/mysql
 
 
   redis:
@@ -25,4 +25,4 @@ services:
       - "6379:6379"
 
     volumes:
-      - ../app/backend/redis/data:/data
+      - ../app/data/backend/redis/data:/data

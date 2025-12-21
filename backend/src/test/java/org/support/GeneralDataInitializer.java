@@ -40,8 +40,10 @@ public class GeneralDataInitializer {
         ActualRewardImage actualRewardImage;
 
         switch (storageType) {
-            case LOCAL_STORAGE -> actualRewardImage
-                    = new LocalStorageActualRewardImage(actualImage);
+            case DB -> actualRewardImage
+                    = new DbStorageActualRewardImage(actualImage);
+            case SERVER -> actualRewardImage
+                    = new ServerStorageActualRewardImage(actualImagePath);
             case AWS_S3 -> actualRewardImage
                     = new AwsS3ActualRewardImage(actualImagePath);
             default -> throw new IllegalArgumentException("Unsupported storage type");
@@ -58,8 +60,10 @@ public class GeneralDataInitializer {
         OverviewRewardImage overviewRewardImage;
 
         switch (storageType) {
-            case LOCAL_STORAGE -> overviewRewardImage
-                    = new LocalStorageOverviewRewardImage(overviewImage);
+            case DB -> overviewRewardImage
+                    = new DbStorageOverviewRewardImage(overviewImage);
+            case SERVER -> overviewRewardImage
+                    = new ServerStorageOverviewRewardImage(overviewImagePath);
             case AWS_S3 -> overviewRewardImage
                     = new AwsS3OverviewRewardImage(overviewImagePath);
             default -> throw new IllegalArgumentException("Unsupported storage type");
@@ -238,6 +242,8 @@ public class GeneralDataInitializer {
         initPlayDomain();
 
         initUserDomain();
+
+        initRewards();
     }
 
     private void initProblemDomain() {
@@ -259,6 +265,11 @@ public class GeneralDataInitializer {
         this.deleteAll(temporalProblemRepo);
         this.deleteAll(receivedInvitationRepo);
         this.deleteAll(userRepo);
+    }
+
+    private void initRewards() {
+        this.deleteAll(actualRewardImageRepo);
+        this.deleteAll(overviewRewardImageRepo);
     }
 
     private <E, I> void deleteAll(

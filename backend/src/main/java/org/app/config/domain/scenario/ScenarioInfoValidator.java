@@ -1,4 +1,4 @@
-package org.app.config.domain;
+package org.app.config.domain.scenario;
 
 import java.util.*;
 import org.app.entity.*;
