@@ -242,6 +242,8 @@ public class GeneralDataInitializer {
         initPlayDomain();
 
         initUserDomain();
+
+        initRewards();
     }
 
     private void initProblemDomain() {
@@ -263,6 +265,11 @@ public class GeneralDataInitializer {
         this.deleteAll(temporalProblemRepo);
         this.deleteAll(receivedInvitationRepo);
         this.deleteAll(userRepo);
+    }
+
+    private void initRewards() {
+        this.deleteAll(actualRewardImageRepo);
+        this.deleteAll(overviewRewardImageRepo);
     }
 
     private <E, I> void deleteAll(
