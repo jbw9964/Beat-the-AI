@@ -5,14 +5,14 @@ import org.app.entity.*;
 import org.app.util.exception.*;
 
 public abstract sealed
-class AbstractReardImageInvokingStrategy<A extends ActualRewardImage, O extends OverviewRewardImage>
+class AbstractRewardImageInvokingStrategy<A extends ActualRewardImage, O extends OverviewRewardImage>
         implements RewardImageInvokerStrategy
-        permits DbStorageInvockingStrategy, ServerStorageInvockingStrategy {
+        permits DbStorageInvokingStrategy, ServerStorageInvokingStrategy {
 
     private final Class<A> actualRewardImageEntityClass;
     private final Class<O> overviewRewardImageEntityClass;
 
-    protected AbstractReardImageInvokingStrategy(
+    protected AbstractRewardImageInvokingStrategy(
             Class<A> actualRewardImageEntityClass,
             Class<O> overviewRewardImageEntityClass
     ) {

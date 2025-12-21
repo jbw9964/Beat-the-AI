@@ -7,13 +7,13 @@ import org.app.entity.*;
 import org.springframework.stereotype.*;
 
 @Component
-public non-sealed class DbStorageInvockingStrategy
-        extends AbstractReardImageInvokingStrategy<DbStorageActualRewardImage,
+public non-sealed class DbStorageInvokingStrategy
+        extends AbstractRewardImageInvokingStrategy<DbStorageActualRewardImage,
         DbStorageOverviewRewardImage> {
 
     private final EntityEditor entityEditor;
 
-    public DbStorageInvockingStrategy(EntityEditor entityEditor) {
+    public DbStorageInvokingStrategy(EntityEditor entityEditor) {
         super(
                 DbStorageActualRewardImage.class,
                 DbStorageOverviewRewardImage.class

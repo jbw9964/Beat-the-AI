@@ -26,9 +26,9 @@ import org.support.*;
 
 
 @RecordApplicationEvents
-@Import(ServerStorageInvockingStrategyTest.DataInitFacade.class)
+@Import(ServerStorageInvokingStrategyTest.DataInitFacade.class)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-class ServerStorageInvockingStrategyTest extends IntegrationTestSupport {
+class ServerStorageInvokingStrategyTest extends IntegrationTestSupport {
 
     static Path storageBasePath;
 
@@ -36,16 +36,16 @@ class ServerStorageInvockingStrategyTest extends IntegrationTestSupport {
     String rewardImageStorageBaseDirectory;
 
     @Autowired
-    ServerStorageInvockingStrategy strategy;
+    ServerStorageInvokingStrategy strategy;
 
     @MockitoSpyBean
     MockableFiles mockedFiles;
 
     @MockitoSpyBean
-    UUidProvider mockedUidProvider;
+    UuidProvider mockedUidProvider;
 
     @MockitoSpyBean
-    EntityEditor mockecEntityEditor;
+    EntityEditor mockedEntityEditor;
 
     @Autowired
     ApplicationEvents applicationEvents;
@@ -332,7 +332,7 @@ class ServerStorageInvockingStrategyTest extends IntegrationTestSupport {
                 .write(newFilePath, image);
 
         doThrow(new RuntimeException())
-                .when(mockecEntityEditor)
+                .when(mockedEntityEditor)
                 .saveEntities(any(), any());
 
         assertThatThrownBy(() -> strategy.saveRewardImages(image, image))
@@ -430,7 +430,7 @@ class ServerStorageInvockingStrategyTest extends IntegrationTestSupport {
                     .write(any(), any());
 
             doThrow(new RuntimeException())
-                    .when(mockecEntityEditor)
+                    .when(mockedEntityEditor)
                     .saveEntities(any(), any());
 
             assertThatThrownBy(() -> strategy.saveRewardImages(image1, image2))

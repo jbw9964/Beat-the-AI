@@ -15,21 +15,21 @@ import org.springframework.stereotype.*;
 
 @Slf4j
 @Component
-public non-sealed class ServerStorageInvockingStrategy
-        extends AbstractReardImageInvokingStrategy<ServerStorageActualRewardImage,
+public non-sealed class ServerStorageInvokingStrategy
+        extends AbstractRewardImageInvokingStrategy<ServerStorageActualRewardImage,
         ServerStorageOverviewRewardImage> {
 
     private final Path storageBasePath;
-    private final UUidProvider uuidProvider;
+    private final UuidProvider uuidProvider;
     private final EntityEditor entityEditor;
     private final ApplicationEventPublisher eventPublisher;
 
     private final MockableFiles files;
 
-    public ServerStorageInvockingStrategy(
+    public ServerStorageInvokingStrategy(
             @Value("${reward-image.server-storing-abs-location}")
             String storageBasePath,
-            UUidProvider uuidProvider,
+            UuidProvider uuidProvider,
             EntityEditor entityEditor,
             ApplicationEventPublisher eventPublisher,
             MockableFiles files

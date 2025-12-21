@@ -20,7 +20,7 @@ public class ImageBlurerImpl implements ImageBlurer {
             1f / 16f, 2f / 16f, 1f / 16f
     };
 
-    private static final ConvolveOp CONVLUTION = new ConvolveOp(
+    private static final ConvolveOp CONVOLUTION = new ConvolveOp(
             new Kernel(3, 3, GAUSSIAN_FILTER_3X3),
             ConvolveOp.EDGE_NO_OP, null
     );
@@ -86,7 +86,7 @@ public class ImageBlurerImpl implements ImageBlurer {
             log.info("Downscaling image with ratio: {}", ratio);
             BufferedImage downscaledImage = resizeImage(source, downWidth, downHeight);
 
-            BufferedImage blurredImage = CONVLUTION.filter(downscaledImage, null);
+            BufferedImage blurredImage = CONVOLUTION.filter(downscaledImage, null);
 
             log.info("Upscaling image with ratio: {}", ratio);
             BufferedImage upscaledImage = resizeImage(blurredImage, originWidth, originHeight);

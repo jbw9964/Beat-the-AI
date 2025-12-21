@@ -13,12 +13,12 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import org.support.*;
 
-@Import(DbStorageInvockingStrategyTest.DataInitFacade.class)
+@Import(DbStorageInvokingStrategyTest.DataInitFacade.class)
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-class DbStorageInvockingStrategyTest extends IntegrationTestSupport {
+class DbStorageInvokingStrategyTest extends IntegrationTestSupport {
 
     @Autowired
-    DbStorageInvockingStrategy strategy;
+    DbStorageInvokingStrategy strategy;
 
     @Autowired
     DataInitFacade data;
