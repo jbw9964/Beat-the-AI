@@ -3,9 +3,13 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # Custom exclusion
-app/backend/mysql/
-app/backend/redis/data/
+app/data/backend/mysql/
+app/data/backend/redis/data/
+app/data/backend/reward-image/
+app/test/
 backend/src/main/resources/application-common-secret.yaml
+backend/src/main/resources/application-directory-secret.yaml
+backend/src/test/resources/application-directory-secret.yaml
 
 # User-specific stuff
 .idea/
