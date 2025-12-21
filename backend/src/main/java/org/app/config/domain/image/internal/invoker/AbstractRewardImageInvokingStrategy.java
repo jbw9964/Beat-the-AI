@@ -60,7 +60,7 @@ class AbstractRewardImageInvokingStrategy<A extends ActualRewardImage, O extends
                     String.format(
                             "Failed to cast entity (%s) to clazz (%s)",
                             entity.getClass().getSimpleName(),
-                            actualRewardImageEntityClass.getSimpleName()
+                            overviewRewardImageEntityClass.getSimpleName()
                     ),
                     "보상 이미지를 처리하던중 예상치 못한 에러가 발생했습니다.", e
             );

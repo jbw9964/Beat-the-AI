@@ -118,7 +118,7 @@ class DbStorageInvokingStrategyTest extends IntegrationTestSupport {
 
         assertThat(response).isNotNull().isEqualTo(entity.getId());
 
-        Optional<ActualRewardImage> find = actualRewardImageRepo.findById(response);
+        Optional<OverviewRewardImage> find = overviewRewardImageRepo.findById(response);
         assertThat(find).isEmpty();
     }
 

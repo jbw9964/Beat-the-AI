@@ -74,7 +74,7 @@ public class EntityEditor {
         LocalDate removalDate = softDeletePolicy.getRemovalDateOn(now);
 
         switch (storageType) {
-            case DB -> actualRewardImageRepo.deleteById(id);
+            case DB -> overviewRewardImageRepo.deleteById(id);
             case SERVER -> {
                 ServerStorageOverviewRewardImage casted
                         = (ServerStorageOverviewRewardImage) removalEntity;
