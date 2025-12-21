@@ -5,9 +5,9 @@ spring:
   modulith.detection-strategy: explicitly-annotated
 
   profiles:
-    default: test-local-mac
+    default: test-local
     group:
-      test-local-mac:
+      test-local:
         - test-secret
         - directory-secret
 

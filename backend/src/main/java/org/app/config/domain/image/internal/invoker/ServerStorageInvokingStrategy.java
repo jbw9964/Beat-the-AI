@@ -1,5 +1,6 @@
 package org.app.config.domain.image.internal.invoker;
 
+import jakarta.annotation.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -19,7 +20,8 @@ public non-sealed class ServerStorageInvokingStrategy
         extends AbstractRewardImageInvokingStrategy<ServerStorageActualRewardImage,
         ServerStorageOverviewRewardImage> {
 
-    private final Path storageBasePath;
+    private final String storageBasePathStr;
+    private Path storageBasePath;
     private final UuidProvider uuidProvider;
     private final EntityEditor entityEditor;
     private final ApplicationEventPublisher eventPublisher;
@@ -28,7 +30,7 @@ public non-sealed class ServerStorageInvokingStrategy
 
     public ServerStorageInvokingStrategy(
             @Value("${reward-image.server-storing-abs-location}")
-            String storageBasePath,
+            String storageBasePathStr,
             UuidProvider uuidProvider,
             EntityEditor entityEditor,
             ApplicationEventPublisher eventPublisher,
@@ -38,17 +40,22 @@ public non-sealed class ServerStorageInvokingStrategy
                 ServerStorageActualRewardImage.class,
                 ServerStorageOverviewRewardImage.class
         );
+        this.storageBasePathStr = storageBasePathStr;
         this.uuidProvider = uuidProvider;
         this.entityEditor = entityEditor;
         this.eventPublisher = eventPublisher;
         this.files = files;
+    }
 
-        if (storageBasePath == null || storageBasePath.isBlank()) {
-            throw new IllegalArgumentException("storageBasePath cannot be null or blank");
+    @PostConstruct
+    void initStorageBasePath() {
+
+        if (this.storageBasePathStr == null || this.storageBasePathStr.isBlank()) {
+            throw new IllegalArgumentException("storageBasePathStr cannot be null or blank");
         }
 
         try {
-            Path basePath = Paths.get(storageBasePath);
+            Path basePath = Paths.get(storageBasePathStr);
 
             if (!files.exists(basePath)) {
                 files.createDirectories(basePath);
@@ -74,7 +81,7 @@ public non-sealed class ServerStorageInvokingStrategy
 
         log.debug(
                 "Initialized server storage invocking strategy with base path: {}",
-                storageBasePath
+                storageBasePathStr
         );
     }
 
