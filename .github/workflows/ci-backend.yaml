@@ -41,7 +41,7 @@ jobs:
         id: test
         shell: bash
         run: |
-          ./gradlew test --build-cache --parallel
+          ./gradlew test --build-cache --parallel -Dspring.profiles.active=test-github-ci
 
       - name: Add test result as comment
         continue-on-error: true

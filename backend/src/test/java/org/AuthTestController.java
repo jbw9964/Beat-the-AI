@@ -3,13 +3,11 @@ package org;
 import lombok.extern.slf4j.*;
 import org.app.config.security.domain.*;
 import org.app.util.api.*;
-import org.springframework.context.annotation.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.core.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Profile("test")
 @RestController
 @RequestMapping(AuthTestController.BASE_URL)
 public class AuthTestController {
