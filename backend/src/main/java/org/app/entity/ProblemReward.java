@@ -26,42 +26,42 @@ public class ProblemReward extends AuditingCreation {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "overview_reward_image_id", nullable = false, updatable = false,
-            foreignKey = @ForeignKey(name = "FK__REWARD_TO_OVERVIEW_IMAGE")
-    )
-    private OverviewRewardImage overviewRewardImage;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
             name = "actual_reward_image_id", nullable = false, updatable = false,
             foreignKey = @ForeignKey(name = "FK__REWARD_TO_ACTUAL_IMAGE")
     )
     private ActualRewardImage actualRewardImage;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "overview_reward_image_id", nullable = false, updatable = false,
+            foreignKey = @ForeignKey(name = "FK__REWARD_TO_OVERVIEW_IMAGE")
+    )
+    private OverviewRewardImage overviewRewardImage;
 
     @Column(nullable = false)
     @Accessors(fluent = true, chain = false)
     private boolean hasTransferred;
 
     public ProblemReward(
-            Problem problem,
-            OverviewRewardImage overviewRewardImage,
-            ActualRewardImage actualRewardImage
+            Problem problem, String description,
+            ActualRewardImage actualRewardImage,
+            OverviewRewardImage overviewRewardImage
     ) {
         this(
-                problem, null, false,
-                overviewRewardImage, actualRewardImage
+                problem, description, false,
+                actualRewardImage, overviewRewardImage
         );
     }
 
     public ProblemReward(
             Problem problem, String description, boolean hasTransferred,
-            OverviewRewardImage overviewRewardImage,
-            ActualRewardImage actualRewardImage
+            ActualRewardImage actualRewardImage,
+            OverviewRewardImage overviewRewardImage
     ) {
         this.problem = problem;
         this.description = description;
         this.hasTransferred = hasTransferred;
-        this.overviewRewardImage = overviewRewardImage;
         this.actualRewardImage = actualRewardImage;
+        this.overviewRewardImage = overviewRewardImage;
     }
 }

@@ -153,7 +153,7 @@ public class GeneralDataInitializer {
 
         ProblemReward problemReward = new ProblemReward(
                 find, description, hasTransferred,
-                findOverviewImg, findActualImg
+                findActualImg, findOverviewImg
         );
         return problemRewardRepo.save(problemReward);
     }

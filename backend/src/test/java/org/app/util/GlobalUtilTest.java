@@ -35,26 +35,6 @@ class GlobalUtilTest {
     }
 
     @Test
-    @DisplayName("GetOrThrow 가 정상 작동한다.")
-    void testGetOrThrow() {
-        int identity = 1, value = 2;
-        int notExistingIdentity = Integer.MAX_VALUE;
-
-        testMap.put(identity, value);
-        testMap.remove(notExistingIdentity);
-
-        Integer get = globalUtil.getOrThrow(
-                identity, this::getOptionalMapValue, CustomException::new
-        );
-        assertThat(get).isEqualTo(value);
-
-        assertThatThrownBy(() -> globalUtil.getOrThrow(
-                notExistingIdentity, this::getOptionalMapValue, CustomException::new
-        ))
-                .isInstanceOf(CustomException.class);
-    }
-
-    @Test
     @DisplayName("Filter 를 포함한 GetOrThrow 가 정상 작동한다.")
     void testGetOrThrowFilter() {
         int identity1 = 1, value1 = 2;

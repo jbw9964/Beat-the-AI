@@ -57,10 +57,10 @@ public class AnonymousUserService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        PlayRecord find = globalUtil.getOrThrow(
-                recordId, playRecordRepo::findPublicRecordsByIdFetchingScenarioRecords,
-                PublicPlayRecordNotFoundException::new
-        );
+        PlayRecord find = playRecordRepo.findPublicRecordsByIdFetchingScenarioRecords(
+                        recordId
+                )
+                .orElseThrow(PublicPlayRecordNotFoundException::new);
 
         DetailedPlayRecordInfo detailedPlayRecordInfo = Util.toDetailedInfo(find);
         List<ScenarioRecordInfo> submittedScenarioInfos
