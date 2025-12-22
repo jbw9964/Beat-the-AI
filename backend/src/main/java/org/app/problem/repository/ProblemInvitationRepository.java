@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.*;
 public interface ProblemInvitationRepository extends JpaRepository<Invitation, Long> {
 
     @Query("""
-            select i from Invitation i
-            where i.code in :codes
+            select count(i) from Invitation i
+                where i.code in :codes
             """)
-    List<Invitation> findAllByCodes(List<String> codes);
+    long countAllByCodes(List<String> codes);
 
 }

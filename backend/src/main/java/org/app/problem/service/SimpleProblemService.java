@@ -28,8 +28,8 @@ public class SimpleProblemService {
     private final ProblemRepository problemRepo;
     private final ProblemAggregationRepository problemAggregationRepo;
     private final ProblemUserRepository userRepo;
-    private final ProblemReceivedInvitationRepository receivedInvitationRepo;
-    private final ProblemInvitationRepository invitationRepo;
+
+    private final ProblemInfoAccessAuthorizer accessAuthorizer;
 
     private final DateTimeProvider dateTimeProvider;
     private final SoftDeletePolicy softDeletePolicy;
@@ -72,48 +72,14 @@ public class SimpleProblemService {
                 )
                 .orElseThrow(ProblemNotFoundException::new);
 
-        Long createdUserId = find.getUser().getId();
-        boolean isMine = createdUserId.equals(authenticatedUserId);
-
-        // 내가 생성한 문제거나 public 속성일 땐 바로 응답.
-        if (
-                isMine ||
-                find.getVisibility().equals(ProblemVisibility.PUBLIC)
-        ) {
-            // TODO : 생각해보니 자기 문제인데 탈퇴했으면 어떻게 처리할지 생각 안해봄.
-            //  일단 그냥 응답하게 만들었는데 생각해서 바꾸던가 해야됨.
-            return Utils.toDetailedInfo(find, isMine);
+        if (!accessAuthorizer.accessable(find, authenticatedUserId)) {
+            throw new ForbiddenException("해당 문제에 접근할 권한이 없습니다.");
         }
 
-        // 남이 만든 private 문제. 초대되어야만 접근 가능
-        boolean invited = false;
+        boolean isMine = find.getUser().getId()
+                .equals(authenticatedUserId);
 
-        if (authenticatedUserId != null) {
-
-            // 사용자 탈퇴했으면 block
-            this.findNonWithdrawnUserOrThrowUserNotFoundEx(authenticatedUserId);
-
-            // 사용자가 해당 문제와 관련되 갖고있는 초대 코드
-            List<String> userReceivedInvitationCodes
-                    = receivedInvitationRepo.findAllByUserIdAndProblemId(
-                            authenticatedUserId, problemId
-                    )
-                    .stream()
-                    .map(ReceivedInvitation::getCode)
-                    .toList();
-
-            if (!userReceivedInvitationCodes.isEmpty()) {
-                invited = !invitationRepo.findAllByCodes(
-                        userReceivedInvitationCodes
-                ).isEmpty();
-            }
-        }
-
-        if (!invited) {
-            throw new ForbiddenException("해당 문제는 초대된 사용자만 접근할 수 있습니다.");
-        }
-
-        return Utils.toDetailedInfo(find, false);
+        return Utils.toDetailedInfo(find, isMine);
     }
 
     // 문제 생성하기
