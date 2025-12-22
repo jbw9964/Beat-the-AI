@@ -23,7 +23,7 @@ public class TestConfig {
 
     private final TestRatingRepository ratingRepo;
     private final TestReceivedInvitationRepository receivedInvitationRepo;
-    private final TestRewardRepository rewardRepo;
+    private final TestProblemRewardRepository problemRewardRepo;
     private final TestScenarioRecordRepository scenarioRecordRepo;
     private final TestTemporalProblemRepository temporalProblemRepo;
 
@@ -38,7 +38,8 @@ public class TestConfig {
                 overviewRewardImageRepo, actualRewardImageRepo,
                 gainedRewardRepo, invitationRepo, notificationRepo, playRecordRepo,
                 problemRepo, problemAggregationRepo, ratingRepo, receivedInvitationRepo,
-                rewardRepo, scenarioRecordRepo, temporalProblemRepo, userRepo, softDeletePolicy
+                problemRewardRepo, scenarioRecordRepo, temporalProblemRepo, userRepo,
+                softDeletePolicy
         );
     }
 

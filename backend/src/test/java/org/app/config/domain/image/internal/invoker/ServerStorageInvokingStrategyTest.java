@@ -342,7 +342,7 @@ class ServerStorageInvokingStrategyTest extends IntegrationTestSupport {
     @Test
     @DisplayName("이미지 저장시 에러가 발생하면 서버 이미지를 삭제하는 event 가 발생한다.")
     void testRemoveOrphanServerFileEvent() throws IOException {
-        long timeToWaitEventNotPubed = 2L;
+        long timeToWaitEventNotPubed = 1L;
         long timeToWaitEventValidationSec = 5L;
         long pollDelayMs = 50L;
 

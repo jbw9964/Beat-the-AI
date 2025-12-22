@@ -6,9 +6,9 @@ import lombok.experimental.*;
 
 @Getter
 @Entity
-@Table(name = "reward")
+@Table(name = "problem_reward")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Reward extends AuditingCreation {
+public class ProblemReward extends AuditingCreation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class Reward extends AuditingCreation {
     @Accessors(fluent = true, chain = false)
     private boolean hasTransferred;
 
-    public Reward(
+    public ProblemReward(
             Problem problem,
             OverviewRewardImage overviewRewardImage,
             ActualRewardImage actualRewardImage
@@ -53,7 +53,7 @@ public class Reward extends AuditingCreation {
         );
     }
 
-    public Reward(
+    public ProblemReward(
             Problem problem, String description, boolean hasTransferred,
             OverviewRewardImage overviewRewardImage,
             ActualRewardImage actualRewardImage
