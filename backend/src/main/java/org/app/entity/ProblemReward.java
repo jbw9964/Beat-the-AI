@@ -64,4 +64,8 @@ public class ProblemReward extends AuditingCreation {
         this.actualRewardImage = actualRewardImage;
         this.overviewRewardImage = overviewRewardImage;
     }
+
+    public void changeDescription(String description) {
+        this.description = description;
+    }
 }
