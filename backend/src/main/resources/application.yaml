@@ -17,7 +17,15 @@ spring:
 
   ai:
     openai:
-      api-key: ${api-key.openai}
+      api-key: ${common-secret.api-key.openai}
+
+  servlet.multipart:
+    enabled: true
+    location: ${reward-image.temporal-saving-abs-location}
+    file-size-threshold: 0B           # 이 값보다 높은 파일은 지정한 디렉토리에, 작으면 메모리에 임시 저장 시킨다.
+    max-file-size: ${common-secret.multipart-info.max-file-size}
+    max-request-size: ${common-secret.multipart-info.max-request-size}
+    strict-servlet-compliance: true   # MultipartFile 받는건 multipart/form-data 요청만 허용한다.
 
   datasource:
     url: ${db.url}
@@ -64,9 +72,17 @@ soft-delete:
   hours-to-schedule-removal: 72
 
 reward-image:
-  base-directory: "${directory.backed-data}/reward-image"
+  base-directory: "${directory-secret.backend-data}/reward-image"
   temporal-saving-abs-location: "${reward-image.base-directory}/temp"
   server-storing-abs-location: "${reward-image.base-directory}/storage"
+
+jwt:
+  at:
+    sign: ${common-secret.jwt.access-token.signature}
+    exp: ${common-secret.jwt.access-token.expiration}
+  rt:
+    sign: ${common-secret.jwt.refresh-token.signature}
+    exp: ${common-secret.jwt.refresh-token.expiration}
 
 logging:
   pattern:

@@ -118,6 +118,7 @@ public class SecurityFilterChainConfig {
                         ).permitAll()
 
                         // problem domain
+                        // problem infos
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/problem",
@@ -125,6 +126,13 @@ public class SecurityFilterChainConfig {
                         ).permitAll()
                         .requestMatchers(
                                 HttpMethod.POST, "/api/problem/search-public"
+                        ).permitAll()
+
+                        // problem reward infos
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/problem/{problem-id:\\d+}/reward",
+                                "/api/problem/{problem-id:\\d+}/reward/{reward-id:\\d+}/overview"
                         ).permitAll()
 
                         // endpoints for auth testing
@@ -140,6 +148,9 @@ public class SecurityFilterChainConfig {
 
                         // endpoint for page request testing
                         .requestMatchers("/api/paging-testing/get").permitAll()
+
+                        // endpoint for multipart testing
+                        .requestMatchers("/api/multipart-testing").permitAll()
 
                         .anyRequest().authenticated()
                 )

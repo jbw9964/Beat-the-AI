@@ -10,9 +10,9 @@ public class AccessTokenManager extends AbstractTokenManager {
     private static final String AT_ISS = "Beat the AI - AT";
 
     protected AccessTokenManager(
-            @Value("${jwt.access-token.signature}")
+            @Value("${jwt.at.sign}")
             String signature,
-            @Value("${jwt.access-token.expiration}")
+            @Value("${jwt.at.exp}")
             long expiration,
             DateTimeProvider dateTimeProvider
     ) {

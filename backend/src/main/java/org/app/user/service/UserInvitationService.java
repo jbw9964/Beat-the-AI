@@ -83,10 +83,8 @@ public class UserInvitationService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        ReceivedInvitation find = globalUtil.getOrThrow(
-                receivedInvitationId, receivedInvitationRepo::findById,
-                ReceivedInvitationNotFoundException::new
-        );
+        ReceivedInvitation find = receivedInvitationRepo.findById(receivedInvitationId)
+                .orElseThrow(ReceivedInvitationNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("자신이 수령한 코드만 조회할 수 있습니다.");
@@ -103,10 +101,8 @@ public class UserInvitationService {
     public Long deleteMyInvitation(Long userId, Long receivedInvitationId) {
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        ReceivedInvitation find = globalUtil.getOrThrow(
-                receivedInvitationId, receivedInvitationRepo::findById,
-                ReceivedInvitationNotFoundException::new
-        );
+        ReceivedInvitation find = receivedInvitationRepo.findById(receivedInvitationId)
+                .orElseThrow(ReceivedInvitationNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("자신이 수령한 코드만 삭제할 수 있습니다.");

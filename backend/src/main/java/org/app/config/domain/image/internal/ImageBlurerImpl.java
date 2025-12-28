@@ -55,6 +55,8 @@ public class ImageBlurerImpl implements ImageBlurer {
     @Override
     public byte[] blurImage(byte[] image) throws FailedToCreateBlurImageException {
 
+        log.info("Creating blur image...");
+
         try (
                 ByteArrayInputStream in = new ByteArrayInputStream(image);
                 ByteArrayOutputStream out = new ByteArrayOutputStream()

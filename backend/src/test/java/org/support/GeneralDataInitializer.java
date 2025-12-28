@@ -25,7 +25,7 @@ public class GeneralDataInitializer {
     private final TestProblemAggregationRepository problemAggregationRepo;
     private final TestRatingRepository ratingRepo;
     private final TestReceivedInvitationRepository receivedInvitationRepo;
-    private final TestRewardRepository rewardRepo;
+    private final TestProblemRewardRepository problemRewardRepo;
     private final TestScenarioRecordRepository scenarioRecordRepo;
     private final TestTemporalProblemRepository temporalProblemRepo;
     private final TestUserRepository userRepo;
@@ -138,7 +138,8 @@ public class GeneralDataInitializer {
         return playRecordRepo.save(playRecord);
     }
 
-    public Reward createReward(
+    @Builder(builderMethodName = "problemRewardBuilder")
+    public ProblemReward createProblemReward(
             Long problemId, Long actualRewardImageId,
             Long overviewRewardImageId, String description,
             boolean hasTransferred
@@ -150,11 +151,11 @@ public class GeneralDataInitializer {
         ActualRewardImage findActualImg = actualRewardImageRepo.findById(actualRewardImageId)
                 .orElseThrow(AssertionError::new);
 
-        Reward reward = new Reward(
+        ProblemReward problemReward = new ProblemReward(
                 find, description, hasTransferred,
-                findOverviewImg, findActualImg
+                findActualImg, findOverviewImg
         );
-        return rewardRepo.save(reward);
+        return problemRewardRepo.save(problemReward);
     }
 
     @Builder(builderMethodName = "scenarioRecordBuilder")
@@ -248,7 +249,7 @@ public class GeneralDataInitializer {
 
     private void initProblemDomain() {
         this.deleteAll(invitationRepo);
-        this.deleteAll(rewardRepo);
+        this.deleteAll(problemRewardRepo);
         this.deleteAll(ratingRepo);
         this.deleteAll(problemAggregationRepo);
         this.deleteAll(problemRepo);

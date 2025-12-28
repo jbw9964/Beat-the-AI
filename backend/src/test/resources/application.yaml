@@ -8,16 +8,24 @@ spring:
     default: test-local
     group:
       test-local:
-        - test-secret
-        - directory-secret
+        - test-common-secret
+        - test-directory-secret
 
       test-github-ci:
-        - test-secret
-        - github-ci-directory-secret
+        - test-common-secret
+        - test-github-ci-directory-secret
 
   ai:
     openai:
-      api-key: ${api-key.openai}
+      api-key: ${common-secret.api-key.openai}
+
+  servlet.multipart:
+    enabled: true
+    location: ${reward-image.temporal-saving-abs-location}
+    file-size-threshold: 0B
+    max-file-size: 1KB
+    max-request-size: ${common-secret.multipart-info.max-request-size}
+    strict-servlet-compliance: true
 
   datasource:
     url: jdbc:h2:mem:test
@@ -43,9 +51,17 @@ soft-delete:
   hours-to-schedule-removal: 72
 
 reward-image:
-  base-directory: "${directory.backed-data}/reward-image"
+  base-directory: "${directory-secret.backend-data}/reward-image"
   temporal-saving-abs-location: "${reward-image.base-directory}/temp"
   server-storing-abs-location: "${reward-image.base-directory}/storage"
+
+jwt:
+  at:
+    sign: ${common-secret.jwt.access-token.signature}
+    exp: ${common-secret.jwt.access-token.expiration}
+  rt:
+    sign: ${common-secret.jwt.refresh-token.signature}
+    exp: ${common-secret.jwt.refresh-token.expiration}
 
 logging:
   pattern:

@@ -9,7 +9,7 @@ app/data/backend/reward-image/
 app/test/
 backend/src/main/resources/application-common-secret.yaml
 backend/src/main/resources/application-directory-secret.yaml
-backend/src/test/resources/application-directory-secret.yaml
+backend/src/test/resources/application-test-directory-secret.yaml
 
 # User-specific stuff
 .idea/

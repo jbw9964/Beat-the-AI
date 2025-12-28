@@ -46,10 +46,8 @@ public class UserTemporalProblemService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        TemporalProblem find = globalUtil.getOrThrow(
-                temporalId, temporalProblemRepo::findById,
-                TemporalProblemNotFoundException::new
-        );
+        TemporalProblem find = temporalProblemRepo.findById(temporalId)
+                .orElseThrow(TemporalProblemNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("임시저장 내용은 자기 자신만 조회할 수 있습니다.");
@@ -98,10 +96,8 @@ public class UserTemporalProblemService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        TemporalProblem find = globalUtil.getOrThrow(
-                temporalId, temporalProblemRepo::findById,
-                TemporalProblemNotFoundException::new
-        );
+        TemporalProblem find = temporalProblemRepo.findById(temporalId)
+                .orElseThrow(TemporalProblemNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("임시저장 내용은 자기 자신만 수정할 수 있습니다.");
@@ -125,10 +121,8 @@ public class UserTemporalProblemService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        TemporalProblem find = globalUtil.getOrThrow(
-                temporalId, temporalProblemRepo::findById,
-                TemporalProblemNotFoundException::new
-        );
+        TemporalProblem find = temporalProblemRepo.findById(temporalId)
+                .orElseThrow(TemporalProblemNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("임시저장 내용은 자기 자신만 삭제할 수 있습니다.");

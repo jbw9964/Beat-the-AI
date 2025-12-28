@@ -165,9 +165,8 @@ public class SimpleUserService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        Rating find = globalUtil.getOrThrow(
-                ratingId, ratingRepo::findById, RatingNotFoundException::new
-        );
+        Rating find = ratingRepo.findById(ratingId)
+                .orElseThrow(RatingNotFoundException::new);
 
         if (!find.getUserId().equals(userId)) {
             throw new ForbiddenException("자신이 작성한 평가 내용만 볼 수 있습니다.");

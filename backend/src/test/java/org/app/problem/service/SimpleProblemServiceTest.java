@@ -389,7 +389,7 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
             String validCode = "This is valid";
             String invalidCode = "This is an invalid code";
 
-            data.createProblemInvitatino(privateProblemId, validCode);
+            data.createProblemInvitation(privateProblemId, validCode);
 
             data.createRecievedInvitation(
                     invitedUserId, privateProblemId, validCode, title
@@ -427,9 +427,10 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
     }
 
     @Test
-    @DisplayName("로그인하지 않았거나 초대 수령하지 않은 유저는 "
-                 + "private 문제 조회시 ForbiddenException 을 받는다.")
+    @DisplayName("Private 문제 조회 시 로그인 하지 않은 유저, 탈퇴한 유저, 초대 코드가 없는 유저는"
+                 + "ForbiddenException 을 받는다.")
     void getProblem3() {
+        Long nonExistingUserId = Long.MAX_VALUE;
         Long nonInvitedUserId;
         Long expiredInvitationHavingUserId;
         String userName = "User name";
@@ -452,7 +453,7 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
             String validCode = "This is valid";
             String invalidCode = "This is an invalid code";
 
-            data.createProblemInvitatino(privateProblemId, validCode);
+            data.createProblemInvitation(privateProblemId, validCode);
             data.createRecievedInvitation(
                     expiredInvitationHavingUserId, privateProblemId, invalidCode, title
             );
@@ -460,6 +461,10 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
 
         assertThatThrownBy(() -> service.getProblem(
                 privateProblemId, null
+        ))
+                .isInstanceOf(ForbiddenException.class);
+        assertThatThrownBy(() -> service.getProblem(
+                privateProblemId, nonExistingUserId
         ))
                 .isInstanceOf(ForbiddenException.class);
         assertThatThrownBy(() -> service.getProblem(
@@ -793,7 +798,7 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
     @DisplayName("관련 자원을 찾을 수 없으면 NotFoundException 이 발생한다.")
     void testNotFoundException() {
         Long existingUserId, withdrawnUserId;
-        Long existingPublicProblemId, existingPrivateProblemId, softDeletedProblemId;
+        Long existingPublicProblemId, softDeletedProblemId;
 
         Long nonExsitingUserId, nonExsitingProblemId;
 
@@ -808,9 +813,6 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
                     0, 0, 0, 0,
                     null, null
             ).getId();
-
-            existingPrivateProblemId = data.createPrivateProblem(userId, "title")
-                    .getId();
 
             softDeletedProblemId = data.createSoftDeletedProblem(
                     userId, "title", ProblemVisibility.PUBLIC,
@@ -833,16 +835,6 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
             TestUtils.assertThrow(      // 문제 삭제 예정일 때
                     softDeletedProblemId, existingUserId,
                     getProblemFunc, ProblemNotFoundException.class
-            );
-
-            TestUtils.assertThrow(      // 문제 private 인데 없는 사용자일 때
-                    existingPrivateProblemId, nonExsitingUserId,
-                    getProblemFunc, UserNotFoundException.class
-            );
-
-            TestUtils.assertThrow(      // 문제 private 인데 없는 탈퇴한 사용자일 때
-                    existingPrivateProblemId, withdrawnUserId,
-                    getProblemFunc, UserNotFoundException.class
             );
         }
 
@@ -1131,7 +1123,7 @@ class SimpleProblemServiceTest extends IntegrationTestSupport {
             return problem;
         }
 
-        void createProblemInvitatino(Long problemId, String code) {
+        void createProblemInvitation(Long problemId, String code) {
             initializer.invitationBuilder()
                     .problemId(problemId)
                     .code(code)

@@ -10,9 +10,9 @@ public class RefreshTokenManager extends AbstractTokenManager {
     private static final String RT_ISS = "Beat the AI - RT";
 
     protected RefreshTokenManager(
-            @Value("${jwt.refresh-token.signature}")
+            @Value("${jwt.rt.sign}")
             String signature,
-            @Value("${jwt.refresh-token.expiration}")
+            @Value("${jwt.rt.exp}")
             long expiration,
             DateTimeProvider dateTimeProvider
     ) {

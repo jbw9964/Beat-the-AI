@@ -40,6 +40,14 @@ public class TestUtils {
                 .isInstanceOf(ex);
     }
 
+    public static <T, U> void assertThrow(
+            T t, U u, BiConsumer<T, U> func,
+            Class<? extends RuntimeException> ex
+    ) {
+        assertThatThrownBy(() -> func.accept(t, u))
+                .isInstanceOf(ex);
+    }
+
     public static <T, U, D> void assertThrow(
             T t, U u, D d, Triplet<T, U, D, ?> func,
             Class<? extends RuntimeException> ex

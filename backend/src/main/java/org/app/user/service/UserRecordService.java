@@ -46,10 +46,8 @@ public class UserRecordService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        PlayRecord find = globalUtil.getOrThrow(
-                playRecordId, playRecordRepo::findByIdFetchingScenarioRecords,
-                PlayRecordNotFoundException::new
-        );
+        PlayRecord find = playRecordRepo.findByIdFetchingScenarioRecords(playRecordId)
+                .orElseThrow(PlayRecordNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("자기 자신만 조회할 수 있습니다.");
@@ -74,10 +72,8 @@ public class UserRecordService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        PlayRecord find = globalUtil.getOrThrow(
-                playRecordId, playRecordRepo::findById,
-                PlayRecordNotFoundException::new
-        );
+        PlayRecord find = playRecordRepo.findById(playRecordId)
+                .orElseThrow(PlayRecordNotFoundException::new);
 
         if (!find.getUser().getId().equals(userId)) {
             throw new ForbiddenException("자기 자신만 공개 여부를 변경할 수 있습니다.");
@@ -98,10 +94,9 @@ public class UserRecordService {
     ) {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
-        PlayRecord playRecord = globalUtil.getOrThrow(
-                playRecordId, playRecordRepo::findById,
-                PlayRecordNotFoundException::new
-        );
+
+        PlayRecord playRecord = playRecordRepo.findById(playRecordId)
+                .orElseThrow(PlayRecordNotFoundException::new);
 
         if (!playRecord.getUser().getId().equals(userId)) {
             throw new ForbiddenException("보상 목록은 자기 자신만 조회할 수 있습니다.");
@@ -123,10 +118,9 @@ public class UserRecordService {
     // 플레이 기록과 연관된 보상 정보 보기 (실 이미지 전달 X)
     public GainedRewardInfo getMyReward(Long userId, Long playRecordId, Long gainedRewardId) {
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
-        PlayRecord playRecord = globalUtil.getOrThrow(
-                playRecordId, playRecordRepo::findById,
-                PlayRecordNotFoundException::new
-        );
+
+        PlayRecord playRecord = playRecordRepo.findById(playRecordId)
+                .orElseThrow(PlayRecordNotFoundException::new);
 
         if (!playRecord.getUser().getId().equals(userId)) {
             throw new ForbiddenException("플레이 기록이 자기 자신의 것이 아닙니다.");
@@ -138,10 +132,8 @@ public class UserRecordService {
             );
         }
 
-        GainedReward find = globalUtil.getOrThrow(
-                gainedRewardId, gainedRewardRepo::findById,
-                GainedRewardNotFoundException::new
-        );
+        GainedReward find = gainedRewardRepo.findById(gainedRewardId)
+                .orElseThrow(GainedRewardNotFoundException::new);
 
         if (!find.getPlayRecord().getId().equals(playRecordId)) {
             throw new ForbiddenException("해당 보상은 다른 플레이 기록과 연관된 보상입니다.");
@@ -162,10 +154,8 @@ public class UserRecordService {
 
         this.findNonWithdrawnUserOrThrowUserNotFoundEx(userId);
 
-        PlayRecord playRecord = globalUtil.getOrThrow(
-                playRecordId, playRecordRepo::findById,
-                PlayRecordNotFoundException::new
-        );
+        PlayRecord playRecord = playRecordRepo.findById(playRecordId)
+                .orElseThrow(PlayRecordNotFoundException::new);
 
         if (!playRecord.getUser().getId().equals(userId)) {
             throw new ForbiddenException("플레이 기록이 자기 자신의 것이 아닙니다.");

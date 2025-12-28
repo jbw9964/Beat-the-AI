@@ -15,13 +15,6 @@ public class GlobalUtil implements PageableProvider {
 
     public <E, I> E getOrThrow(
             I identity, Function<I, Optional<E>> func,
-            Supplier<RuntimeException> ex
-    ) {
-        return func.apply(identity).orElseThrow(ex);
-    }
-
-    public <E, I> E getOrThrow(
-            I identity, Function<I, Optional<E>> func,
             Supplier<RuntimeException> ex, Predicate<E> filter
     ) {
         Optional<E> opt = func.apply(identity);
