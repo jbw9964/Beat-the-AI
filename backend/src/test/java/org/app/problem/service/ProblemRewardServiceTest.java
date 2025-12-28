@@ -404,6 +404,7 @@ class ProblemRewardServiceTest extends IntegrationTestSupport {
     void validateBeforeDeleteReward() {
         Long notExsitingProblemId, softDeletedProblemId;
         Long notExisintgRewardId;
+        //noinspection WrapperTypeMayBePrimitive
         Long notExsitingUserId, withdrawnUserId;
 
         Long existingProblemId, exsitingRewardId;
@@ -432,79 +433,36 @@ class ProblemRewardServiceTest extends IntegrationTestSupport {
             ).getId();
         }
 
-        Class<ProblemNotFoundException> problemNotFoundEx = ProblemNotFoundException.class;
-        Class<ProblemRewardNotFoundException> problemRewardNotFoundEx
-                = ProblemRewardNotFoundException.class;
-        Class<UserNotFoundException> userNotFoundEx = UserNotFoundException.class;
-        Class<ForbiddenException> forbiddenEx = ForbiddenException.class;
+        Triplet<Long, Long, Long, ?> getOverviewIdFunc = (pid, rid, uid)
+                -> service.getRewardImageIdsInfoBeforeRemoval(pid, rid, uid);
 
-        // getOverviewRewardIdBeforeRemoval 메서드에 대해 검증
-        {
-            Triplet<Long, Long, Long, ?> getOverviewIdFunc = (pid, rid, uid)
-                    -> service.getOverviewRewardIdBeforeRemoval(pid, rid, uid);
+        TestUtils.assertThrow(      // 문제 없을 때
+                notExsitingProblemId, exsitingRewardId, createdUserId,
+                getOverviewIdFunc, ProblemNotFoundException.class
+        );
+        TestUtils.assertThrow(      // 문제 삭제 예정일 때
+                softDeletedProblemId, exsitingRewardId, createdUserId,
+                getOverviewIdFunc, ProblemNotFoundException.class
+        );
 
-            TestUtils.assertThrow(      // 문제 없을 때
-                    notExsitingProblemId, exsitingRewardId, createdUserId,
-                    getOverviewIdFunc, problemNotFoundEx
-            );
-            TestUtils.assertThrow(      // 문제 삭제 예정일 때
-                    softDeletedProblemId, exsitingRewardId, createdUserId,
-                    getOverviewIdFunc, problemNotFoundEx
-            );
+        TestUtils.assertThrow(      // 보상 없을 때
+                existingProblemId, notExisintgRewardId, createdUserId,
+                getOverviewIdFunc, ProblemRewardNotFoundException.class
+        );
 
-            TestUtils.assertThrow(      // 보상 없을 때
-                    existingProblemId, notExisintgRewardId, createdUserId,
-                    getOverviewIdFunc, problemRewardNotFoundEx
-            );
+        TestUtils.assertThrow(      // 사용자 없을 때
+                existingProblemId, exsitingRewardId, notExsitingUserId,
+                getOverviewIdFunc, UserNotFoundException.class
+        );
+        TestUtils.assertThrow(      // 탈퇴한 사용자일 때
+                existingProblemId, exsitingRewardId, withdrawnUserId,
+                getOverviewIdFunc, UserNotFoundException.class
+        );
 
-            TestUtils.assertThrow(      // 사용자 없을 때
-                    existingProblemId, exsitingRewardId, notExsitingUserId,
-                    getOverviewIdFunc, userNotFoundEx
-            );
-            TestUtils.assertThrow(      // 탈퇴한 사용자일 때
-                    existingProblemId, exsitingRewardId, withdrawnUserId,
-                    getOverviewIdFunc, userNotFoundEx
-            );
-
-            TestUtils.assertThrow(      // 문제 작성자 외 다른 사람이 시도할 때
-                    existingProblemId, exsitingRewardId, anotherUserId,
-                    getOverviewIdFunc, forbiddenEx
-            );
-        }
-
-        // getActualRewardIdBeforeRemoval 메서드에 대해 검증
-        {
-            Triplet<Long, Long, Long, ?> getActualIdFunc = (pid, rid, uid)
-                    -> service.getActualRewardIdBeforeRemoval(pid, rid, uid);
-
-            TestUtils.assertThrow(      // 문제 없을 때
-                    notExsitingProblemId, exsitingRewardId, createdUserId,
-                    getActualIdFunc, problemNotFoundEx
-            );
-            TestUtils.assertThrow(      // 문제 삭제 예정일 때
-                    softDeletedProblemId, exsitingRewardId, createdUserId,
-                    getActualIdFunc, problemNotFoundEx
-            );
-
-            TestUtils.assertThrow(      // 보상 없을 때
-                    existingProblemId, notExisintgRewardId, createdUserId,
-                    getActualIdFunc, problemRewardNotFoundEx
-            );
-
-            TestUtils.assertThrow(      // 사용자 없을 때
-                    existingProblemId, exsitingRewardId, notExsitingUserId,
-                    getActualIdFunc, userNotFoundEx
-            );
-            TestUtils.assertThrow(      // 탈퇴한 사용자일 때
-                    existingProblemId, exsitingRewardId, withdrawnUserId,
-                    getActualIdFunc, userNotFoundEx
-            );
-
-            TestUtils.assertThrow(      // 문제 작성자 외 다른 사람이 시도할 때
-                    existingProblemId, exsitingRewardId, anotherUserId,
-                    getActualIdFunc, forbiddenEx
-            );
-        }
+        TestUtils.assertThrow(      // 문제 작성자 외 다른 사람이 시도할 때
+                existingProblemId, exsitingRewardId, anotherUserId,
+                getOverviewIdFunc, ForbiddenException.class
+        );
     }
 
     @Test

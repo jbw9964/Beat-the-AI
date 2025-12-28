@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.extern.slf4j.*;
 import org.app.config.domain.image.*;
 import org.app.problem.domain.exception.*;
+import org.app.problem.dto.*;
 import org.app.problem.dto.request.*;
 import org.app.problem.dto.response.*;
 import org.app.problem.service.*;
@@ -232,12 +233,13 @@ public class ProblemRewardController {
 
         // 문제 보상과 연관된 image id 를 취한다.
         // 사용자 다른 사람이거나 관련 정보 없으면 아래 메서드에서 걸러진다.
-        Long actualRewardId = rewardService.getActualRewardIdBeforeRemoval(
+        RewardImageIds entityInfo
+                = rewardService.getRewardImageIdsInfoBeforeRemoval(
                 problemId, rewardId, authenticatedUserId
         );
-        Long overviewRewardId = rewardService.getOverviewRewardIdBeforeRemoval(
-                problemId, rewardId, authenticatedUserId
-        );
+
+        Long actualRewardId = entityInfo.actualRewardImageId();
+        Long overviewRewardId = entityInfo.overviewRewardImageId();
 
         log.info("Identified reward images");
 

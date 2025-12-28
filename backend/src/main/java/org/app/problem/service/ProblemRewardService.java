@@ -182,8 +182,8 @@ public class ProblemRewardService {
         return find.getId();
     }
 
-    // 문제 보상 삭제 전 문제 & 보상 존재하는지, 사용자 탈퇴 안하고 문제 작성자 맞는지 검사 1
-    public Long getOverviewRewardIdBeforeRemoval(
+    // 문제 보상 삭제 전 문제 & 보상 존재하는지, 사용자 탈퇴 안하고 문제 작성자 맞는지 검사
+    public RewardImageIds getRewardImageIdsInfoBeforeRemoval(
             Long problemId, Long problemRewardId, Long authenticatedUserId
     ) {
 
@@ -191,19 +191,10 @@ public class ProblemRewardService {
                 problemId, problemRewardId, authenticatedUserId
         );
 
-        return find.getOverviewRewardImage().getId();
-    }
-
-    // 문제 보상 삭제 전 문제 & 보상 존재하는지, 사용자 탈퇴 안하고 문제 작성자 맞는지 검사 2
-    public Long getActualRewardIdBeforeRemoval(
-            Long problemId, Long problemRewardId, Long authenticatedUserId
-    ) {
-
-        ProblemReward find = this.validateBeforeDeleteReward(
-                problemId, problemRewardId, authenticatedUserId
+        return new RewardImageIds(
+                find.getActualRewardImage().getId(),
+                find.getOverviewRewardImage().getId()
         );
-
-        return find.getActualRewardImage().getId();
     }
 
     // 문제 보상 삭제하기
