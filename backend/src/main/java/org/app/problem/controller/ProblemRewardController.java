@@ -126,19 +126,29 @@ public class ProblemRewardController {
 
         log.info("Identified problem. Receving image data");
 
-        byte[] actualRewardImageByte, overviewRewardImageByte = null;
+        byte[] actualRewardImageByte, overviewRewardImageByte;
 
         try {
             // 이미지 정보를 가져온다. overview 없으면 만든다.
             actualRewardImageByte = actualRewardImage.getBytes();
 
             if (
-                    imageInfoBroker.acceptableImage(actualRewardImageByte) &&
-                    overviewRewardImage == null
+                    overviewRewardImage == null ||
+                    overviewRewardImage.isEmpty()
             ) {
-                log.info("No overview image given.");
+                log.info("No overview image given or it's empty.");
+
+                if (!imageInfoBroker.acceptableImage(actualRewardImageByte)) {
+                    log.info("Cannot generate overview reward image, "
+                             + "due to non-acceptable image data.");
+                    throw new UnacceptableImageGivenException();
+                }
+
+                log.info("Generating overview reward image");
                 overviewRewardImageByte = imageBlurer.blurImage(actualRewardImageByte);
                 log.info("Blur image has been generated.");
+            } else {
+                overviewRewardImageByte = overviewRewardImage.getBytes();
             }
 
         } catch (IOException e) {
