@@ -145,7 +145,7 @@ public class ExceptionHandlerConfig {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ApiResponse<?> multipartException(MaxUploadSizeExceededException e) {
 
-        String maxima = "[Unkown]";
+        String maxima = "[Unknown]";
         if (e.getMaxUploadSize() == -1) {
 
             String caseMsg = e.getCause().getMessage();
