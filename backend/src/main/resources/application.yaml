@@ -18,6 +18,7 @@ spring:
   ai:
     openai:
       api-key: ${api-key.openai}
+      api-key: ${common-secret.api-key.openai}
 
   datasource:
     url: ${db.url}
@@ -64,9 +65,17 @@ soft-delete:
   hours-to-schedule-removal: 72
 
 reward-image:
-  base-directory: "${directory.backed-data}/reward-image"
+  base-directory: "${directory-secret.backend-data}/reward-image"
   temporal-saving-abs-location: "${reward-image.base-directory}/temp"
   server-storing-abs-location: "${reward-image.base-directory}/storage"
+
+jwt:
+  at:
+    sign: ${common-secret.jwt.access-token.signature}
+    exp: ${common-secret.jwt.access-token.expiration}
+  rt:
+    sign: ${common-secret.jwt.refresh-token.signature}
+    exp: ${common-secret.jwt.refresh-token.expiration}
 
 logging:
   pattern:

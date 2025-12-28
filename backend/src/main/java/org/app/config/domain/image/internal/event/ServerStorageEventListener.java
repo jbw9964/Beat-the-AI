@@ -12,12 +12,12 @@ import org.springframework.stereotype.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class EventHandler {
+class ServerStorageEventListener {
 
     private final MockableFiles files;
 
     @EventListener(RemoveOrphanServerFileEvent.class)
-    public void handleRemoveOrphanServerFileEvent(RemoveOrphanServerFileEvent event) {
+    public void removeOrphanServerFileEvent(RemoveOrphanServerFileEvent event) {
         List<String> removals = event.removals();
 
         log.info(
