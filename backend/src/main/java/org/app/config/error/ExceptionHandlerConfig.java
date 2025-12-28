@@ -13,13 +13,14 @@ import org.springframework.validation.*;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.*;
+import org.springframework.web.multipart.*;
 
 @Slf4j
 @RestControllerAdvice
 public class ExceptionHandlerConfig {
 
     @ExceptionHandler(CustomException.class)
-    public ApiResponse<?> handle(CustomException e) {
+    public ApiResponse<?> customException(CustomException e) {
         int code = e.getCode();
         String message = e.getMessage();
 
@@ -141,6 +142,34 @@ public class ExceptionHandlerConfig {
         return ApiResponse.fail(400, errorMessages, "Bad Request");
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ApiResponse<?> multipartException(MaxUploadSizeExceededException e) {
+
+        String maxima = "[Unkown]";
+        if (e.getMaxUploadSize() == -1) {
+
+            String caseMsg = e.getCause().getMessage();
+            if (caseMsg != null) {
+                int i = caseMsg.indexOf("size of ");
+                if (i != -1) {
+                    maxima = caseMsg.substring(Math.min(
+                            i + 8, caseMsg.length()
+                    ));
+                }
+            }
+
+        } else {
+            maxima = String.format("%d bytes.", e.getMaxUploadSize());
+        }
+
+        String message = String.format(
+                "제공된 파일 크기가 허용치를 초과했습니다: %s",
+                maxima
+        );
+        int statusCode = e.getStatusCode().value();
+
+        return ApiResponse.fail(statusCode, null, message);
+    }
 
     private record Util() {
 

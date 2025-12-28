@@ -149,6 +149,9 @@ public class SecurityFilterChainConfig {
                         // endpoint for page request testing
                         .requestMatchers("/api/paging-testing/get").permitAll()
 
+                        // endpoint for multipart testing
+                        .requestMatchers("/api/multipart-testing").permitAll()
+
                         .anyRequest().authenticated()
                 )
         ;
